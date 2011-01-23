@@ -1,0 +1,9 @@
+{
+  "gameName": "Knight-Through",
+  "numRoles": 2,
+  "version": 0,
+  
+  "user_interface": "knightThrough.js",
+  "rulesheet": "knightThrough.kif",  
+  "stylesheet": "knightThrough.xsl"
+}

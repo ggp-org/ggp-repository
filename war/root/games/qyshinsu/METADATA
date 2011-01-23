@@ -1,0 +1,9 @@
+{
+  "gameName": "Qyshinsu",
+  "numRoles": 2,
+  "version": 0,
+  
+  "user_interface": "qyshinsu.js",
+  "rulesheet": "qyshinsu.kif",  
+  "stylesheet": "qyshinsu.xsl"
+}

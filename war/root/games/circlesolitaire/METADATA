@@ -1,0 +1,6 @@
+{
+  "gameName": "Circle Solitaire",
+  "version": 0,
+
+  "rulesheet": "circlesolitaire.kif"
+}

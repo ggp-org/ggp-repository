@@ -1,0 +1,9 @@
+{
+  "gameName": "Eight Puzzle",
+  "numRoles": 1,
+  "version": 0,
+  
+  "user_interface": "eightPuzzle.js",
+  "rulesheet": "eightPuzzle.kif",  
+  "stylesheet": "eightPuzzle.xsl"
+}

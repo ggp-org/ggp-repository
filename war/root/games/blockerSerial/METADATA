@@ -1,0 +1,6 @@
+{
+  "gameName": "Blocker in Series",
+  "version": 0,
+
+  "rulesheet": "blockerSerial.kif"
+}

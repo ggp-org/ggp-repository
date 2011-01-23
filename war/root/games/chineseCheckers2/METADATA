@@ -1,0 +1,6 @@
+{
+  "gameName": "Chinese Checkers, Two Players",
+  "version": 0,
+
+  "rulesheet": "chineseCheckers2.kif"
+}

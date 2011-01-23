@@ -1,0 +1,3 @@
+On their turn, each player may spawn a new piece from their starting location, move an existing piece as though it
+were a Chess knight, or capture with an existing piece as though it were a Chess king. The first player to get three
+pieces in a row, column, or diagonal in the center three-by-three square wins.

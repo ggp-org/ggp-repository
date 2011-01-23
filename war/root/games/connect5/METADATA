@@ -1,0 +1,6 @@
+{
+  "gameName": "Connect Five",
+  "version": 0,
+
+  "rulesheet": "connect5.kif"
+}

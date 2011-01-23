@@ -1,0 +1,6 @@
+{
+  "gameName": "Chicken Tic-Tac-Toe",
+  "version": 0,
+
+  "rulesheet": "chickentictactoe.kif"
+}

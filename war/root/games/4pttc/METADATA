@@ -1,0 +1,10 @@
+{
+  "gameName": "Four-Player Tic-Tac-Chess",
+  "numRoles": 4,
+  "version": 0,
+  
+  "user_interface": "4pttc.js",
+  "rulesheet": "4pttc.kif",  
+  "stylesheet": "4pttc.xsl",
+  "description": "4pttc.txt"
+}

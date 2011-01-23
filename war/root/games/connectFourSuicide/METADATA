@@ -1,0 +1,9 @@
+{
+  "gameName": "Connect Four (Suicide)",
+  "numRoles": 2,
+  "version": 0,
+  
+  "user_interface": "connectFourSuicide.js",
+  "rulesheet": "connectFourSuicide.kif",  
+  "stylesheet": "connectFourSuicide.xsl"
+}

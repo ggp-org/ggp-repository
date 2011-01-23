@@ -1,0 +1,10 @@
+{
+  "gameName": "Two-Player Tic-Tac-Chess",
+  "numRoles": 2,
+  "version": 0,
+  
+  "user_interface": "2pttc.js",
+  "rulesheet": "2pttc.kif",  
+  "stylesheet": "2pttc.xsl",
+  "description": "2pttc.txt"
+}

@@ -1,0 +1,9 @@
+{
+  "gameName": "Chess",
+  "numRoles": 2,
+  "version": 0,
+  
+  "user_interface": "chess.js",
+  "rulesheet": "chess.kif",  
+  "stylesheet": "chess.xsl"
+}

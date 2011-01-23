@@ -1,0 +1,6 @@
+{
+  "gameName": "Bidding Tic-Tac-Toe",
+  "version": 0,
+
+  "rulesheet": "biddingTicTacToe.kif"
+}

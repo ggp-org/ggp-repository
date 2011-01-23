@@ -1,0 +1,6 @@
+{
+  "gameName": "Check-Lines",
+  "version": 0,
+
+  "rulesheet": "checkLines.kif"
+}

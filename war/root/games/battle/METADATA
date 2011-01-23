@@ -1,0 +1,10 @@
+{
+  "gameName": "Battle",
+  "numRoles": 2,
+  "version": 0,
+  
+  "user_interface": "battle.js",
+  "rulesheet": "battle.kif",  
+  "stylesheet": "battle.xsl",
+  "description": "battle.txt"
+}

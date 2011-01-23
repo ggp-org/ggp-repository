@@ -1,0 +1,9 @@
+{
+  "gameName": "Breakthrough",
+  "numRoles": 2,
+  "version": 0,
+  
+  "user_interface": "breakthrough.js",
+  "rulesheet": "breakthrough.kif",  
+  "stylesheet": "breakthrough.xsl"
+}

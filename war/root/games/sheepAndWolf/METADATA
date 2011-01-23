@@ -1,0 +1,9 @@
+{
+  "gameName": "Sheep and Wolf",
+  "numRoles": 2,
+  "version": 0,
+  
+  "user_interface": "sheepAndWolf.js",
+  "rulesheet": "sheepAndWolf.kif",  
+  "stylesheet": "sheepAndWolf.xsl"
+}

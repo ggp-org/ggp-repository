@@ -1,0 +1,7 @@
+{
+  gameName: "Kitten Escapes From Fire",
+  
+  user_interface: "kittenEscapesFromFire.js",
+  rulesheet: "kittenEscapesFromFire.kif",  
+  stylesheet: "kittenEscapesFromFire.xsl"
+}

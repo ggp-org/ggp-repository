@@ -1,0 +1,9 @@
+{
+  "gameName": "European Peg Jumping",
+  "numRoles": 1,
+  "version": 0,
+  
+  "user_interface": "pegEuro.js",
+  "rulesheet": "pegEuro.kif",  
+  "stylesheet": "pegEuro.xsl"
+}

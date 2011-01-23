@@ -1,0 +1,10 @@
+{
+  "gameName": "Two-Player Free-For-All",
+  "numRoles": 2,
+  "version": 0,
+  
+  "user_interface": "2pffa.js",
+  "rulesheet": "2pffa.kif",  
+  "stylesheet": "2pffa.xsl",
+  "description": "2pffa.txt"
+}

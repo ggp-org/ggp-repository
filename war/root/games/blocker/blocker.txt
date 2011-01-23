@@ -1,0 +1,5 @@
+At each step, each player chooses a cell in the grid that has not yet been chosen. Each cell that
+the Crosser picks becomes part of a bridge from the left side to the right side, which can go along
+diagonals but cannot backtrack. The Crosser if they can succeed at building such a bridge.
+Each cell that the Blocker picks becomes a gap. The Blocker wins if the Crosser cannot build their
+bridge.

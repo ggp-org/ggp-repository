@@ -1,0 +1,6 @@
+{
+  "gameName": "Colonel Blotto's Game",
+  "version": 0,
+
+  "rulesheet": "colonelBlotto.kif"
+}

@@ -1,0 +1,9 @@
+{
+  "gameName": "Breakthrough (Small w/ Holes)",
+  "numRoles": 2,
+  "version": 0,
+  
+  "user_interface": "breakthroughSmallHoles.js",
+  "rulesheet": "breakthroughSmallHoles.kif",  
+  "stylesheet": "breakthroughSmallHoles.xsl"
+}

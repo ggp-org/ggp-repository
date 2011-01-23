@@ -1,0 +1,6 @@
+{
+  "gameName": "Asteroids in Parallel",
+  "version": 0,
+
+  "rulesheet": "asteroidsParallel.kif"
+}

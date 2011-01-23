@@ -1,0 +1,3 @@
+On their turn, each player drops a colored disk down into a column, attempting to create a row of four
+disks of their color along any row, column, or diagonal. The first player to accomplish this receives 100 points.
+The player immediately before them receives 50 points. The player immediately after them receives 0 points. 

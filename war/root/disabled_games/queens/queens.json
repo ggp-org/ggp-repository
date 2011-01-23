@@ -1,0 +1,7 @@
+{
+  gameName: "Nine Queens",
+  
+  user_interface: "queens.js",
+  rulesheet: "queens.kif",  
+  stylesheet: "queens.xsl"
+}

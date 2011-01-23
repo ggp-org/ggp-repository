@@ -1,0 +1,5 @@
+At each step, each player chooses either to move a piece, or to defend a piece.
+Regular checkers may move in one of the four cardinal directions. Kings may move
+in any direction, including along diagonals. When a piece moves onto another piece,
+the piece being moved on to is captured, unless it is being defended, in which case
+the attacking piece is captured. The goal is to capture ten pieces.

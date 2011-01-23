@@ -1,0 +1,9 @@
+{
+  "gameName": "Two-Player TTCC4",
+  "numRoles": 2,
+  "version": 0,
+  
+  "user_interface": "ttcc4_2player.js",
+  "rulesheet": "ttcc4_2player.kif",  
+  "stylesheet": "ttcc4_2player.xsl"
+}

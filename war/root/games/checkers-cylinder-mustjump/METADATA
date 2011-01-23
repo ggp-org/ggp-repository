@@ -1,0 +1,6 @@
+{
+  "gameName": "Checkers on a Cylinder, Must-Jump",
+  "version": 0,
+
+  "rulesheet": "checkers-cylinder-mustjump.kif"
+}

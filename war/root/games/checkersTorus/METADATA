@@ -1,0 +1,6 @@
+{
+  "gameName": "Checkers on a Torus",
+  "version": 0,
+
+  "rulesheet": "checkersTorus.kif"
+}

@@ -1,0 +1,7 @@
+{
+  gameName: "Zhadu",
+  
+  user_interface: "zhadu.js",
+  rulesheet: "zhadu.kif",  
+  stylesheet: "zhadu.xsl"
+}

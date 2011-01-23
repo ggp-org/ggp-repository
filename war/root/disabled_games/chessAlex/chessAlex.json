@@ -1,0 +1,7 @@
+{
+  gameName: "Alex's Chess",
+  
+  user_interface: "chessAlex.js",
+  rulesheet: "chessAlex.kif",  
+  stylesheet: "chessAlex.xsl"
+}

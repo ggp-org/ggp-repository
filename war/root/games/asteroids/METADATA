@@ -1,0 +1,6 @@
+{
+  "gameName": "Asteroids",
+  "version": 0,
+
+  "rulesheet": "asteroids.kif"
+}
