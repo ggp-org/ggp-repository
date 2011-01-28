@@ -16,7 +16,7 @@ import javax.servlet.http.*;
 
 @SuppressWarnings("serial")
 public class GGP_RepositoryServlet extends HttpServlet {
-    public static final String repositoryRootDirectory = "http://ggp-repository.appspot.com";
+    public static final String repositoryRootDirectory = "http://games.ggp.org";
     
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
