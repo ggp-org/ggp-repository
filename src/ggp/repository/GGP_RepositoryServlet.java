@@ -6,11 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.*;
 
@@ -36,10 +31,7 @@ public class GGP_RepositoryServlet extends HttpServlet {
         if (reqURI.contains("v0/")) reqURI = reqURI.replace("v0/", "");
                 
         if (reqURI.equals("/") || reqURI.equals("/index.html")) {
-            response = generateIndexPage();
-            contentType = "text/html";
-        } else if(reqURI.startsWith("/games/") && reqURI.endsWith("/index.html") && reqURI.length() > 18) {
-            response = generateGameDirectoryPage(reqURI);
+            response = readFile(new File("gameList.html"));
             contentType = "text/html";
         } else if(reqURI.startsWith("/games/") && reqURI.endsWith("/") && reqURI.length() > 9) {
             response = readFile(new File("root" + reqURI + "METADATA"));
@@ -121,59 +113,5 @@ public class GGP_RepositoryServlet extends HttpServlet {
         }
         
         return response;
-    }
-    
-    private String generateIndexPage() {
-        StringBuilder b = new StringBuilder();
-        
-        b.append("<html><head><title>GGP Game Repository</title></head>");
-        
-        b.append("<body><h1>GGP Game Repository</h1>");
-        b.append("Welcome to an active instance of a GGP Game Repository. ");
-        b.append("The games available in this repository are:<ul>");
-        
-        List<String> theKeyList = new ArrayList<String>(getAvailableGames());
-        Collections.sort(theKeyList);        
-        for (String gameName : theKeyList) {
-            b.append("<li><a href=games/" + gameName + "/index.html>" + gameName + "</a>");
-        }
-        b.append("</ul></body></html>");
-        
-        return b.toString();
-    }
-    
-    private String generateGameDirectoryPage(String reqURI) {
-        StringBuilder b = new StringBuilder();
-        String gameName = reqURI.replace("/games/", "").replace("/index.html", "");        
-        
-        b.append("<html><head><title>GGP Game Repository</title></head>");
-        
-        b.append("<body><h1>GGP Game Repository</h1>");
-        b.append("<body><h2>"+gameName+"</h2>");
-        
-        b.append("Files associated with this game are:<ul>");
-        
-        String rootURI = "root" + reqURI.replace("/index.html", ""); 
-        File rootFile = new File(rootURI);
-        if (rootFile.exists() && rootFile.isDirectory()) {
-            String[] children = rootFile.list();
-            for (int i=0; i<children.length; i++) {
-                // Get filename of file or directory
-                b.append("<li><a href=" + children[i] + ">" + children[i] + "</a>");                    
-            }
-        }
-        
-        b.append("</ul></body></html>");
-
-        return b.toString();
-    }
-    
-    private Set<String> getAvailableGames() {
-        Set<String> theSet = new HashSet<String>();        
-        String[] children = new File("root/games/").list();
-        for (int i=0; i<children.length; i++) {
-            theSet.add(children[i]);
-        }
-        return theSet;
     }
 }
