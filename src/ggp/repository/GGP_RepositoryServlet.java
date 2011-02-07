@@ -31,7 +31,7 @@ public class GGP_RepositoryServlet extends HttpServlet {
         if (reqURI.contains("v0/")) reqURI = reqURI.replace("v0/", "");
                 
         if (reqURI.equals("/") || reqURI.equals("/index.html")) {
-            response = readFile(new File("gameList.html"));
+            response = readFile(new File("root/gameList.html"));
             contentType = "text/html";
         } else if(reqURI.startsWith("/games/") && reqURI.endsWith("/") && reqURI.length() > 9) {
             response = readFile(new File("root" + reqURI + "METADATA"));
