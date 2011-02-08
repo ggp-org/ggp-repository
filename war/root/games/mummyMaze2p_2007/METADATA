@@ -1,5 +1,6 @@
 {
   "version": 0,
+  "numRoles": 2,
 
   "rulesheet": "mummyMaze2p_2007.kif"
 }

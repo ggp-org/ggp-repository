@@ -1,6 +1,7 @@
 {
   "gameName": "Blocker in Series",
   "version": 0,
+  "numRoles": 2,
 
   "rulesheet": "blockerSerial.kif"
 }

@@ -1,6 +1,7 @@
 {
   "gameName": "Checkers Tiny",
   "version": 0,
+  "numRoles": 2,
 
   "rulesheet": "checkersTiny.kif"
 }

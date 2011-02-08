@@ -1,5 +1,6 @@
 {
   "version": 0,
+  "numRoles": 6,
 
   "rulesheet": "tictactoe_3d_6player.kif"
 }

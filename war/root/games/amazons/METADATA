@@ -1,6 +1,7 @@
 {
   "gameName": "Amazons",
   "version": 0,
+  "numRoles": 2,
 
   "rulesheet": "amazons.kif"
 }

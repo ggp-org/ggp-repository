@@ -1,6 +1,7 @@
 {
   "gameName": "Catch-a-Mouse",
   "version": 0,
+  "numRoles": 2,
 
   "rulesheet": "catcha_mouse.kif"
 }

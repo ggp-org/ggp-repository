@@ -1,6 +1,7 @@
 {
   "gameName": "Chinese Checkers, Six Players, NOOPs",
   "version": 0,
+  "numRoles": 6,
 
   "rulesheet": "chineseCheckers6p.kif"
 }

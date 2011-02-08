@@ -1,6 +1,7 @@
 {
   "gameName": "Colored Trails",
   "version": 0,
+  "numRoles": 2,
 
   "rulesheet": "coloredtrails.kif"
 }

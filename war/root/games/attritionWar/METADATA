@@ -1,6 +1,7 @@
 {
   "gameName": "War of Attrition",
   "version": 0,
+  "numRoles": 2,
 
   "rulesheet": "attritionWar.kif"
 }

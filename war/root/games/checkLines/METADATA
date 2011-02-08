@@ -1,6 +1,7 @@
 {
   "gameName": "Check-Lines",
   "version": 0,
+  "numRoles": 2,
 
   "rulesheet": "checkLines.kif"
 }

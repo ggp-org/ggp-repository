@@ -1,6 +1,7 @@
 {
   "gameName": "Colonel Blotto's Game",
   "version": 0,
+  "numRoles": 2,
 
   "rulesheet": "colonelBlotto.kif"
 }

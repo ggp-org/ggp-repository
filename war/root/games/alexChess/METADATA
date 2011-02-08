@@ -1,6 +1,7 @@
 {
   "gameName": "Chess, by Alex",
   "version": 0,
+  "numRoles": 2,
 
   "rulesheet": "alexChess.kif"
 }

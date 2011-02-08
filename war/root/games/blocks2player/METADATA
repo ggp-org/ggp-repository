@@ -1,6 +1,7 @@
 {
   "gameName": "Two-Player Blocks",
   "version": 0,
+  "numRoles": 2,
 
   "rulesheet": "blocks2player.kif"
 }

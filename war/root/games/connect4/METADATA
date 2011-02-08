@@ -1,6 +1,7 @@
 {
   "gameName": "Connect Four, Variant 2",
   "version": 0,
+  "numRoles": 2,
 
   "rulesheet": "connect4.kif"
 }

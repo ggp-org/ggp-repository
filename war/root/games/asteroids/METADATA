@@ -1,6 +1,7 @@
 {
   "gameName": "Asteroids",
   "version": 0,
+  "numRoles": 1,
 
   "rulesheet": "asteroids.kif"
 }

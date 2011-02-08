@@ -1,5 +1,6 @@
 {
   "version": 0,
+  "numRoles": 4,
 
   "rulesheet": "four_way_battle.kif"
 }
