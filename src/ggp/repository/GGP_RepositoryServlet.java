@@ -28,7 +28,7 @@ public class GGP_RepositoryServlet extends HttpServlet {
         
         // TODO: Come up with a much better implementation of versioning
         // than this hacky hack.
-        if (reqURI.contains("v0/")) reqURI = reqURI.replace("v0/", "");
+        if (reqURI.contains("v0/")) reqURI = reqURI.replaceFirst("v0/", "");
                 
         if (reqURI.equals("/") || reqURI.equals("/index.html")) {
             response = readFile(new File("root/gameList.html"));
