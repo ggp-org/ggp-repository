@@ -9,6 +9,7 @@
   legalMapping: {},
   selectedCell: null,
   targetedCells: [],
+  selectedMove: null,
   selectedMoveIndex: null,  
 
   // "clearSelection" is called by external scripts.
@@ -16,7 +17,8 @@
     this.unrenderSelectedMove();
   
     this.selectedCell = null;
-    this.targetedCells = [];
+    this.selectedMove = null;
+    this.targetedCells = [];    
     this.selectedMoveIndex = null;
         
     this.selectionCallback(null);
@@ -45,9 +47,48 @@
       if (this.legalMapping[cell.id]) {      
       	cell.onclick = this.getCellClickHandler(cell);
       }
-    }    
+    }
+    
+    // Intercept key events and see if they're relevant to the game, and if not
+    // route them to the existing key handler.
+    if (!this.hasKeyBindings) {
+      var thisRef = this;
+      var oldkeydown = document.onkeydown;    
+      document.onkeydown = function(e) { thisRef.onkeydown(e); if (oldkeydown) oldkeydown(e); }
+      this.hasKeyBindings = true;
+    }
   },
+    
+  hasKeyBindings: false,
+  onkeydown: function (e) {
+    if (e.which == 74 || e.which == 75) {
+      var previousMove = this.selectedMove;
+      var moveIndex = this.legals.indexOf(previousMove);
 
+      if (e.which == 74) { moveIndex--; }
+      else if (e.which == 75) { moveIndex++; }
+
+      if (moveIndex < 0) { moveIndex += this.legals.length; }
+      else if (moveIndex >= this.legals.length) { moveIndex -= this.legals.length; }
+
+      var selectedMove = this.legals[moveIndex];
+      var cellIdForMove = this.getCellForMove(selectedMove);
+      var cellForMove = document.getElementById(cellIdForMove);
+      var indexInCell = this.legalMapping[cellIdForMove].indexOf(selectedMove);
+
+      // Identify the target cell(s).
+      var targets = this.getTargetsForMove(selectedMove);
+
+      this.unrenderSelectedMove();
+      this.selectedCell = cellForMove;
+      this.targetedCells = targets;
+      this.selectedMove = selectedMove;
+      this.selectedMoveIndex = indexInCell;
+      this.renderSelectedMove();
+      this.selectionCallback(selectedMove);
+    }
+  },
+  
   cacheLegalMapping: function() {
     this.legalMapping = {};
     for(var i = 0; i < this.legals.length; i++) {
@@ -121,6 +162,7 @@
       parent.unrenderSelectedMove();
       parent.selectedCell = cell;
       parent.targetedCells = targets;
+      parent.selectedMove = selectedMove;
       parent.renderSelectedMove();
       parent.selectionCallback(selectedMove);
     }
