@@ -72,6 +72,15 @@ public class GGP_RepositoryServlet extends HttpServlet {
                     if (reqURI.endsWith(".xsl")) {
                         response = "<!DOCTYPE stylesheet [<!ENTITY ROOT \""+repositoryRootDirectory+"\">]>\n\n" + response;
                     }
+                    
+                    // Horrible hack; fix this later. Right now this is used to
+                    // let games share a common board user interface, but this should
+                    // really be handled in a cleaner, more general way with javascript
+                    // libraries and imports.
+                    if (reqURI.endsWith(".js") && response.contains("[BOARD_INTERFACE_JS]")) {
+                        String theCommonBoardJS = readFile(new File("root/resources/scripts/BoardInterface.js"));
+                        response = response.replaceFirst("\\[BOARD_INTERFACE_JS\\]", theCommonBoardJS);
+                    }
                 }
             } else {
                 resp.setStatus(404);
