@@ -9,12 +9,29 @@ import java.io.InputStream;
 
 import javax.servlet.http.*;
 
+import java.util.Collections;
+import net.sf.jsr107cache.Cache;
+import net.sf.jsr107cache.CacheException;
+import net.sf.jsr107cache.CacheManager;
+
 @SuppressWarnings("serial")
 public class GGP_RepositoryServlet extends HttpServlet {
     public static final String repositoryRootDirectory = "http://games.ggp.org";
     
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
+        // Initialize the memcache.
+        Cache cache;
+        try {
+            cache = CacheManager.getInstance().getCache("gameCache");
+            if (cache == null) {
+                cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+                CacheManager.getInstance().registerCache("gameCache", cache);
+            }
+        } catch (CacheException e) {
+            throw new RuntimeException(e);
+        }        
+        
         // Allow cross-site access to the files, since nothing is mutable.
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
@@ -23,8 +40,34 @@ public class GGP_RepositoryServlet extends HttpServlet {
         
         // Generate the response content.
         String response = "";
-        String contentType = "";
         String reqURI = req.getRequestURI();
+        
+        // Generate the content type based on the URL.
+        resp.setContentType(getContentType(reqURI));
+        
+        if (reqURI.equals("/cache/stats")) {
+            String theStatsString = "Cache statistics: ";
+            theStatsString += "Hits(" + cache.getCacheStatistics().getCacheHits() + ") ";
+            theStatsString += "Misses(" + cache.getCacheStatistics().getCacheMisses() + ") ";
+            theStatsString += "Size(" + cache.size() + ") ";
+            resp.getWriter().println(theStatsString);
+            resp.setStatus(200);
+            return;
+        } else if (reqURI.equals("/cache/flush")) {
+            cache.clear();
+            resp.getWriter().println("Cache flushed.");
+            resp.setStatus(200);
+            return;            
+        }
+        
+        // Query the cache for the requested URL, and return the cached
+        // value if there's a cache hit.
+        if (cache.containsKey(reqURI)) {
+            String theCachedValue = cache.get(reqURI).toString();
+            resp.getWriter().println(theCachedValue);
+            resp.setStatus(200);
+            return;
+        }
         
         // TODO: Come up with a much better implementation of versioning
         // than this hacky hack.
@@ -32,17 +75,14 @@ public class GGP_RepositoryServlet extends HttpServlet {
                 
         if (reqURI.equals("/") || reqURI.equals("/index.html")) {
             response = readFile(new File("root/gameList.html"));
-            contentType = "text/html";
         } else if(reqURI.startsWith("/games/") && reqURI.endsWith("/") && reqURI.length() > 9) {
             response = readFile(new File("root" + reqURI + "METADATA"));
-            contentType = "text/javascript";
         } else {
             String rootURI = "root" + reqURI;            
             File rootFile = new File(rootURI);
             if (rootFile.exists()) {
                 if (rootFile.isDirectory()) {
                     // Show contents of the directory, using JSON notation.
-                    contentType = "text/javascript";
                     response = "[";
 
                     String[] children = rootFile.list();
@@ -62,7 +102,6 @@ public class GGP_RepositoryServlet extends HttpServlet {
                     }
                     in.close();
                     
-                    contentType = "image/png";
                     response = "";
                 } else {
                     // Show contents of the file.                                        
@@ -88,25 +127,38 @@ public class GGP_RepositoryServlet extends HttpServlet {
             }
         }
         
-        // Content type: use explicitly set type, or infer from filename,
-        // or fall back to using text/plain.
-        if (contentType.length() > 0) {
-            resp.setContentType(contentType);
-        } else if (reqURI.endsWith(".xml")) {
-            resp.setContentType("application/xml");
-        } else if (reqURI.endsWith(".xsl")) {
-            resp.setContentType("application/xml");
-        } else if (reqURI.endsWith(".js")) {
-            resp.setContentType("text/javascript");   
-        } else if (reqURI.endsWith(".json")) {
-            resp.setContentType("text/javascript");
-        } else {
-            resp.setContentType("text/plain");
-        }
-        
         // Write the response content.
         if(response.length() > 0) {
+            // First, cache the content for later use.
+            cache.put(reqURI, response);
+
+            // Then write it out to the client.
             resp.getWriter().println(response);
+            resp.setStatus(200);
+        }
+    }
+    
+    private String getContentType(String theURL) {
+        if (theURL.endsWith(".xml")) {
+            return "application/xml";
+        } else if (theURL.endsWith(".xsl")) {
+            return "application/xml";
+        } else if (theURL.endsWith(".js")) {
+            return "text/javascript";   
+        } else if (theURL.endsWith(".json")) {
+            return "text/javascript";
+        } else if (theURL.endsWith(".html")) {
+            return "text/html";
+        } else if (theURL.endsWith(".png")) {
+            return "image/png";
+        } else {
+            if (theURL.equals("/")) {
+                return "text/html";
+            } else if (theURL.endsWith("/")) {
+                return "text/javascript";
+            }
+            
+            return "text/plain";
         }
     }
     
