@@ -1,6 +1,7 @@
 package ggp.repository;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -39,14 +40,14 @@ public class GGP_RepositoryServlet extends HttpServlet {
         resp.setHeader("Access-Control-Allow-Age", "86400");        
         
         // Generate the response content.
-        String response = "";
         String reqURI = req.getRequestURI();
         
         // Generate the content type based on the URL.
         resp.setContentType(getContentType(reqURI));
-        
+
+        // Cache control administrative requests
         if (reqURI.equals("/cache/stats")) {
-            String theStatsString = "Cache statistics: ";
+            String theStatsString = "Cache statistics [v2]: ";
             theStatsString += "Hits(" + cache.getCacheStatistics().getCacheHits() + ") ";
             theStatsString += "Misses(" + cache.getCacheStatistics().getCacheMisses() + ") ";
             theStatsString += "Size(" + cache.size() + ") ";
@@ -59,86 +60,69 @@ public class GGP_RepositoryServlet extends HttpServlet {
             resp.setStatus(200);
             return;            
         }
-        
+
         // Query the cache for the requested URL, and return the cached
         // value if there's a cache hit.
         if (cache.containsKey(reqURI)) {
-            String theCachedValue = cache.get(reqURI).toString();
-            resp.getWriter().println(theCachedValue);
+            byte[] theCachedValue = (byte[])cache.get(reqURI);
+            resp.getOutputStream().write(theCachedValue);
             resp.setStatus(200);
             return;
         }
-        
-        // TODO: Come up with a much better implementation of versioning
-        // than this hacky hack.
-        if (reqURI.contains("v0/")) reqURI = reqURI.replaceFirst("v0/", "");
-                
-        if (reqURI.equals("/") || reqURI.equals("/index.html")) {
-            response = readFile(new File("root/gameList.html"));
-        } else if(reqURI.startsWith("/games/") && reqURI.endsWith("/") && reqURI.length() > 9) {
-            response = readFile(new File("root" + reqURI + "METADATA"));
-        } else {
-            String rootURI = "root" + reqURI;            
-            File rootFile = new File(rootURI);
-            if (rootFile.exists()) {
-                if (rootFile.isDirectory()) {
-                    // Show contents of the directory, using JSON notation.
-                    response = "[";
 
-                    String[] children = rootFile.list();
-                    for (int i=0; i<children.length; i++) {
-                        // Get filename of file or directory
-                        response += '"' + children[i] + "\",\n ";
-                    }
-
-                    response = response.substring(0, response.length() - 3) + "]";
-                } else if(reqURI.endsWith(".png")) {
-                    InputStream in = new FileInputStream(rootFile);
-                
-                    // Transfer bytes from in to out
-                    byte[] buf = new byte[1024];
-                    while (in.read(buf) > 0) {
-                        resp.getOutputStream().write(buf);
-                    }
-                    in.close();
-                    
-                    response = "";
-                } else {
-                    // Show contents of the file.                                        
-                    response += readFile(rootFile);
-
-                    // Special case override for XSLT
-                    if (reqURI.endsWith(".xsl")) {
-                        response = "<!DOCTYPE stylesheet [<!ENTITY ROOT \""+repositoryRootDirectory+"\">]>\n\n" + response;
-                    }
-                    
-                    // Horrible hack; fix this later. Right now this is used to
-                    // let games share a common board user interface, but this should
-                    // really be handled in a cleaner, more general way with javascript
-                    // libraries and imports.
-                    if (reqURI.endsWith(".js") && response.contains("[BOARD_INTERFACE_JS]")) {
-                        String theCommonBoardJS = readFile(new File("root/resources/scripts/BoardInterface.js"));
-                        response = response.replaceFirst("\\[BOARD_INTERFACE_JS\\]", theCommonBoardJS);
-                    }
-                }
-            } else {
-                resp.setStatus(404);
-                response = "";
-            }
+        // Otherwise, get the bytes for the response.
+        byte[] responseBytes = null;
+        try {
+            responseBytes = getResponseBytesForURI(reqURI);
+        } catch (IOException e) {
+            ;
         }
         
         // Write the response content.
-        if(response.length() > 0) {
+        if(responseBytes != null && responseBytes.length > 0) {
             // First, cache the content for later use.
-            cache.put(reqURI, response);
+            cache.put(reqURI, responseBytes);
 
             // Then write it out to the client.
-            resp.getWriter().println(response);
+            resp.getOutputStream().write(responseBytes);
             resp.setStatus(200);
+        } else {
+            resp.setStatus(404);
         }
     }
     
-    private String getContentType(String theURL) {
+    private static byte[] getResponseBytesForURI(String reqURI) throws IOException {
+        // Special case: the main page.
+        if (reqURI.equals("/") || reqURI.equals("/index.html")) {
+            return readFile(new File("root/gameList.html")).getBytes();
+        }
+        
+        if (reqURI.startsWith("/games/")) {
+            if(reqURI.endsWith("/") && reqURI.length() > 9) {
+                reqURI += "METADATA";
+            }
+
+            // TODO: Come up with a much better implementation of versioning
+            // than this hacky hack.
+            if (reqURI.contains("v0/")) reqURI = reqURI.replaceFirst("v0/", "");            
+            
+            /*
+            String vPrefix = reqURI;
+            int nVersion = -1;            
+            try {
+                String lastPart = reqURI.substring(reqURI.lastIndexOf("/v")+1);
+                String vPart = lastPart.substring(0,lastPart.indexOf("/"));
+                nVersion = Integer.parseInt(vPart);
+            } catch (Exception e) {
+                ;
+            }
+            */
+        }            
+        
+        return getBytesForFile(new File("root" + reqURI));        
+    }
+
+    private static String getContentType(String theURL) {
         if (theURL.endsWith(".xml")) {
             return "application/xml";
         } else if (theURL.endsWith(".xsl")) {
@@ -162,7 +146,63 @@ public class GGP_RepositoryServlet extends HttpServlet {
         }
     }
     
-    private String readFile(File rootFile) throws IOException {
+    private static byte[] getBytesForFile(File theFile) {
+        try {
+            if (!theFile.exists()) {
+                return null;
+            } else if (theFile.isDirectory()) {
+                return readDirectory(theFile).getBytes();
+            } else if (theFile.getName().endsWith(".png")) {
+                // TODO: Handle other binary formats?
+                return readBinaryFile(theFile);
+            } else if (theFile.getName().endsWith(".xsl")) {
+                return transformXSL(readFile(theFile)).getBytes();
+            } else if (theFile.getName().endsWith(".js")) {
+                return transformJS(readFile(theFile)).getBytes();
+            } else {
+                return readFile(theFile).getBytes();
+            }
+        } catch (IOException e) {
+            return null;
+        }
+    }
+    
+    private static String transformXSL(String theContent) {
+        // Special case override for XSLT        
+        return "<!DOCTYPE stylesheet [<!ENTITY ROOT \""+repositoryRootDirectory+"\">]>\n\n" + theContent;
+    }
+    
+    private static String transformJS(String theContent) throws IOException {
+        // Horrible hack; fix this later. Right now this is used to
+        // let games share a common board user interface, but this should
+        // really be handled in a cleaner, more general way with javascript
+        // libraries and imports.
+        if (theContent.contains("[BOARD_INTERFACE_JS]")) {
+            String theCommonBoardJS = readFile(new File("root/resources/scripts/BoardInterface.js"));
+            theContent = theContent.replaceFirst("\\[BOARD_INTERFACE_JS\\]", theCommonBoardJS);
+        }
+        return theContent;
+    }
+
+    private static String readDirectory(File theDirectory) throws IOException {
+        StringBuilder response = new StringBuilder();
+        // Show contents of the directory, using JSON notation.
+        response.append("[");
+
+        String[] children = theDirectory.list();
+        for (int i=0; i<children.length; i++) {
+            // Get filename of file or directory
+            response.append("\"");
+            response.append(children[i]);
+            response.append("\",\n ");
+        }
+
+        response.delete(response.length()-3, response.length());
+        response.append("]");
+        return response.toString();
+    }
+    
+    private static String readFile(File rootFile) throws IOException {
         // Show contents of the file.                                        
         FileReader fr = new FileReader(rootFile);
         BufferedReader br = new BufferedReader(fr);
@@ -174,5 +214,19 @@ public class GGP_RepositoryServlet extends HttpServlet {
         }
         
         return response;
+    }
+    
+    private static byte[] readBinaryFile(File rootFile) throws IOException {
+        InputStream in = new FileInputStream(rootFile);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        
+        // Transfer bytes from in to out
+        byte[] buf = new byte[1024];
+        while (in.read(buf) > 0) {
+            out.write(buf);
+        }
+        in.close();
+        
+        return out.toByteArray();
     }
 }
