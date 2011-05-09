@@ -1,0 +1,10 @@
+{
+  "gameName": "Two-Player Free-For-All Zero-Sum",
+  "numRoles": 2,
+  "version": 0,
+  
+  "user_interface": "2pffa_zerosum.js",
+  "rulesheet": "2pffa_zerosum.kif",  
+  "stylesheet": "2pffa_zerosum.xsl",
+  "description": "2pffa_zerosum.txt"
+}
