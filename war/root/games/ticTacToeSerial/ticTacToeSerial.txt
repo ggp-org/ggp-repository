@@ -1,0 +1,3 @@
+Two games of tic-tac-toe played one after the other.
+When both games are completed, the players receive scores that are
+averages of their results in each game.

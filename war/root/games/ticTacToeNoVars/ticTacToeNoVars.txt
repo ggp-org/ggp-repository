@@ -1,0 +1,2 @@
+Another version of tic-tac-toe. This version uses no
+variables in the game description.

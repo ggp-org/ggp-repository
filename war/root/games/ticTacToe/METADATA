@@ -4,6 +4,7 @@
   "version": 0,
   
   "user_interface": "ticTacToe.js",
-  "rulesheet": "ticTacToe.kif",  
-  "stylesheet": "ticTacToe.xsl"
+  "rulesheet": "ticTacToe.kif",
+  "stylesheet": "ticTacToe.xsl",
+  "description": "ticTacToe.txt"
 }

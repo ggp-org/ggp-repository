@@ -1,0 +1,2 @@
+A variant of tic-tac-toe played on a 5x5 grid,
+requiring five marks in a row to win.

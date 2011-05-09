@@ -2,5 +2,6 @@
   "version": 0,
   "numRoles": 2,
 
-  "rulesheet": "ticTacToeLargeSuicide.kif"
+  "rulesheet": "ticTacToeLargeSuicide.kif",
+  "description": "ticTacToeLargeSuicide.txt"
 }

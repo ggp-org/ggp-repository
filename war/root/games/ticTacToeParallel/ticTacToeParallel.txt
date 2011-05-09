@@ -1,0 +1,4 @@
+Two games of tic-tac-toe played at the same time.
+Each turn, the active player makes a mark on each board. When one of
+the games is completed, both games stop, and the players' scores are
+the averages of their results in each game.

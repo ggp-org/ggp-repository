@@ -2,5 +2,6 @@
   "version": 0,
   "numRoles": 2,
 
-  "rulesheet": "ticTacToeParallel.kif"
+  "rulesheet": "ticTacToeParallel.kif",
+  "description": "ticTacToeParallel.txt"
 }
