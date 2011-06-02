@@ -1,0 +1,6 @@
+Cit-Tac-Eot is a game written by the Lés Caméles Froliqué Ìlogicamént team
+(Michael Abercrombie, Patrick Grafe, and Peter Pham) from the 2011 edition
+of the CS227B class at Stanford. It is a Tic-Tac-Toe style game where you
+try to mark five-in-a-row on a 5x5 grid. However, each turn the grid cells
+rotate around the center, the inner cells rotating clockwise and the outer
+cells rotating counter-clockwise.

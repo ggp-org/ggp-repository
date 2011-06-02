@@ -3,6 +3,7 @@
 ;;; TicTacChessCheckersFour (alternate implementation)
 ;;;
 ;;; Changed by Sam Schreiber to have only two players. 
+;;; Changed by Alex Landau to have a score of 50/50 on a draw. (5/28/11)
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -33,23 +34,35 @@
 ;; LEGAL Relations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;(<= (legal ?player noop)
+;    (role ?player)) 
+    
 (<= (legal ?player noop)
     (role ?player)
-    (not (true (control ?player)))) 
+    (not (true (control ?player))))
+; Restrict noops for the active player to when no legal
+; moves are available
+(<= (legal ?player ?move)
+    (legal2 ?player ?move))
+(<= (hasLegalMove ?player)
+    (legal2 ?player ?move))
+(<= (legal ?player noop)
+    (true (control ?player))
+    (not (hasLegalMove ?player)))
     
-(<= (legal ?player (drop ?x))
+(<= (legal2 ?player (drop ?x))
 	(true (control ?player))
 	(chute ?x)
 	(emptyCell ?x 6))
 	
-(<= (legal ?player (pawnMove ?x1 ?y1 ?x2 ?y2))
+(<= (legal2 ?player (pawnMove ?x1 ?y1 ?x2 ?y2))
 	(true (control ?player))
 	(true (cell ?x1 ?y1 ?piece))
 	(piece ?piece pawn ?player)
 	(orthogonal ?x1 ?y1 ?x2 ?y2)
 	(onBoard ?x2 ?y2)
 	(emptyCell ?x2 ?y2))
-(<= (legal ?player1 (pawnMove ?x1 ?y1 ?x2 ?y2))
+(<= (legal2 ?player1 (pawnMove ?x1 ?y1 ?x2 ?y2))
 	(true (control ?player1))
 	(true (cell ?x1 ?y1 ?piece1))
 	(piece ?piece1 pawn ?player1)
@@ -59,14 +72,14 @@
 	(piece ?piece2 ?ignore ?player2)
 	(distinct ?player1 ?player2))
 	
-(<= (legal ?player (knightMove ?x1 ?y1 ?x2 ?y2))
+(<= (legal2 ?player (knightMove ?x1 ?y1 ?x2 ?y2))
 	(true (control ?player))
 	(true (cell ?x1 ?y1 ?piece))
 	(piece ?piece knight ?player)
 	(ell ?x1 ?y1 ?x2 ?y2)
 	(onBoard ?x2 ?y2)
 	(emptyCell ?x2 ?y2))
-(<= (legal ?player1 (knightMove ?x1 ?y1 ?x2 ?y2))
+(<= (legal2 ?player1 (knightMove ?x1 ?y1 ?x2 ?y2))
 	(true (control ?player1))
 	(true (cell ?x1 ?y1 ?piece1))
 	(piece ?piece1 knight ?player1)
@@ -76,7 +89,7 @@
 	(piece ?piece2 ?ignore ?player2)
 	(distinct ?player1 ?player2))
 
-(<= (legal ?player (checkerMove ?x1 ?y1 ?x2 ?y2))
+(<= (legal2 ?player (checkerMove ?x1 ?y1 ?x2 ?y2))
 	(true (control ?player))
 	(true (cell ?x1 ?y1 ?piece))
 	(piece ?piece checker ?player)
@@ -84,7 +97,7 @@
 	(onBoard ?x2 ?y2)
 	(emptyCell ?x2 ?y2))
 
-(<= (legal ?player1 (jump ?x1 ?y1 ?x2 ?y2 ?x3 ?y3))
+(<= (legal2 ?player1 (jump ?x1 ?y1 ?x2 ?y2 ?x3 ?y3))
 	(true (control ?player1))
 	(true (cell ?x1 ?y1 ?piece1))
 	(piece ?piece1 checker ?player1)
@@ -95,7 +108,7 @@
 	(upRight ?x2 ?y2 ?x3 ?y3)
 	(onBoard ?x3 ?y3)
 	(emptyCell ?x3 ?y3))
-(<= (legal ?player1 (jump ?x1 ?y1 ?x2 ?y2 ?x3 ?y3))
+(<= (legal2 ?player1 (jump ?x1 ?y1 ?x2 ?y2 ?x3 ?y3))
 	(true (control ?player1))
 	(true (cell ?x1 ?y1 ?piece1))
 	(piece ?piece1 checker ?player1)
@@ -106,7 +119,7 @@
 	(upLeft ?x2 ?y2 ?x3 ?y3)
 	(onBoard ?x3 ?y3)
 	(emptyCell ?x3 ?y3))
-(<= (legal ?player1 (jump ?x1 ?y1 ?x2 ?y2 ?x3 ?y3))
+(<= (legal2 ?player1 (jump ?x1 ?y1 ?x2 ?y2 ?x3 ?y3))
 	(true (control ?player1))
 	(true (cell ?x1 ?y1 ?piece1))
 	(piece ?piece1 checker ?player1)
@@ -117,7 +130,7 @@
 	(downRight ?x2 ?y2 ?x3 ?y3)
 	(onBoard ?x3 ?y3)
 	(emptyCell ?x3 ?y3))
-(<= (legal ?player1 (jump ?x1 ?y1 ?x2 ?y2 ?x3 ?y3))
+(<= (legal2 ?player1 (jump ?x1 ?y1 ?x2 ?y2 ?x3 ?y3))
 	(true (control ?player1))
 	(true (cell ?x1 ?y1 ?piece1))
 	(piece ?piece1 checker ?player1)
@@ -219,7 +232,11 @@
 
 (<= (goal ?player 0)
 	(role ?player)
-	(not (line ?player)))
+	(not (line ?player))
+	anyLine)
+(<= (goal ?player 50)
+	(role ?player)
+	(not anyLine))
 (<= (goal ?player 100)
 	(role ?player)
 	(line ?player))
@@ -227,6 +244,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; View Definitions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= anyLine
+	(line ?player))
 
 (<= (lowPoint ?x ?y)
 	(lowPointFrom ?x 6 ?x ?y))
@@ -411,3 +431,102 @@
 (stepCount 71 72) (stepCount 72 73) (stepCount 73 74) (stepCount 74 75) (stepCount 75 76) (stepCount 76 77) (stepCount 77 78) (stepCount 78 79) (stepCount 79 80) (stepCount 80 81)
 (stepCount 81 82) (stepCount 82 83) (stepCount 83 84) (stepCount 84 85) (stepCount 85 86) (stepCount 86 87) (stepCount 87 88) (stepCount 88 89) (stepCount 89 90) (stepCount 90 91)
 (stepCount 91 92) (stepCount 92 93) (stepCount 93 94) (stepCount 94 95) (stepCount 95 96) (stepCount 96 97) (stepCount 97 98) (stepCount 98 99) (stepCount 99 100) (stepCount 100 101)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Bases and Inputs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (base (control ?player))
+	(role ?player))
+(base (step 1))
+(<= (base (step ?n))
+	(stepCount ?m ?n))
+
+(<= (base (cell ?x ?y ?piece))
+	(start ?piece ?x ?y))
+
+(<= (base (cell ?x ?y ?piece))
+	(onBoard ?x ?y)
+	(or (piece ?piece pawn ?color)
+		(piece ?piece knight ?color)))
+(<= (base (cell ?x ?y ?disc))
+	(onBoard ?x ?y)
+	(chute ?x)
+	(piece ?disc disc ?color))
+(oddIdx 1) (oddIdx 3) (oddIdx 5) (oddIdx 7)
+(evenIdx 2) (evenIdx 4) (evenIdx 6)
+(<= (oddSquare ?x ?y)
+	(oddIdx ?x)
+	(evenIdx ?y))
+(<= (oddSquare ?x ?y)
+	(oddIdx ?y)
+	(evenIdx ?x))
+(<= (base (cell ?x ?y ?checker))
+	(onBoard ?x ?y)
+	(oddSquare ?x ?y)
+	(piece ?checker checker ?color))
+	
+(<= (input ?player noop)
+    (role ?player)) 
+    
+(<= (input ?player (drop ?x))
+	(role ?player)
+	(chute ?x))
+	
+(<= (input ?player (pawnMove ?x1 ?y1 ?x2 ?y2))
+	(piece ?piece pawn ?player)
+	(or (onBoard ?x1 ?y1) (start ?piece ?x1 ?y1))
+	(orthogonal ?x1 ?y1 ?x2 ?y2)
+	(onBoard ?x2 ?y2))
+(<= (input ?player (pawnMove ?x1 ?y1 ?x2 ?y2))
+	(piece ?piece pawn ?player)
+	(or (onBoard ?x1 ?y1) (start ?piece ?x1 ?y1))
+	(diagonal ?x1 ?y1 ?x2 ?y2)
+	(onBoard ?x2 ?y2))
+	
+(<= (input ?player (knightMove ?x1 ?y1 ?x2 ?y2))
+	(piece ?piece knight ?player)
+	(or (onBoard ?x1 ?y1) (start ?piece ?x1 ?y1))
+	(ell ?x1 ?y1 ?x2 ?y2)
+	(onBoard ?x2 ?y2))
+(<= (input ?player (knightMove ?x1 ?y1 ?x2 ?y2))
+	(piece ?piece knight ?player)
+	(or (onBoard ?x1 ?y1) (start ?piece ?x1 ?y1))
+	(ell ?x1 ?y1 ?x2 ?y2)
+	(onBoard ?x2 ?y2))
+
+(<= (input ?player (checkerMove ?x1 ?y1 ?x2 ?y2))
+	(piece ?piece checker ?player)
+	(or (onBoard ?x1 ?y1) (start ?piece ?x1 ?y1))
+	(diagonal ?x1 ?y1 ?x2 ?y2)
+	(onBoard ?x2 ?y2)
+	(oddSquare ?x2 ?y2))
+
+(<= (input ?player (jump ?x1 ?y1 ?x2 ?y2 ?x3 ?y3))
+	(piece ?piece checker ?player)
+	(or (onBoard ?x1 ?y1) (start ?piece ?x1 ?y1))
+	(upRight ?x1 ?y1 ?x2 ?y2)
+	(upRight ?x2 ?y2 ?x3 ?y3)
+	(onBoard ?x3 ?y3)
+	(oddSquare ?x2 ?y2))
+(<= (input ?player (jump ?x1 ?y1 ?x2 ?y2 ?x3 ?y3))
+	(piece ?piece checker ?player)
+	(or (onBoard ?x1 ?y1) (start ?piece ?x1 ?y1))
+	(upLeft ?x1 ?y1 ?x2 ?y2)
+	(upLeft ?x2 ?y2 ?x3 ?y3)
+	(onBoard ?x3 ?y3)
+	(oddSquare ?x2 ?y2))
+(<= (input ?player (jump ?x1 ?y1 ?x2 ?y2 ?x3 ?y3))
+	(piece ?piece checker ?player)
+	(or (onBoard ?x1 ?y1) (start ?piece ?x1 ?y1))
+	(downRight ?x1 ?y1 ?x2 ?y2)
+	(downRight ?x2 ?y2 ?x3 ?y3)
+	(onBoard ?x3 ?y3)
+	(oddSquare ?x2 ?y2))
+(<= (input ?player (jump ?x1 ?y1 ?x2 ?y2 ?x3 ?y3))
+	(piece ?piece checker ?player)
+	(or (onBoard ?x1 ?y1) (start ?piece ?x1 ?y1))
+	(downLeft ?x1 ?y1 ?x2 ?y2)
+	(downLeft ?x2 ?y2 ?x3 ?y3)
+	(onBoard ?x3 ?y3)
+	(oddSquare ?x2 ?y2))

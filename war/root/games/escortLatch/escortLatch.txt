@@ -1,0 +1,4 @@
+Escort-Latch Breakthrough is a variant of Breakthrough that has an explicit latch.
+Each side has a king as well as a phalanx of pawns. Players only win if their king
+makes it to the other side; pawns don't count. Kings are constrained so that they
+can't move backwards.

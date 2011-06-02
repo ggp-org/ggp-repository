@@ -1,0 +1,10 @@
+{
+  "gameName": "Escort-Latch Breakthrough",
+  "numRoles": 2,
+  "version": 0,
+  
+  "user_interface": "escortLatch.js",
+  "rulesheet": "escortLatch.kif",  
+  "stylesheet": "escortLatch.xsl",
+  "description": "escortLatch.txt"
+}
