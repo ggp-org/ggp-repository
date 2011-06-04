@@ -8,141 +8,91 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.servlet.http.*;
-
-import java.util.Collections;
-import net.sf.jsr107cache.Cache;
-import net.sf.jsr107cache.CacheException;
-import net.sf.jsr107cache.CacheManager;
-
 @SuppressWarnings("serial")
-public class GGP_RepositoryServlet extends HttpServlet {
+public class GGP_RepositoryServlet extends CachedStaticServlet {
     public static final String repositoryRootDirectory = "http://games.ggp.org";
-    
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-        // Initialize the memcache.
-        Cache cache;
-        try {
-            cache = CacheManager.getInstance().getCache("gameCache");
-            if (cache == null) {
-                cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-                CacheManager.getInstance().registerCache("gameCache", cache);
-            }
-        } catch (CacheException e) {
-            throw new RuntimeException(e);
-        }        
-        
-        // Allow cross-site access to the files, since nothing is mutable.
-        resp.setHeader("Access-Control-Allow-Origin", "*");
-        resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-        resp.setHeader("Access-Control-Allow-Headers", "*");
-        resp.setHeader("Access-Control-Allow-Age", "86400");        
-        
-        // Generate the response content.
-        String reqURI = req.getRequestURI();
-        
-        // Generate the content type based on the URL.
-        resp.setContentType(getContentType(reqURI));
 
-        // Cache control administrative requests
-        if (reqURI.equals("/cache/stats")) {
-            String theStatsString = "Cache statistics [v2]: ";
-            theStatsString += "Hits(" + cache.getCacheStatistics().getCacheHits() + ") ";
-            theStatsString += "Misses(" + cache.getCacheStatistics().getCacheMisses() + ") ";
-            theStatsString += "Size(" + cache.size() + ") ";
-            resp.getWriter().println(theStatsString);
-            resp.setStatus(200);
-            return;
-        } else if (reqURI.equals("/cache/flush")) {
-            cache.clear();
-            resp.getWriter().println("Cache flushed.");
-            resp.setStatus(200);
-            return;            
-        }
-
-        // Query the cache for the requested URL, and return the cached
-        // value if there's a cache hit.
-        if (cache.containsKey(reqURI)) {
-            byte[] theCachedValue = (byte[])cache.get(reqURI);
-            resp.getOutputStream().write(theCachedValue);
-            resp.setStatus(200);
-            return;
-        }
-
-        // Otherwise, get the bytes for the response.
-        byte[] responseBytes = null;
-        try {
-            responseBytes = getResponseBytesForURI(reqURI);
-        } catch (IOException e) {
-            ;
-        }
-        
-        // Write the response content.
-        if(responseBytes != null && responseBytes.length > 0) {
-            // First, cache the content for later use.
-            cache.put(reqURI, responseBytes);
-
-            // Then write it out to the client.
-            resp.getOutputStream().write(responseBytes);
-            resp.setStatus(200);
-        } else {
-            resp.setStatus(404);
-        }
-    }
-    
-    private static byte[] getResponseBytesForURI(String reqURI) throws IOException {
+    protected byte[] getResponseBytesForURI(String reqURI) throws IOException {
         // Special case: the main page.
         if (reqURI.equals("/") || reqURI.equals("/index.html")) {
             return readFile(new File("root/gameList.html")).getBytes();
         }
-        
-        if (reqURI.startsWith("/games/")) {
-            if(reqURI.endsWith("/") && reqURI.length() > 9) {
-                reqURI += "METADATA";
-            }
 
-            // TODO: Come up with a much better implementation of versioning
-            // than this hacky hack.
-            if (reqURI.contains("v0/")) reqURI = reqURI.replaceFirst("v0/", "");            
-            
-            /*
-            String vPrefix = reqURI;
-            int nVersion = -1;            
-            try {
-                String lastPart = reqURI.substring(reqURI.lastIndexOf("/v")+1);
-                String vPart = lastPart.substring(0,lastPart.indexOf("/"));
-                nVersion = Integer.parseInt(vPart);
-            } catch (Exception e) {
-                ;
-            }
-            */
-        }            
+        // Files not under /games/ aren't versioned, and can just be
+        // accessed directly.
+        if (!reqURI.startsWith("/games/")) {
+            return getBytesForFile(new File("root" + reqURI));
+        }
         
-        return getBytesForFile(new File("root" + reqURI));        
-    }
-
-    private static String getContentType(String theURL) {
-        if (theURL.endsWith(".xml")) {
-            return "application/xml";
-        } else if (theURL.endsWith(".xsl")) {
-            return "application/xml";
-        } else if (theURL.endsWith(".js")) {
-            return "text/javascript";   
-        } else if (theURL.endsWith(".json")) {
-            return "text/javascript";
-        } else if (theURL.endsWith(".html")) {
-            return "text/html";
-        } else if (theURL.endsWith(".png")) {
-            return "image/png";
+        // Accessing the folder containing a game should show the game's
+        // associated metadata (which includes the contents of the folder).
+        if(reqURI.endsWith("/") && reqURI.length() > 9) {
+            reqURI += "METADATA";
+        }
+        
+        // Extract out the version number
+        String thePrefix = reqURI.substring(0, reqURI.lastIndexOf("/"));
+        String theSuffix = reqURI.substring(reqURI.lastIndexOf("/")+1);
+        Integer theVersion = null;
+        try {
+            String vPart = thePrefix.substring(thePrefix.lastIndexOf("/v")+2);
+            theVersion = Integer.parseInt(vPart);            
+            thePrefix = thePrefix.substring(0, thePrefix.lastIndexOf("/v"));
+        } catch (Exception e) {
+            ;
+        }
+        
+        // Sanity check: raise an exception if the parsing didn't work.
+        if (theVersion == null) {
+            if (!reqURI.equals(thePrefix + "/" + theSuffix)) {
+                throw new RuntimeException(reqURI + " != [~v] " + (thePrefix + "/" + theSuffix));
+            }
         } else {
-            if (theURL.equals("/")) {
-                return "text/html";
-            } else if (theURL.endsWith("/")) {
-                return "text/javascript";
+            if (!reqURI.equals(thePrefix + "/v" + theVersion + "/" + theSuffix)) {
+                throw new RuntimeException(reqURI + " != [v] " + (thePrefix + "/v" + theVersion + "/" + theSuffix));
             }
-            
-            return "text/plain";
+        }
+
+        // When no version number is explicitly specified, assume that we want the
+        // latest version, whatever that is. Also, make sure the game version being
+        // requested actually exists (i.e. is between 0 and the max version).
+        int nMaxVersion = getMaxVersionForDirectory(new File("root", thePrefix));
+        if (theVersion == null) theVersion = nMaxVersion;        
+        if (theVersion < 0 || theVersion > nMaxVersion) return null;
+
+        while (theVersion >= 0) {
+            byte[] theBytes = getBytesForVersionedFile(thePrefix, theVersion, theSuffix);
+            if (theBytes != null) {
+                return theBytes;
+            }
+            theVersion--;
+        }
+        return null;
+    }
+    
+    private static int getMaxVersionForDirectory(File theDir) {
+        if (!theDir.exists() || !theDir.isDirectory()) {
+            throw new RuntimeException(theDir + ": " + theDir.exists() + " , " + theDir.isDirectory());
+        }
+        
+        int maxVersion = 0;
+        String[] children = theDir.list();
+        for (String s : children) {
+            if (s.startsWith("v")) {
+                int nVersion = Integer.parseInt(s.substring(1));
+                if (nVersion > maxVersion) {
+                    maxVersion = nVersion;
+                }
+            }
+        }
+        return maxVersion;
+    }
+    
+    private static byte[] getBytesForVersionedFile(String thePrefix, int theVersion, String theSuffix) {
+        if (theVersion == 0) {
+            return getBytesForFile(new File("root", thePrefix + "/" + theSuffix));
+        } else {
+            return getBytesForFile(new File("root", thePrefix + "/v" + theVersion + "/" + theSuffix));
         }
     }
     
