@@ -3,5 +3,7 @@
   "version": 0,
   "numRoles": 2,
 
-  "rulesheet": "biddingTicTacToe_10coins.kif"
+  "rulesheet": "biddingTicTacToe_10coins.kif",
+  "stylesheet": "biddingTicTacToe_10coins.xsl",
+  "description": "biddingTicTacToe_10coins.txt"
 }

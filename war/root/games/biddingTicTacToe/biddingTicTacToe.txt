@@ -1,0 +1,4 @@
+Bidding Tic-Tac-Toe is a variant of tic-tac-toe in which players bid for the opportunity
+to play moves. Each player starts with three coins, and the first player has a tiebreaker.
+Each turn, the players both place bids; the winner makes a move, and the loser receives
+all of the coins that were bid, and the tiebreaker if it was used.
