@@ -8,6 +8,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.google.appengine.repackaged.org.json.JSONException;
+import com.google.appengine.repackaged.org.json.JSONObject;
+
 @SuppressWarnings("serial")
 public class GGP_RepositoryServlet extends CachedStaticServlet {
     public static final String repositoryRootDirectory = "http://games.ggp.org";
@@ -22,6 +25,20 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
         // accessed directly.
         if (!reqURI.startsWith("/games/")) {
             return getBytesForFile(new File("root" + reqURI));
+        }
+        
+        // Provide a listing of all of the metadata files for all of
+        // the games, on request.
+        if (reqURI.equals("/games/metadata")) {
+            JSONObject theGameMetaMap = new JSONObject();
+            for (String gameName : new File("root", "games").list()) {
+                try {
+                    theGameMetaMap.put(gameName, new JSONObject(new String(getResponseBytesForURI("/games/" + gameName + "/"))));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return theGameMetaMap.toString().getBytes();
         }
         
         // Accessing the folder containing a game should show the game's
