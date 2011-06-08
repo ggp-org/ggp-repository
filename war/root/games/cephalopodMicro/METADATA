@@ -3,5 +3,6 @@
   "version": 0,
   "numRoles": 2,
 
-  "rulesheet": "cephalopodMicro.kif"
+  "rulesheet": "cephalopodMicro.kif",
+  "stylesheet": "cephalopodMicro.xsl"
 }

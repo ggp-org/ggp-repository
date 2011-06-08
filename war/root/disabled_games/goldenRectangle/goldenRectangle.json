@@ -1,7 +1,0 @@
-{
-  gameName: "Golden Rectangle",
-  
-  user_interface: "goldenRectangle.js",
-  rulesheet: "goldenRectangle.kif",  
-  stylesheet: "goldenRectangle.xsl"
-}

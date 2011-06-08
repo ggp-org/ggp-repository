@@ -3,5 +3,7 @@
   "version": 0,
   "numRoles": 2,
 
-  "rulesheet": "checkersSmall.kif"
+  "rulesheet": "checkersSmall.kif",
+  "stylesheet": "checkersSmall.xsl",
+  "user_interface": "checkersSmall.js"
 }

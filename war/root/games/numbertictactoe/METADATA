@@ -1,6 +1,8 @@
 {
+  "gameName": "Number Tic-Tac-Toe",
   "version": 0,
   "numRoles": 2,
 
-  "rulesheet": "numbertictactoe.kif"
+  "rulesheet": "numbertictactoe.kif",
+  "stylesheet": "numbertictactoe.xsl"
 }
