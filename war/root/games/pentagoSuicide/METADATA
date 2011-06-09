@@ -1,6 +1,8 @@
 {
+  "gameName": "Pentago Suicide",
   "version": 0,
   "numRoles": 2,
 
-  "rulesheet": "pentagoSuicide.kif"
+  "rulesheet": "pentagoSuicide.kif",
+  "stylesheet": "pentagoSuicide.xsl"
 }
