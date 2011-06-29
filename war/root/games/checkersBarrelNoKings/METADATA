@@ -1,6 +1,5 @@
 {
   "gameName": "Checkers on a Barrel without Kings",
-  "version": 0,
   "numRoles": 2,
 
   "rulesheet": "checkersBarrelNoKings.kif"

@@ -1,0 +1,7 @@
+{
+  "gameName": "Checkers on a Cylinder, Must-Jump",
+  "numRoles": 2,
+
+  "rulesheet": "checkers-cylinder-mustjump.kif",
+  "stylesheet": "checkers.xsl"
+}

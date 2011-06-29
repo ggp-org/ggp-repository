@@ -1,0 +1,7 @@
+{
+  "gameName": "Checkers with Modified Goals",
+  "numRoles": 2,
+
+  "rulesheet": "checkers-newgoals.kif",
+  "stylesheet": "checkers.xsl"  
+}

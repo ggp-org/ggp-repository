@@ -1,6 +1,5 @@
 {
   "gameName": "Checkers on a Cylinder, Suicide, Must-Jump",
-  "version": 0,
   "numRoles": 2,
 
   "rulesheet": "checkers-suicide-cylinder-mustjump.kif"

@@ -1,5 +1,4 @@
 {
-  "version": 0,
   "numRoles": 2,
 
   "rulesheet": "tictactoe-init1.kif"

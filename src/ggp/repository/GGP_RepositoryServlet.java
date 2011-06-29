@@ -50,42 +50,63 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
         // Extract out the version number
         String thePrefix = reqURI.substring(0, reqURI.lastIndexOf("/"));
         String theSuffix = reqURI.substring(reqURI.lastIndexOf("/")+1);
-        Integer theVersion = null;
+        Integer theExplicitVersion = null;
         try {
             String vPart = thePrefix.substring(thePrefix.lastIndexOf("/v")+2);
-            theVersion = Integer.parseInt(vPart);            
+            theExplicitVersion = Integer.parseInt(vPart);            
             thePrefix = thePrefix.substring(0, thePrefix.lastIndexOf("/v"));
         } catch (Exception e) {
             ;
         }
         
         // Sanity check: raise an exception if the parsing didn't work.
-        if (theVersion == null) {
+        if (theExplicitVersion == null) {
             if (!reqURI.equals(thePrefix + "/" + theSuffix)) {
                 throw new RuntimeException(reqURI + " != [~v] " + (thePrefix + "/" + theSuffix));
             }
         } else {
-            if (!reqURI.equals(thePrefix + "/v" + theVersion + "/" + theSuffix)) {
-                throw new RuntimeException(reqURI + " != [v] " + (thePrefix + "/v" + theVersion + "/" + theSuffix));
+            if (!reqURI.equals(thePrefix + "/v" + theExplicitVersion + "/" + theSuffix)) {
+                throw new RuntimeException(reqURI + " != [v] " + (thePrefix + "/v" + theExplicitVersion + "/" + theSuffix));
             }
         }
 
         // When no version number is explicitly specified, assume that we want the
         // latest version, whatever that is. Also, make sure the game version being
         // requested actually exists (i.e. is between 0 and the max version).
-        int nMaxVersion = getMaxVersionForDirectory(new File("root", thePrefix));
-        if (theVersion == null) theVersion = nMaxVersion;        
-        if (theVersion < 0 || theVersion > nMaxVersion) return null;
+        int nMaxVersion = getMaxVersionForDirectory(new File("root", thePrefix));        
+        Integer theFetchedVersion = theExplicitVersion;
+        if (theFetchedVersion == null) theFetchedVersion = nMaxVersion;
+        if (theFetchedVersion < 0 || theFetchedVersion > nMaxVersion) return null;
 
-        while (theVersion >= 0) {
-            byte[] theBytes = getBytesForVersionedFile(thePrefix, theVersion, theSuffix);
+        while (theFetchedVersion >= 0) {
+            byte[] theBytes = getBytesForVersionedFile(thePrefix, theFetchedVersion, theSuffix);
             if (theBytes != null) {
+                if (theSuffix.equals("METADATA")) {
+                    theBytes = adjustMetadataJSON(theBytes, theExplicitVersion, nMaxVersion);
+                }
                 return theBytes;
             }
-            theVersion--;
+            theFetchedVersion--;
         }
         return null;
     }
+    
+    // When the user requests a particular version, the metadata should always be for that version.
+    // When the user requests the latest version, the metadata should always indicate the most recent version.
+    // TODO(schreib): Clean this up later: perhaps generate the metadata entirely?
+    public static byte[] adjustMetadataJSON(byte[] theMetaBytes, Integer nExplicitVersion, int nMaxVersion) throws IOException {
+        try {
+            JSONObject theMetaJSON = new JSONObject(new String(theMetaBytes));
+            if (nExplicitVersion == null) {
+                theMetaJSON.put("version", nMaxVersion);
+            } else {
+                theMetaJSON.put("version", nExplicitVersion);
+            }
+            return theMetaJSON.toString().getBytes();
+        } catch (JSONException je) {
+            throw new IOException(je);
+        }
+    }    
     
     private static int getMaxVersionForDirectory(File theDir) {
         if (!theDir.exists() || !theDir.isDirectory()) {

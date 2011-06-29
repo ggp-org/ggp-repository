@@ -1,6 +1,5 @@
 {
   "gameName": "Asteroids in Series",
-  "version": 0,
   "numRoles": 1,
 
   "rulesheet": "asteroidsSerial.kif"

@@ -1,0 +1,7 @@
+{
+  "gameName": "Checkers, Must-Jump",
+  "numRoles": 2,
+
+  "rulesheet": "checkers-mustjump.kif",
+  "stylesheet": "checkers.xsl"
+}

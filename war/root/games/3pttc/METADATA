@@ -1,7 +1,6 @@
 {
   "gameName": "Three-Player Tic-Tac-Chess",
   "numRoles": 3,
-  "version": 0,
   
   "user_interface": "3pttc.js",
   "rulesheet": "3pttc.kif",  
