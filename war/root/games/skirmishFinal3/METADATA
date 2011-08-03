@@ -1,6 +1,8 @@
 {
   "version": 0,
   "numRoles": 2,
+  "gameName": "Skirmish Endgame 3",
 
-  "rulesheet": "skirmishFinal3.kif"
+  "rulesheet": "skirmishFinal3.kif",
+  "stylesheet": "skirmishFinal3.xsl"
 }
