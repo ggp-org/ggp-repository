@@ -1,7 +1,7 @@
 {
   "gameName": "Chinese Checkers, One Player",
-  "version": 0,
   "numRoles": 1,
 
-  "rulesheet": "chineseCheckers1.kif"
+  "rulesheet": "chineseCheckers1.kif",
+  "stylesheet": "chineseCheckers.xsl"
 }
