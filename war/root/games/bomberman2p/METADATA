@@ -1,7 +1,7 @@
 {
   "gameName": "Bomberman",
-  "version": 0,
   "numRoles": 2,
 
-  "rulesheet": "bomberman2p.kif"
+  "rulesheet": "bomberman2p.kif",
+  "stylesheet": "bomberman2p.xsl"
 }
