@@ -1,0 +1,225 @@
+; Dots and Boxes
+; by Alex Landau, 7/10/11 (alandau@cs.stanford.edu)
+; 5x5 boxes, 6x6 dots
+
+; The search space is large, but strategy is rather tricky until the
+; end of the game anyway. Heuristics may help.
+
+(role xplayer)
+(role oplayer)
+
+(index 1)
+(index 2)
+(index 3)
+(index 4)
+(index 5)
+(index 6)
+(next_index 1 2)
+(next_index 2 3)
+(next_index 3 4)
+(next_index 4 5)
+(next_index 5 6)
+
+(init (box_count xplayer 0))
+(init (box_count oplayer 0))
+
+(init (control xplayer))
+
+(<= (undrawn ?x ?y1 ?x ?y2)
+	(index ?x)
+	(next_index ?y1 ?y2)
+	(not (true (line ?x ?y1 ?x ?y2))))
+(<= (undrawn ?x1 ?y ?x2 ?y)
+	(next_index ?x1 ?x2)
+	(index ?y)
+	(not (true (line ?x1 ?y ?x2 ?y))))
+(<= any_undrawn
+	(undrawn ?x1 ?y1 ?x2 ?y2))
+
+(<= (legal ?player (draw ?x1 ?y1 ?x2 ?y2))
+	(true (control ?player))
+	(undrawn ?x1 ?y1 ?x2 ?y2))
+	
+(<= (next (line ?x1 ?y1 ?x2 ?y2))
+	(does ?player (draw ?x1 ?y1 ?x2 ?y2)))
+(<= (next (line ?x1 ?y1 ?x2 ?y2))
+	(true (line ?x1 ?y1 ?x2 ?y2)))
+
+(<= (legal ?player noop)
+	(role ?player)
+	(not (true (control ?player))))
+
+; Box-drawing mechanics
+; Look at the line we just drew
+(<= (v_drawn ?x ?y1 ?x ?y2)
+	(does ?player (draw ?x ?y1 ?x ?y2)))
+(<= (h_drawn ?x1 ?y ?x2 ?y)
+	(does ?player (draw ?x1 ?y ?x2 ?y)))
+; Look on either side of the line to see if there's a box
+; Record the location of the box for visualization purposes
+(<= (box_formed ?x1 ?y1)
+	(v_drawn ?x1 ?y1 ?x1 ?y2)
+	(true (line ?x1 ?y2 ?x2 ?y2))
+	(true (line ?x1 ?y1 ?x2 ?y1))
+	(true (line ?x2 ?y1 ?x2 ?y2)))
+(<= (box_formed ?x1 ?y1)
+	(v_drawn ?x2 ?y1 ?x2 ?y2)
+	(true (line ?x1 ?y1 ?x2 ?y1))
+	(true (line ?x1 ?y1 ?x1 ?y2))
+	(true (line ?x1 ?y2 ?x2 ?y2)))
+(<= (box_formed ?x1 ?y1)
+	(h_drawn ?x1 ?y1 ?x2 ?y1)
+	(true (line ?x2 ?y1 ?x2 ?y2))
+	(true (line ?x1 ?y1 ?x1 ?y2))
+	(true (line ?x1 ?y2 ?x2 ?y2)))
+(<= (box_formed ?x1 ?y1)
+	(h_drawn ?x1 ?y2 ?x2 ?y2)
+	(true (line ?x1 ?y1 ?x1 ?y2))
+	(true (line ?x1 ?y1 ?x2 ?y1))
+	(true (line ?x2 ?y1 ?x2 ?y2)))
+(<= any_box_formed
+	(box_formed ?x ?y))
+(<= two_boxes_formed
+	(box_formed ?x1 ?y1)
+	(box_formed ?x2 ?y2)
+	(or (distinct ?x1 ?x2)
+		(distinct ?y1 ?y2)))
+
+; Updating the players' scores
+(<= (next (box_count ?player ?n))
+	(true (box_count ?player ?n))
+	(not (true (control ?player))))
+(<= (next (box_count ?player ?n))
+	(true (box_count ?player ?n))
+	(true (control ?player))
+	(not any_box_formed))
+(<= (next (box_count ?player ?np1))
+	(true (box_count ?player ?n))
+	(true (control ?player))
+	any_box_formed
+	(not two_boxes_formed)
+	(succ ?n ?np1))
+(<= (next (box_count ?player ?np2))
+	(true (box_count ?player ?n))
+	(true (control ?player))
+	two_boxes_formed
+	(succ ?n ?np1)
+	(succ ?np1 ?np2))
+	
+; If you formed a box, take another turn
+(<= (next (control ?player))
+	(true (control ?player))
+	any_box_formed)
+(<= (next (control xplayer))
+	(true (control oplayer))
+	(not any_box_formed))
+(<= (next (control oplayer))
+	(true (control xplayer))
+	(not any_box_formed))
+
+; These parts of the state are purely for visualization purposes.
+(<= (next (box ?x ?y x))
+	(box_formed ?x ?y)
+	(true (control xplayer)))
+(<= (next (box ?x ?y o))
+	(box_formed ?x ?y)
+	(true (control oplayer)))
+(<= (next (box ?x ?y ?mark))
+	(true (box ?x ?y ?mark)))
+
+; The game ends when there are no more lines to draw
+(<= terminal
+	(not any_undrawn))
+
+; The higher score wins
+(<= x_wins
+	(true (box_count xplayer ?xscore))
+	(true (box_count oplayer ?oscore))
+	(gt ?xscore ?oscore))
+(<= o_wins
+	(true (box_count xplayer ?xscore))
+	(true (box_count oplayer ?oscore))
+	(gt ?oscore ?xscore))
+; This breaks the tie if the board count is even
+; (possible on a board with an even number of boxes)
+(<= o_wins
+	(true (box_count xplayer ?tied))
+	(true (box_count oplayer ?tied)))
+(<= (goal xplayer 100)
+	x_wins)
+(<= (goal xplayer 0)
+	(not x_wins))
+(<= (goal oplayer 100)
+	o_wins)
+(<= (goal oplayer 0)
+	(not o_wins))
+
+; gt is for the score only; based on succ
+(<= (gt ?h ?l)
+	(succ ?l ?h))
+(<= (gt ?h ?l)
+	(succ ?m ?h)
+	(gt ?m ?l)
+	(succ ?l ?lp1))
+; succ is for the score only; there are 25 boxes
+(succ 0 1)
+(succ 1 2)
+(succ 2 3)
+(succ 3 4)
+(succ 4 5)
+(succ 5 6)
+(succ 6 7)
+(succ 7 8)
+(succ 8 9)
+(succ 9 10)
+(succ 10 11)
+(succ 11 12)
+(succ 12 13)
+(succ 13 14)
+(succ 14 15)
+(succ 15 16)
+(succ 16 17)
+(succ 17 18)
+(succ 18 19)
+(succ 19 20)
+(succ 20 21)
+(succ 21 22)
+(succ 22 23)
+(succ 23 24)
+(succ 24 25)
+
+; Bases and inputs
+(<= (base (box_count ?player 0))
+	(role ?player))
+(<= (base (box_count ?player ?n))
+	(role ?player)
+	(succ ?m ?n))
+(<= (base (control ?player))
+	(role ?player))
+(<= (base (line ?x ?y1 ?x ?y2))
+	(index ?x)
+	(next_index ?y1 ?y2))
+(<= (base (line ?x1 ?y ?x2 ?y))
+	(next_index ?x1 ?x2)
+	(index ?y))
+(<= (base (box ?x ?y x))
+	(index ?x)
+	(distinct ?x 6)
+	(index ?y)
+	(distinct ?y 6))
+(<= (base (box ?x ?y o))
+	(index ?x)
+	(distinct ?x 6)
+	(index ?y)
+	(distinct ?y 6))
+
+(<= (input ?player (draw ?x ?y1 ?x ?y2))
+	(role ?player)
+	(index ?x)
+	(next_index ?y1 ?y2))
+(<= (input ?player (draw ?x1 ?y ?x2 ?y))
+	(role ?player)
+	(next_index ?x1 ?x2)
+	(index ?y))
+(<= (input ?player noop)
+	(role ?player))

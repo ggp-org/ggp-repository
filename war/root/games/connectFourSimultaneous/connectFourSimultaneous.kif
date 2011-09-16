@@ -1,0 +1,187 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Connect Four Simultaneous
+;;; by Alex Landau, 7/18/11
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; ROLE Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(role red)
+(role black)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; INIT Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(init (control red 1))
+(init (control black 2))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; LEGAL Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (legal red (drop ?x ?board))
+    (true (control red ?board))
+    (columnOpen ?x ?board))
+    
+(<= (legal black (drop ?x ?board))
+    (true (control black ?board))
+    (columnOpen ?x ?board))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; NEXT Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (next (cell ?x 1 ?board ?player))
+    (does ?player (drop ?x ?board))
+    (columnEmpty ?x ?board))
+(<= (next (cell ?x ?y2 ?board ?player))
+    (does ?player (drop ?x ?board))
+    (cellOpen ?x ?y2 ?board)
+    (succ ?y1 ?y2)
+    (not (cellOpen ?x ?y1 ?board))) 
+(<= (next (cell ?x ?y ?board ?player))
+    (true (cell ?x ?y ?board ?player)))
+    
+(<= (next (control red ?board))
+    (true (control black ?board)))
+(<= (next (control black ?board))
+    (true (control red ?board)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; TERMINAL Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= terminal
+    (line red))
+(<= terminal
+    (line black))
+(<= terminal
+    (not boardOpen))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; GOAL Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (goal red 100)
+    (line red)
+    (not (line black)))
+(<= (goal red 50)
+    (not (line red))
+    (not (line black))
+    (not boardOpen))
+(<= (goal red 0)
+    (line black)
+    (not (line red)))
+(<= (goal red 0)
+    (not (line red))
+    (not (line black))
+    boardOpen)
+
+(<= (goal ?player 50)
+    (role ?player)
+    (line red)
+    (line black))
+    
+(<= (goal black 100)
+    (line black)
+    (not (line red)))
+(<= (goal black 50)
+    (not (line red))
+    (not (line black))
+    (not boardOpen))
+(<= (goal black 0)
+    (line red)
+    (not (line black)))
+(<= (goal black 0)
+    (not (line red))
+    (not (line black))
+    boardOpen)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; View Definitions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (cellOpen ?x ?y ?board)
+    (x ?x)
+    (y ?y)
+    (board ?board)
+    (not (true (cell ?x ?y ?board red)))
+    (not (true (cell ?x ?y ?board black))))
+(<= (columnOpen ?x ?board)
+    (cellOpen ?x 6 ?board))
+(<= (columnEmpty ?x ?board)
+    (cellOpen ?x 1 ?board))
+(<= boardOpen    ; True iff both boards are open, false iff both not open...
+    (x ?x)
+    (columnOpen ?x ?board))
+
+(<= (line ?player)
+    (true (cell ?x1 ?y ?board ?player))
+    (succ ?x1 ?x2)
+    (succ ?x2 ?x3)
+    (succ ?x3 ?x4)
+    (true (cell ?x2 ?y ?board ?player))
+    (true (cell ?x3 ?y ?board ?player))
+    (true (cell ?x4 ?y ?board ?player)))
+(<= (line ?player)
+    (true (cell ?x ?y1 ?board ?player))
+    (succ ?y1 ?y2)
+    (succ ?y2 ?y3)
+    (succ ?y3 ?y4)
+    (true (cell ?x ?y2 ?board ?player))
+    (true (cell ?x ?y3 ?board ?player))
+    (true (cell ?x ?y4 ?board ?player)))
+(<= (line ?player)
+    (true (cell ?x1 ?y1 ?board ?player))
+    (succ ?x1 ?x2)
+    (succ ?x2 ?x3)
+    (succ ?x3 ?x4)
+    (succ ?y1 ?y2)
+    (succ ?y2 ?y3)
+    (succ ?y3 ?y4)
+    (true (cell ?x2 ?y2 ?board ?player))
+    (true (cell ?x3 ?y3 ?board ?player))
+    (true (cell ?x4 ?y4 ?board ?player)))
+(<= (line ?player)
+    (true (cell ?x1 ?y4 ?board ?player))
+    (succ ?x1 ?x2)
+    (succ ?x2 ?x3)
+    (succ ?x3 ?x4)
+    (succ ?y3 ?y4)
+    (succ ?y2 ?y3)
+    (succ ?y1 ?y2)
+    (true (cell ?x2 ?y3 ?board ?player))
+    (true (cell ?x3 ?y2 ?board ?player))
+    (true (cell ?x4 ?y1 ?board ?player)))
+    
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Static Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(board 1) (board 2)
+
+(succ 1 2) (succ 2 3) (succ 3 4) (succ 4 5) (succ 5 6) (succ 6 7) (succ 7 8)
+
+(x 1) (x 2) (x 3) (x 4) (x 5) (x 6) (x 7) (x 8)
+(y 1) (y 2) (y 3) (y 4) (y 5) (y 6)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Bases and Inputs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (base (control ?player ?board))
+	(role ?player)
+	(board ?board))
+(<= (base (cell ?x ?y ?board ?player))
+	(x ?x)
+	(y ?y)
+	(board ?board)
+	(role ?player))
+(<= (input ?player (drop ?x ?board))
+	(role ?player)
+	(x ?x)
+	(board ?board))

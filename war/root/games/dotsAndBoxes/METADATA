@@ -1,0 +1,7 @@
+{
+  "gameName": "Dots and Boxes",
+  "numRoles": 2,
+  
+  "rulesheet": "dotsAndBoxes.kif",
+  "stylesheet": "dotsAndBoxes.xsl"
+}
