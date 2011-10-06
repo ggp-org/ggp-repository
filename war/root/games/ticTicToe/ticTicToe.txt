@@ -1,0 +1,1 @@
+A variant of tic-tac-toe in which both players move simultaneously. If they try to play in the same square at the same time, nothing happens. The game stops after six moves if no one has won.
