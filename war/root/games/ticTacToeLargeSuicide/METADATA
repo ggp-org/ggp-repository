@@ -1,7 +1,9 @@
 {
-  "version": 0,
+  "gameName": "Tic-Tac-Toe Large Suicide",
   "numRoles": 2,
 
+  "user_interface": "ticTacToeLargeSuicide.js",
   "rulesheet": "ticTacToeLargeSuicide.kif",
-  "description": "ticTacToeLargeSuicide.txt"
+  "stylesheet": "ticTacToeLargeSuicide.xsl",
+  "description": "ticTacToeLargeSuicide.txt"  
 }
