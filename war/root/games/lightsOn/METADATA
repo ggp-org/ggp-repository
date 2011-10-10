@@ -1,6 +1,8 @@
 {
-  "version": 0,
+  "gameName": "Lights On",
   "numRoles": 1,
 
-  "rulesheet": "lightsOn.kif"
+  "rulesheet": "lightsOn.kif",
+  "stylesheet": "lightsOn.xsl",
+  "user_interface": "lightsOn.js"
 }

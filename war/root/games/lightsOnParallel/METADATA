@@ -1,6 +1,8 @@
 {
-  "version": 0,
+  "gameName": "Lights On Parallel",
   "numRoles": 1,
 
-  "rulesheet": "lightsOnParallel.kif"
+  "rulesheet": "lightsOnParallel.kif",
+  "stylesheet": "lightsOnParallel.xsl",
+  "user_interface": "lightsOn.js"
 }
