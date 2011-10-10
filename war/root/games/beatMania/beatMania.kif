@@ -46,25 +46,25 @@
 (<= (next (block 3 30))
     (does dropper (place 3)))
     
-(<= (next (blocksDropped ?n++))
+(<= (next (blocksDropped ?nplusplus))
     blockDropped
     (true (blocksDropped ?n))
-    (++ ?n ?n++))
+    (plusplus ?n ?nplusplus))
 (<= (next (blocksDropped ?n))
     (true (blocksDropped ?n))
     (not blockDropped))
     
-(<= (next (blocksCaught ?n++))    
+(<= (next (blocksCaught ?nplusplus))    
 	blockCaught
     (true (blocksCaught ?n))
-    (++ ?n ?n++))
+    (plusplus ?n ?nplusplus))
 (<= (next (blocksCaught ?n))
     (true (blocksCaught ?n))
     (not blockCaught))
     
-(<= (next (block ?x ?y--))
+(<= (next (block ?x ?yminusminus))
     (true (block ?x ?y))
-    (-- ?y ?y--))
+    (minusminus ?y ?yminusminus))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; TERMINAL Relations
@@ -110,13 +110,13 @@
 ;;; Static Relations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(++  0  1) (++  1  2) (++  2  3) (++  3  4) (++  4  5) (++  5  6) (++  6  7) (++  7  8) (++  8  9) (++  9 10)
-(++ 10 11) (++ 11 12) (++ 12 13) (++ 13 14) (++ 14 15) (++ 15 16) (++ 16 17) (++ 17 18) (++ 18 19) (++ 19 20)
-(++ 20 21) (++ 21 22) (++ 22 23) (++ 23 24) (++ 24 25) (++ 25 26) (++ 26 27) (++ 27 28) (++ 28 29) (++ 29 30)
+(plusplus  0  1) (plusplus  1  2) (plusplus  2  3) (plusplus  3  4) (plusplus  4  5) (plusplus  5  6) (plusplus  6  7) (plusplus  7  8) (plusplus  8  9) (plusplus  9 10)
+(plusplus 10 11) (plusplus 11 12) (plusplus 12 13) (plusplus 13 14) (plusplus 14 15) (plusplus 15 16) (plusplus 16 17) (plusplus 17 18) (plusplus 18 19) (plusplus 19 20)
+(plusplus 20 21) (plusplus 21 22) (plusplus 22 23) (plusplus 23 24) (plusplus 24 25) (plusplus 25 26) (plusplus 26 27) (plusplus 27 28) (plusplus 28 29) (plusplus 29 30)
 
-(-- 30 29) (-- 29 28) (-- 28 27) (-- 27 26) (-- 26 25) (-- 25 24) (-- 24 23) (-- 23 22) (-- 22 21) (-- 21 20)
-(-- 20 19) (-- 19 18) (-- 18 17) (-- 17 16) (-- 16 15) (-- 15 14) (-- 14 13) (-- 13 12) (-- 12 11) (-- 11 10)
-(-- 10  9) (--  9  8) (--  8  7) (--  7  6) (--  6  5) (--  5  4) (--  4  3) (--  3  2) (--  2  1)
+(minusminus 30 29) (minusminus 29 28) (minusminus 28 27) (minusminus 27 26) (minusminus 26 25) (minusminus 25 24) (minusminus 24 23) (minusminus 23 22) (minusminus 22 21) (minusminus 21 20)
+(minusminus 20 19) (minusminus 19 18) (minusminus 18 17) (minusminus 17 16) (minusminus 16 15) (minusminus 15 14) (minusminus 14 13) (minusminus 13 12) (minusminus 12 11) (minusminus 11 10)
+(minusminus 10  9) (minusminus  9  8) (minusminus  8  7) (minusminus  7  6) (minusminus  6  5) (minusminus  5  4) (minusminus  4  3) (minusminus  3  2) (minusminus  2  1)
 
 
 

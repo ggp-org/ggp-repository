@@ -1,7 +1,7 @@
 {
   "gameName": "Beat-Mania",
-  "version": 0,
   "numRoles": 2,
 
-  "rulesheet": "beatMania.kif"
+  "rulesheet": "beatMania.kif",
+  "stylesheet": "beatMania.xsl"
 }
