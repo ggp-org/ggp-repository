@@ -1,6 +1,7 @@
 {
-  "version": 0,
+  "gameName": "Maze",
   "numRoles": 1,
 
-  "rulesheet": "maze.kif"
+  "rulesheet": "maze.kif",
+  "stylesheet": "maze.xsl"
 }
