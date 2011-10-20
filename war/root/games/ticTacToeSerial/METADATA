@@ -1,7 +1,9 @@
 {
-  "version": 0,
+  "gameName": "Tic-Tac-Toe Serial",
   "numRoles": 2,
 
   "rulesheet": "ticTacToeSerial.kif",
+  "stylesheet": "ticTacToeSerial.xsl",
+  "user_interface": "ticTacToeSerial.js",
   "description": "ticTacToeSerial.txt"
 }

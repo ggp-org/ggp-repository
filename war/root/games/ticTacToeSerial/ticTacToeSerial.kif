@@ -138,68 +138,68 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (<= (goal xplayer 100)
-    goalXPlayer1-100
-    goalXPlayer2-100)
+    goalXPlayer1100
+    goalXPlayer2100)
 
 (<= (goal xplayer 75)
-    goalXPlayer1-100
-    goalXPlayer2-50)
+    goalXPlayer1100
+    goalXPlayer250)
 (<= (goal xplayer 75)
-    goalXPlayer1-50
-    goalXPlayer2-100)
+    goalXPlayer150
+    goalXPlayer2100)
 
 (<= (goal xplayer 50)
-    goalXPlayer1-100
-    goalXPlayer2-0)    
+    goalXPlayer1100
+    goalXPlayer20)    
 (<= (goal xplayer 50)
-    goalXPlayer1-50
-    goalXPlayer2-50)
+    goalXPlayer150
+    goalXPlayer250)
 (<= (goal xplayer 50)
-    goalXPlayer1-0
-    goalXPlayer2-100)    
+    goalXPlayer10
+    goalXPlayer2100)    
 
 (<= (goal xplayer 25)
-    goalXPlayer1-50
-    goalXPlayer2-0)
+    goalXPlayer150
+    goalXPlayer20)
 (<= (goal xplayer 25)
-    goalXPlayer1-0
-    goalXPlayer2-50)
+    goalXPlayer10
+    goalXPlayer250)
 
 (<= (goal xplayer 0)
-    goalXPlayer1-0
-    goalXPlayer2-0)
+    goalXPlayer10
+    goalXPlayer20)
 
 (<= (goal oplayer 100)
-    goalOPlayer1-100
-    goalOPlayer2-100)
+    goalOPlayer1100
+    goalOPlayer2100)
 
 (<= (goal oplayer 75)
-    goalOPlayer1-100
-    goalOPlayer2-50)
+    goalOPlayer1100
+    goalOPlayer250)
 (<= (goal oplayer 75)
-    goalOPlayer1-50
-    goalOPlayer2-100)
+    goalOPlayer150
+    goalOPlayer2100)
 
 (<= (goal oplayer 50)
-    goalOPlayer1-100
-    goalOPlayer2-0)
+    goalOPlayer1100
+    goalOPlayer20)
 (<= (goal oplayer 50)
-    goalOPlayer1-50
-    goalOPlayer2-50)
+    goalOPlayer150
+    goalOPlayer250)
 (<= (goal oplayer 50)
-    goalOPlayer1-0
-    goalOPlayer2-100)
+    goalOPlayer10
+    goalOPlayer2100)
 
 (<= (goal oplayer 25)
-    goalOPlayer1-50
-    goalOPlayer2-0)
+    goalOPlayer150
+    goalOPlayer20)
 (<= (goal oplayer 25)
-    goalOPlayer1-0
-    goalOPlayer2-50)
+    goalOPlayer10
+    goalOPlayer250)
 
 (<= (goal oplayer 0)
-    goalOPlayer1-0
-    goalOPlayer2-0)
+    goalOPlayer10
+    goalOPlayer20)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -225,54 +225,54 @@
 (<= game2TermCond
     (not open2))
 
-(<= goalXPlayer1-100
+(<= goalXPlayer1100
     (line1 x))
-(<= goalXPlayer1-50
+(<= goalXPlayer150
     (not (line1 x))
     (not (line1 o))
     (not open1))
-(<= goalXPlayer1-0
+(<= goalXPlayer10
     (line1 o))
-(<= goalXPlayer1-0
+(<= goalXPlayer10
     (not (line1 x))
     (not (line1 o))
     open1)
     
-(<= goalOPlayer1-100
+(<= goalOPlayer1100
     (line1 o))
-(<= goalOPlayer1-50
+(<= goalOPlayer150
     (not (line1 x))
     (not (line1 o))
     (not open1))
-(<= goalOPlayer1-0
+(<= goalOPlayer10
     (line1 x))
-(<= goalOPlayer1-0
+(<= goalOPlayer10
     (not (line1 x))
     (not (line1 o))
     open1)
 
-(<= goalXPlayer2-100
+(<= goalXPlayer2100
     (line2 x))
-(<= goalXPlayer2-50
+(<= goalXPlayer250
     (not (line2 x))
     (not (line2 o))
     (not open2))
-(<= goalXPlayer2-0
+(<= goalXPlayer20
     (line2 o))
-(<= goalXPlayer2-0
+(<= goalXPlayer20
     (not (line2 x))
     (not (line2 o))
     open2)
     
-(<= goalOPlayer2-100
+(<= goalOPlayer2100
     (line2 o))
-(<= goalOPlayer2-50
+(<= goalOPlayer250
     (not (line2 x))
     (not (line2 o))
     (not open2))
-(<= goalOPlayer2-0
+(<= goalOPlayer20
     (line2 x))
-(<= goalOPlayer2-0
+(<= goalOPlayer20
     (not (line2 x))
     (not (line2 o))
     open2)

@@ -1,7 +1,9 @@
 {
-  "version": 0,
+  "gameName": "Tic-Tac-Toe Parallel",
   "numRoles": 2,
 
   "rulesheet": "ticTacToeParallel.kif",
+  "stylesheet": "ticTacToeParallel.xsl",
+  "user_interface": "ticTacToeParallel.js",
   "description": "ticTacToeParallel.txt"
 }
