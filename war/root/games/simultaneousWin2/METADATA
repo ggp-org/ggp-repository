@@ -1,6 +1,8 @@
 {
-  "version": 0,
+  "gameName": "Lights On Simultaneous II",
   "numRoles": 1,
 
-  "rulesheet": "simultaneousWin2.kif"
+  "rulesheet": "simultaneousWin2.kif",
+  "stylesheet": "simultaneousWin2.xsl",
+  "user_interface": "lightsOn.js"
 }

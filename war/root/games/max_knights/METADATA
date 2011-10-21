@@ -1,6 +1,8 @@
 {
-  "version": 0,
+  "gameName": "Max Knights",
   "numRoles": 1,
 
-  "rulesheet": "max_knights.kif"
+  "rulesheet": "max_knights.kif",
+  "stylesheet": "chess.xsl",
+  "user_interface": "max_knights.js"
 }

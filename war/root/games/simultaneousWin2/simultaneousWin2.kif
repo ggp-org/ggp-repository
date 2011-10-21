@@ -29,16 +29,16 @@
     (does robot (press ?xignore ?yignore ?x ?y)))
 (<= (next (cell ?x ?y 4))
     (in ?x ?y 1)
-    lightson-1)
+    lightson1)
 (<= (next (cell ?x ?y 4))
     (in ?x ?y 2)
-    lightson-2)
+    lightson2)
 (<= (next (cell ?x ?y 4))
     (in ?x ?y 3)
-    lightson-3)
+    lightson3)
 (<= (next (cell ?x ?y 4))
     (in ?x ?y 4)
-    lightson-4)
+    lightson4)
 (<= (next (cell ?x ?y 3))
     (true (cell ?x ?y 4)))
 (<= (next (cell ?x ?y 2))
@@ -51,37 +51,37 @@
     (true (cell ?x ?y 0)))
     
 (<= terminal
-    lightson-12)
+    lightson12)
 (<= terminal
-    lightson-13)
+    lightson13)
 (<= terminal
-    lightson-14)
+    lightson14)
 (<= terminal
-    lightson-23)
+    lightson23)
 (<= terminal
-    lightson-24)
+    lightson24)
 (<= terminal
-    lightson-34)
+    lightson34)
     
 (<= (goal robot 100)
-    lightson-12)
+    lightson12)
 (<= (goal robot 100)
-    lightson-13)
+    lightson13)
 (<= (goal robot 100)
-    lightson-14)
+    lightson14)
 (<= (goal robot 100)
-    lightson-23)
+    lightson23)
 (<= (goal robot 100)
-    lightson-24)
+    lightson24)
 (<= (goal robot 100)
-    lightson-34)
+    lightson34)
 (<= (goal robot 0)
-    (not lightson-12)
-    (not lightson-13)
-    (not lightson-14)
-    (not lightson-23)
-    (not lightson-24)
-    (not lightson-34))
+    (not lightson12)
+    (not lightson13)
+    (not lightson14)
+    (not lightson23)
+    (not lightson24)
+    (not lightson34))
     
 (<= (on ?x ?y)
     (true (cell ?x ?y 1)))
@@ -92,45 +92,45 @@
 (<= (on ?x ?y)
     (true (cell ?x ?y 4)))
     
-(<= lightson-1
+(<= lightson1
     (on 1 1)
     (on 1 2)
     (on 2 1)
     (on 2 2))
-(<= lightson-2
+(<= lightson2
     (on 3 1)
     (on 3 2)
     (on 4 1)
     (on 4 2))
-(<= lightson-3
+(<= lightson3
     (on 1 3)
     (on 1 4)
     (on 2 3)
     (on 2 4))
-(<= lightson-4
+(<= lightson4
     (on 3 3)
     (on 3 4)
     (on 4 3)
     (on 4 4))
     
-(<= lightson-12
-    lightson-1
-    lightson-2)
-(<= lightson-13
-    lightson-1
-    lightson-3)
-(<= lightson-14
-    lightson-1
-    lightson-4)
-(<= lightson-23
-    lightson-2
-    lightson-3)
-(<= lightson-24
-    lightson-2
-    lightson-4)
-(<= lightson-34
-    lightson-3
-    lightson-4)
+(<= lightson12
+    lightson1
+    lightson2)
+(<= lightson13
+    lightson1
+    lightson3)
+(<= lightson14
+    lightson1
+    lightson4)
+(<= lightson23
+    lightson2
+    lightson3)
+(<= lightson24
+    lightson2
+    lightson4)
+(<= lightson34
+    lightson3
+    lightson4)
 
 (in 1 1 1)
 (in 1 2 1)

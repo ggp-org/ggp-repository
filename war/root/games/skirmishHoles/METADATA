@@ -1,8 +1,8 @@
 {
-  "version": 0,
-  "numRoles": 2,
   "gameName": "Skirmish w/ Holes",
+  "numRoles": 2,
 
   "rulesheet": "skirmishHoles.kif",
-  "stylesheet": "skirmishHoles.xsl"
+  "stylesheet": "skirmishHoles.xsl",
+  "user_interface": "skirmish.js"
 }
