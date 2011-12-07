@@ -10,11 +10,9 @@ import net.sf.jsr107cache.CacheManager;
 
 @SuppressWarnings("serial")
 public abstract class CachedStaticServlet extends HttpServlet {
-    public static final String cacheName = "gameCache"; 
-    
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-        // Initialize the memcache.
+    private static final String cacheName = "gameCache"; 
+
+    public static Cache getCache() {
         Cache cache;
         try {
             cache = CacheManager.getInstance().getCache(cacheName);
@@ -24,7 +22,14 @@ public abstract class CachedStaticServlet extends HttpServlet {
             }
         } catch (CacheException e) {
             throw new RuntimeException(e);
-        }        
+        }   
+        return cache;
+    }    
+    
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+        // Initialize the memcache.
+        Cache cache = getCache();
         
         // Allow cross-site access to the files, since nothing is mutable.
         resp.setHeader("Access-Control-Allow-Origin", "*");
@@ -51,7 +56,7 @@ public abstract class CachedStaticServlet extends HttpServlet {
             cache.clear();
             resp.getWriter().println("Cache flushed.");
             resp.setStatus(200);
-            return;            
+            return;
         }
 
         // Query the cache for the requested URL, and return the cached
@@ -70,7 +75,7 @@ public abstract class CachedStaticServlet extends HttpServlet {
         } catch (IOException e) {
             ;
         }
-        
+
         // Write the response content.
         if(responseBytes != null && responseBytes.length > 0) {
             // First, cache the content for later use.
@@ -99,6 +104,10 @@ public abstract class CachedStaticServlet extends HttpServlet {
             return "image/png";
         } else {
             if (theURL.equals("/")) {
+                return "text/html";
+            } else if (theURL.equals("/base/")) {
+                return "text/html";
+            } else if (theURL.equals("/dresden/")) {
                 return "text/html";
             } else if (theURL.endsWith("/")) {
                 return "text/javascript";

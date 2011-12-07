@@ -40,7 +40,7 @@
 
   <center>
   <h1>Available Games</h1>
-  <h2>Games available on the games.ggp.org repository server.</h2>
+  <h2>Games available on the games.ggp.org/base/ repository server.</h2>
   </center>
   <br>
   <table id="game_table" cellspacing=15>
@@ -57,7 +57,7 @@
   </table>
 
   <script type="text/javascript" language="javascript">
-    var repo_prefix = '//games.ggp.org/';  
+    var repo_prefix = '//games.ggp.org/base/';  
     var game_table = document.getElementById("game_table");
 
     var games_listing = ResourceLoader.load_json(repo_prefix + 'games/');
@@ -90,15 +90,15 @@
       theHTML += "</td> <td>";      
       if (meta.numRoles) theHTML += meta.numRoles;
       theHTML += "</td> <td>";
-      theHTML += "<a href='//games.ggp.org/games/" + key + "/'>Metadata</a>";
+      theHTML += "<a href='//games.ggp.org/base/games/" + key + "/'>Metadata</a>";
       theHTML += "</td> <td>";
-      if (meta.rulesheet) theHTML += "<a href='//games.ggp.org/games/" + key + "/" + meta.rulesheet + "'>Rulesheet</a>";
+      if (meta.rulesheet) theHTML += "<a href='//games.ggp.org/base/games/" + key + "/" + meta.rulesheet + "'>Rulesheet</a>";
       theHTML += "</td> <td>";
-      if (meta.stylesheet) theHTML += "<a href='//games.ggp.org/games/" + key + "/" + meta.stylesheet + "'>Stylesheet</a>";
+      if (meta.stylesheet) theHTML += "<a href='//games.ggp.org/base/games/" + key + "/" + meta.stylesheet + "'>Stylesheet</a>";
       theHTML += "</td> <td>";
-      if (meta.user_interface) theHTML += "<a href='//games.ggp.org/games/" + key + "/" + meta.user_interface + "'>Interface</a>";
+      if (meta.user_interface) theHTML += "<a href='//games.ggp.org/base/games/" + key + "/" + meta.user_interface + "'>Interface</a>";
       theHTML += "</td> <td>";
-      if (meta.description) theHTML += "<a href='//games.ggp.org/games/" + key + "/" + meta.description + "'>Description</a>";
+      if (meta.description) theHTML += "<a href='//games.ggp.org/base/games/" + key + "/" + meta.description + "'>Description</a>";
       theHTML += "</td>";
       
       gameRow.innerHTML = theHTML;
