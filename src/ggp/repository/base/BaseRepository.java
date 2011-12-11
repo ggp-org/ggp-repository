@@ -12,8 +12,7 @@ import com.google.appengine.repackaged.org.json.JSONException;
 import com.google.appengine.repackaged.org.json.JSONObject;
 
 public class BaseRepository {
-    // TODO: cut over to "http://games.ggp.org/base/"
-    public static final String repositoryRootDirectory = "http://games.ggp.org";    
+    public static final String repositoryRootDirectory = "http://games.ggp.org/base";    
     
     public static byte[] getResponseBytesForURI(String reqURI) throws IOException {
         // Special case: the main page.

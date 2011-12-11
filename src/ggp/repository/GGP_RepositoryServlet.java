@@ -17,8 +17,8 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
         if (reqURI.startsWith("/base/")) {
             return BaseRepository.getResponseBytesForURI(reqURI.substring("/base".length()));
         }
-
-        // Special case: the implied /base/ tree. To be phased out.
-        return BaseRepository.getResponseBytesForURI(reqURI);
+        
+        // TODO: Do something more clever with the root directory.
+        return null;
     }
 }
