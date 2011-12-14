@@ -109,7 +109,7 @@ public class BaseRepository {
     
     private static int getMaxVersionForDirectory(File theDir) {
         if (!theDir.exists() || !theDir.isDirectory()) {
-            throw new RuntimeException(theDir + ": " + theDir.exists() + " , " + theDir.isDirectory());
+            return -1;
         }
         
         int maxVersion = 0;
