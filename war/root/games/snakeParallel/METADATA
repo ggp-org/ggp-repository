@@ -1,6 +1,7 @@
 {
-  "version": 0,
+  "gameName": "Snake Parallel",
   "numRoles": 1,
 
-  "rulesheet": "snakeParallel.kif"
+  "rulesheet": "snakeParallel.kif",
+  "stylesheet": "snakeParallel.xsl"
 }
