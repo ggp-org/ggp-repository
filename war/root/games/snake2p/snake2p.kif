@@ -77,22 +77,22 @@
 (<= (next (cell ?a ?y blueHead))
   (does blue moveLeft)
   (true (cell ?x ?y blueHead))
-  (++ ?a ?x))
+  (plusplus ?a ?x))
 
 (<= (next (cell ?a ?y blueHead))
   (does blue moveRight)
   (true (cell ?x ?y blueHead))
-  (++ ?x ?a))
+  (plusplus ?x ?a))
 
 (<= (next (cell ?x ?b blueHead))
   (does blue moveDown)
   (true (cell ?x ?y blueHead))
-  (++ ?y ?b))
+  (plusplus ?y ?b))
 
 (<= (next (cell ?x ?b blueHead))
   (does blue moveUp)
   (true (cell ?x ?y blueHead))
-  (++ ?b ?y))
+  (plusplus ?b ?y))
 
 (<= (next (cell ?x ?y f))
   (true (cell ?x ?y redHead)))
@@ -100,22 +100,22 @@
 (<= (next (cell ?a ?y redHead))
   (does red moveLeft)
   (true (cell ?x ?y redHead))
-  (++ ?a ?x))
+  (plusplus ?a ?x))
 
 (<= (next (cell ?a ?y redHead))
   (does red moveRight)
   (true (cell ?x ?y redHead))
-  (++ ?x ?a))
+  (plusplus ?x ?a))
 
 (<= (next (cell ?x ?b redHead))
   (does red moveDown)
   (true (cell ?x ?y redHead))
-  (++ ?y ?b))
+  (plusplus ?y ?b))
 
 (<= (next (cell ?x ?b redHead))
   (does red moveUp)
   (true (cell ?x ?y redHead))
-  (++ ?b ?y))
+  (plusplus ?b ?y))
 
 ;;;;;;;;;;;; HASBLANK ;;;;;;;;;;;
 
@@ -221,16 +221,16 @@
   (not hasBlank))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                         ++                              ;;
+;;                         plusplus                              ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(++ 0 1)
-(++ 1 2)
-(++ 2 3)
-(++ 3 4)
-(++ 4 5)
-(++ 5 6)
-(++ 6 7)
-(++ 7 8)
-(++ 8 9)
-(++ 9 10)
+(plusplus 0 1)
+(plusplus 1 2)
+(plusplus 2 3)
+(plusplus 3 4)
+(plusplus 4 5)
+(plusplus 5 6)
+(plusplus 6 7)
+(plusplus 7 8)
+(plusplus 8 9)
+(plusplus 9 10)
