@@ -58,6 +58,13 @@ public abstract class CachedStaticServlet extends HttpServlet {
             resp.setStatus(200);
             return;
         }
+        
+        // Cron handler should never hit the cache.
+        if (reqURI.startsWith("/cron/")) {
+            handleCronRequest(reqURI.substring("/cron".length()));
+            resp.setStatus(200);
+            return;
+        }
 
         // Query the cache for the requested URL, and return the cached
         // value if there's a cache hit.
@@ -117,5 +124,6 @@ public abstract class CachedStaticServlet extends HttpServlet {
         }
     }
     
-    protected abstract byte[] getResponseBytesForURI(String reqURI) throws IOException;    
+    protected abstract byte[] getResponseBytesForURI(String reqURI) throws IOException;
+    protected abstract void handleCronRequest(String reqURI) throws IOException;
 }

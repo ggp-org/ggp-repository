@@ -117,7 +117,7 @@ public class CachedGame {
         return Persistence.loadAll(CachedGame.class);
     }
     
-    private final static String gameLoadingPrefix = "http://euklid.inf.tu-dresden.de:8180/ggpserver/public/download_gdl.jsp?name=";
+    private final static String gameLoadingPrefix = "http://130.208.241.192/ggpserver/public/download_gdl.jsp?name=";
 
     public static void ingestCachedGame(String gameKey) throws IOException {
         String theRulesheet = RemoteResourceLoader.loadRaw(gameLoadingPrefix + gameKey);

@@ -5,6 +5,10 @@ import ggp.repository.base.BaseRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import util.configuration.RemoteResourceLoader;
 
 import com.google.appengine.repackaged.org.json.JSONArray;
 import com.google.appengine.repackaged.org.json.JSONException;
@@ -17,18 +21,6 @@ public class DresdenRepository {
             return BaseRepository.readFile(new File("root/gameListDresden.html")).getBytes();
         }
         
-        // Special case: game ingestion.
-        if (reqURI.startsWith("/ingest/")) {
-            String gameKey = reqURI.replace("/ingest/", "");
-            if (CachedGame.loadCachedGame(gameKey) == null) {
-                CachedGame.ingestCachedGame(gameKey);
-                CachedStaticServlet.getCache().clear();
-                return ("Just ingested game: " + gameKey).getBytes();
-            } else {
-                return ("Already ingested game: " + gameKey).getBytes();
-            }
-        }
-
         // Files not under /games/ aren't versioned, and can just be
         // accessed directly.
         if (!reqURI.startsWith("/games/")) {
@@ -70,5 +62,32 @@ public class DresdenRepository {
         CachedGame cachedGame = CachedGame.loadCachedGame(theGameKey);
         if (cachedGame == null) return null;
         return cachedGame.getResource(theResource);
+    }
+    
+    public static void performRegularIngestion() throws IOException {
+        try {
+            Set<CachedGame> theKnownGames = CachedGame.loadCachedGames();
+            Set<String> theKnownGameKeys = new HashSet<String>();
+            for (CachedGame g : theKnownGames) {
+                theKnownGameKeys.add(g.getGameKey());
+            }
+            
+            boolean foundNewGames = false;
+            JSONObject theJSON = RemoteResourceLoader.loadJSON("http://database.ggp.org/statistics/f69721b2f73839e513eed991e96824f1af218ac1/overall");
+            JSONArray theObservedGames = theJSON.getJSONArray("observedGames");
+            for (int i = 0; i < theObservedGames.length(); i++) {
+                String observedGame = theObservedGames.getString(i);
+                String gameKey = observedGame.replace("http://games.ggp.org/dresden/games/", "").replace("/v0/","");
+                if (!theKnownGameKeys.contains(gameKey)) {
+                    foundNewGames = true;
+                    CachedGame.ingestCachedGame(gameKey);
+                }
+            }
+            if (foundNewGames) {
+                CachedStaticServlet.getCache().clear();
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

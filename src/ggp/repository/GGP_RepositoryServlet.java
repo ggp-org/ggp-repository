@@ -21,4 +21,11 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
         // TODO: Do something more clever with the root directory.
         return null;
     }
+
+    @Override
+    protected void handleCronRequest(String reqURI) throws IOException {
+        if (reqURI.equals("/update_dresden")) {
+            DresdenRepository.performRegularIngestion();
+        }
+    }
 }
