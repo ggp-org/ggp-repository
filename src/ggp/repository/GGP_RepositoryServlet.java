@@ -1,5 +1,6 @@
 package ggp.repository;
 
+import java.io.File;
 import java.io.IOException;
 
 import ggp.repository.base.BaseRepository;
@@ -16,6 +17,11 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
         // Repository: the /base/ games.
         if (reqURI.startsWith("/base/")) {
             return BaseRepository.getResponseBytesForURI(reqURI.substring("/base".length()));
+        }
+
+        // Web plumbing: return a well-formed robots.txt file discouraging crawling.
+        if (reqURI.equals("/robots.txt")) {
+            return BaseRepository.readFile(new File("root/robots.txt")).getBytes();
         }
         
         // TODO: Do something more clever with the root directory.
