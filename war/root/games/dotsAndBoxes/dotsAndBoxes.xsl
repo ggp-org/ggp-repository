@@ -34,10 +34,11 @@
         background-color: #000000;
         border-collapse: collapse;
       }
-      p {
+      div.dot {
         font-size: <xsl:value-of select="$height * 0.6 * 0.14"/>px;
         text-align: center;
         align: center;
+        font-weight: bold;
       }
     </style>
     
@@ -99,10 +100,10 @@
     <xsl:value-of select="$row"/>
   </xsl:attribute>
 
-  <p><b>
+  <div class="dot">
   <xsl:if test="//fact[(relation='box') and argument[1]=$col and argument[2]=$row and argument[3]='x']">X</xsl:if>
   <xsl:if test="//fact[(relation='box') and argument[1]=$col and argument[2]=$row and argument[3]='o']"><font color="#999999">O</font></xsl:if>
-  </b></p>
+  </div>
   
   </td>
   </xsl:if> 

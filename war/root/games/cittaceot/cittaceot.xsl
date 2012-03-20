@@ -11,14 +11,13 @@
         height: <xsl:value-of select="$height * 0.2"/>px;
         border: 2px solid #000;
         background-color: #CCCCCC;
+        font-size: <xsl:value-of select="$width * 0.6 * 0.2"/>px;
+        text-align: center;
+        font-weight: bold;
+        align: center;
       }
       table.board {
         background-color: #000000;
-      }
-      p {
-        font-size: <xsl:value-of select="$width * 0.6 * 0.2"/>px;
-        text-align: center;
-        align: center;
       }
     </style>
     
@@ -41,10 +40,8 @@
     <xsl:value-of select="$row"/>
   </xsl:attribute>
 
-  <p><b>
   <xsl:if test="//fact[relation='cell' and argument[1]=$col and argument[2]=$row and argument[3]='x']">X</xsl:if>
   <xsl:if test="//fact[relation='cell' and argument[1]=$col and argument[2]=$row and argument[3]='o']"><font color="#999999">O</font></xsl:if>
-  </b></p>
   
   </td>  
 </xsl:template>
