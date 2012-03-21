@@ -1,6 +1,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;; Qyshinsu
+;;; 
+;;;  A 2 player abstract strategy game where the piece you play constrains 
+;;;  where the opponent can play.
+;;;
+;;;  Full Description: http://www.rafrederickson.com/Qyshinsu_Guidelines.pdf
+;;;
+;;;  The game was created by Rodney A. Frederickson and can be ordered as a
+;;;  board game on his website: http://rafrederickson.com/qyshinsu/
+;;;
+;;;  GDL by: Ethan Dreyfuss
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

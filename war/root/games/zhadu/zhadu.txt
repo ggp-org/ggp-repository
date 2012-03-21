@@ -1,0 +1,5 @@
+ A 2 player abstract strategy game with a placement phase and a movement phase, where the first piece you capture determines what other piece you need to capture in order to win.
+
+A full description of the game is available as a PDF at http://www.rafrederickson.com/Zhadu_Guidelines.pdf
+
+The game was created by Rodney A. Frederickson and can be ordered as a board game on his website: http://rafrederickson.com/zhadu/

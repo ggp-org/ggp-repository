@@ -2,5 +2,6 @@
   "version": 0,
   "numRoles": 2,
 
-  "rulesheet": "zhadu.kif"
+  "rulesheet": "zhadu.kif",
+  "description": "zhadu.txt"
 }
