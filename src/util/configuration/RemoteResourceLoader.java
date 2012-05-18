@@ -7,8 +7,8 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
-import com.google.appengine.repackaged.org.json.JSONArray;
-import com.google.appengine.repackaged.org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * RemoteResourceLoader loads remotely-stored resources. It can load resources

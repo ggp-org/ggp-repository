@@ -10,9 +10,9 @@ import java.util.Set;
 
 import util.configuration.RemoteResourceLoader;
 
-import com.google.appengine.repackaged.org.json.JSONArray;
-import com.google.appengine.repackaged.org.json.JSONException;
-import com.google.appengine.repackaged.org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DresdenRepository {
     public static byte[] getResponseBytesForURI(String reqURI) throws IOException {
