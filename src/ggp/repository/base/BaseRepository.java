@@ -8,8 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.google.appengine.repackaged.org.json.JSONException;
-import com.google.appengine.repackaged.org.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class BaseRepository {
     public static final String repositoryRootDirectory = "http://games.ggp.org/base";    
