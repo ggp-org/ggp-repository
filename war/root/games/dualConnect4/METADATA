@@ -1,0 +1,9 @@
+{
+  "gameName": "Dual Connect 4",
+  "numRoles": 2,
+
+  "rulesheet": "dualConnect4.kif",
+  "stylesheet": "dualConnect4.xsl",
+  "description": "dualConnect4.txt"
+}
+

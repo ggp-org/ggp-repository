@@ -1,0 +1,58 @@
+( role red )
+( role blue )
+
+( init ( control red ) )
+( <= ( init ( empty ?r ?c ) ) ( index ?r ) ( index ?c ) )
+
+( index 1 )
+( index 2 )
+( index 3 )
+( index 4 )
+( index 5 )
+
+( shade weak )
+( shade medium )
+( shade strong )
+
+( good_shade strong )
+
+( <= ( filled ?r ?c ) ( true ( marked ?r ?c ?p ?l ) ) )
+( <= ( legal ?p ( mark ?r ?c ?l ) ) ( shade ?l ) ( true ( control ?p ) ) ( index ?r ) ( index ?c ) ( not ( filled ?r ?c ) ) ( not ( true ( prohibited ?p ?l ) ) ) )
+( <= ( legal ?p noop ) ( role ?p ) ( not ( true ( control ?p ) ) ) )
+
+( <= ( shaded ?p ?l ) ( does ?p ( mark ?r ?c ?l ) ) )
+( <= ( filling ?r ?c ) ( does ?p ( mark ?r ?c ?l ) ) )
+
+( <= ( next ( control blue ) ) ( true ( control red ) ) )
+( <= ( next ( control red ) ) ( true ( control blue ) ) )
+
+( <= ( next ( marked ?r ?c ?p ?l ) ) ( does ?p ( mark ?r ?c ?l ) ) )
+( <= ( next ( marked ?r ?c ?p ?l ) ) ( true ( marked ?r ?c ?p ?l ) ) )
+
+( <= ( next ( prohibited ?p strong ) ) ( shaded ?p weak ) )
+( <= ( next ( prohibited ?p medium ) ) ( shaded ?p weak ) )
+( <= ( next ( prohibited ?p strong ) ) ( shaded ?p medium ) )
+( <= ( next ( prohibited ?p ?l ) ) ( true ( prohibited ?p ?l ) ) )
+
+( <= ( next ( empty ?r ?c ) ) ( true ( empty ?r ?c ) ) ( not ( filling ?r ?c ) ) )
+
+( <= ( other_in_row ?r ?p ) ( role ?p ) ( role ?q ) ( distinct ?p ?q ) ( true ( marked ?r ?c ?q ?l ) ) )
+( <= ( other_in_col ?c ?p ) ( role ?p ) ( role ?q ) ( distinct ?p ?q ) ( true ( marked ?r ?c ?q ?l ) ) )
+
+( <= ( weak_shade_in_row ?r ?p ) ( true ( marked ?r ?c ?p ?l ) ) ( not ( good_shade ?l ) ) )
+( <= ( weak_shade_in_col ?c ?p ) ( true ( marked ?r ?c ?p ?l ) ) ( not ( good_shade ?l ) ) )
+
+( <= ( empty_in_row ?r ) ( true ( empty ?r ?c ) ) ) 
+( <= ( empty_in_col ?c ) ( true ( empty ?r ?c ) ) )
+
+( <= ( line ?p ) ( role ?p ) ( index ?r ) ( not ( other_in_row ?r ?p ) ) ( not ( weak_shade_in_row ?r ?p ) ) ( not ( empty_in_row ?r ) ) )
+( <= ( line ?p ) ( role ?p ) ( index ?c ) ( not ( other_in_col ?c ?p ) ) ( not ( weak_shade_in_col ?c ?p ) ) ( not ( empty_in_col ?c ) ) )
+
+( <= ( open_space ?p ) ( role ?p ) ( index ?r ) ( index ?c ) ( not ( filled ?r ?c ) ) )
+
+( <= terminal ( line ?p ) )
+( <= terminal ( role ?p ) ( not ( open_space ?p ) ) )
+
+( <= ( goal ?p 100 ) ( line ?p ) )
+( <= ( goal ?p 50 ) ( role ?p ) ( role ?q ) ( distinct ?p ?q ) ( not ( line ?q ) ) ( not ( line ?p ) ) )
+( <= ( goal ?p 0 ) ( role ?p ) ( line ?q ) ( distinct ?p ?q ) ( not ( line ?p ) ) )

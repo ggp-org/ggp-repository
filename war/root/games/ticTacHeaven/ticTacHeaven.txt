@@ -1,0 +1,3 @@
+Tic Tac Heaven is a disjunctively factorable joining of Tic-Tac-Toe and Nine Board Tic Tac Toe.
+
+

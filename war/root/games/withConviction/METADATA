@@ -1,0 +1,8 @@
+{
+  "gameName": "With Conviction!",
+  "numRoles": 2,
+  
+  "rulesheet": "withConviction.kif",
+  "stylesheet": "withConviction.xsl",
+  "description": "withConviction.txt"
+}

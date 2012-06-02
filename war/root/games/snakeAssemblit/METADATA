@@ -1,0 +1,7 @@
+{
+  "gameName": "Snake Assemblit",
+  "numRoles": 2,
+  "rulesheet": "snakeAssemblit.kif",
+  "stylesheet": "snakeAssemblit.xsl",
+  "description": "snakeAssemblit.txt"
+}

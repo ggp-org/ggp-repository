@@ -1,0 +1,1 @@
+Dual Connect 4 is a disjunctively factorable joining of Connect4 and Connect4 Suicide. You win if you win on either board.

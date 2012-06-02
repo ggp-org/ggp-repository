@@ -1,0 +1,4 @@
+
+Snake Assemblit is a disjunctively factorable joining of Snake and Assemblit. Assemblit has the following rules: There is a column player and a row player. Each player only gets points by aligning themselves with marks in their "score region". The score region is the left and top half of the board for the column player and the row player respectively. Players have a fixed number of marks they can put down. They can shift the marks in rows and columns as well.
+
+

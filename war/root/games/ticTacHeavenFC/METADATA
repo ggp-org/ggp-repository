@@ -1,0 +1,8 @@
+{
+  "gameName": "Tic Tac Heaven Factor Control",
+  "numRoles": 2,
+
+  "rulesheet": "ticTacHeavenFC.kif",
+  "stylesheet": "ticTacHeavenFC.xsl",
+  "description": "ticTacHeavenFC.txt"
+}

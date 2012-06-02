@@ -1,0 +1,1 @@
+"With Conviction!" is like Tic-Tac-Toe on a 5x5 board. However, each move has a "strength" associated with it. If a player makes a move of a particular strength, he will no longer be able to make a move of a higher strength. However, the only way to win is to make a row or a column entirely with "strong" moves.
