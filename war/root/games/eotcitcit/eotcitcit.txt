@@ -1,0 +1,1 @@
+Tic-tic-toe is a variant of tic-tac-toe in which both players move simultaneously. If they try to play in the same square at the same time, nothing happens. The game stops after six moves if no one has won. This game is a "suicide" variant of tic-tic-toe: a player wins if their opponent gets three marks in a row.

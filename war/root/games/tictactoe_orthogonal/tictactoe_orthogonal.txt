@@ -1,0 +1,1 @@
+A variant of tic-tac-toe in which rows must be vertical or horizontal, not diagonal. (The GDL description is interesting in that it is aggressively monotonic.)

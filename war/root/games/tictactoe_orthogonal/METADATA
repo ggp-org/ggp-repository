@@ -1,6 +1,6 @@
 {
-  "version": 0,
   "numRoles": 2,
 
-  "rulesheet": "tictactoe_orthogonal.kif"
+  "rulesheet": "tictactoe_orthogonal.kif",
+  "description": "tictactoe_orthogonal.txt"
 }

@@ -1,0 +1,1 @@
+A "suicide" variant of tic-tac-toe: a player wins if their opponent gets three marks in a row.

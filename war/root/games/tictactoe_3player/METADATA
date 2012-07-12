@@ -1,6 +1,6 @@
 {
-  "version": 0,
   "numRoles": 3,
 
-  "rulesheet": "tictactoe_3player.kif"
+  "rulesheet": "tictactoe_3player.kif",
+  "description": "tictactoe_3player.txt"
 }

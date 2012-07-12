@@ -1,0 +1,1 @@
+A variant of tic-tac-toe played by three players on a 5x5 toroidal board (i.e. it wraps around the edges). Goal values: 100 for getting four marks in a row; 66 for getting three in a row; 33 for getting neither, but preventing anyone from getting four in a row; and 0 for failing at all of the above.

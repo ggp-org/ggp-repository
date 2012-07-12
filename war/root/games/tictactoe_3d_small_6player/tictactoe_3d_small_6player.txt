@@ -1,0 +1,1 @@
+A variant of tic-tac-toe played on a 3x3x3 cube. Three marks in a row (in any direction) to win. The six players are on two teams; each team member is responsible for picking one of the team's coordinates every time they make a mark.

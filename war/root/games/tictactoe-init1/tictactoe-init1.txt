@@ -1,0 +1,1 @@
+A version of tic-tac-toe in which some squares are already filled in. The xPlayer has a forced win.
