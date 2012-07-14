@@ -24,7 +24,11 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
             return BaseRepository.readFile(new File("root/robots.txt")).getBytes();
         }
         
-        // TODO: Do something more clever with the root directory.
+        // Otherwise show a static page for the root directory.
+        if (reqURI.equals("/") || reqURI.equals("/index.html")) {
+            return BaseRepository.readFile(new File("root/index.html")).getBytes();
+        }
+        
         return null;
     }
 
