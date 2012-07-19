@@ -1,6 +1,9 @@
 {
+  "gameName": "Three-Player Tic-Tac-Toe",
   "numRoles": 3,
 
   "rulesheet": "tictactoe_3player.kif",
+  "stylesheet": "tictactoe_3player.xsl",
+  "user_interface": "tictactoe_3player.js",
   "description": "tictactoe_3player.txt"
 }
