@@ -1,0 +1,7 @@
+{
+  "gameName": "Dots and Boxes (Suicide)",
+  "numRoles": 2,
+  
+  "rulesheet": "dotsAndBoxesSuicide.kif",
+  "stylesheet": "dotsAndBoxesSuicide.xsl"
+}
