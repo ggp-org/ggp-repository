@@ -170,7 +170,7 @@
 (<= blackWin
     (index ?x)
     (true (cellHolds ?x 1 black)))
-    
+
 ; MG's bugfix    
 (<= whiteWin
 	(not blackCell))

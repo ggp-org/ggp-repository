@@ -1,0 +1,1 @@
+In this game, each player has two rows of Chess pawns. The first player to move one of their pawns to their opponent's back row loses the game.
