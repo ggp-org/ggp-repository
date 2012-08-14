@@ -1,0 +1,9 @@
+{
+  "gameName": "Connect Four Large",
+  "numRoles": 2,
+    
+  "user_interface": "connectFourLarge.js",
+  "rulesheet": "connectFourLarge.kif",
+  "stylesheet": "connectFourLarge.xsl",
+  "description": "connectFourLarge.txt"
+}
