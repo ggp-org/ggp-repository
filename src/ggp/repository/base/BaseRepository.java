@@ -1,5 +1,7 @@
 package ggp.repository.base;
 
+import ggp.repository.MetadataCompleter;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -81,7 +83,7 @@ public class BaseRepository {
             byte[] theBytes = getBytesForVersionedFile(thePrefix, theFetchedVersion, theSuffix);
             if (theBytes != null) {
                 if (theSuffix.equals("METADATA")) {
-                    theBytes = adjustMetadataJSON(theBytes, theExplicitVersion, nMaxVersion);
+                    theBytes = adjustMetadataJSON(reqURI, theBytes, theExplicitVersion, nMaxVersion);
                 }
                 return theBytes;
             }
@@ -92,15 +94,16 @@ public class BaseRepository {
     
     // When the user requests a particular version, the metadata should always be for that version.
     // When the user requests the latest version, the metadata should always indicate the most recent version.
-    // TODO(schreib): Clean this up later: perhaps generate the metadata entirely?
-    public static byte[] adjustMetadataJSON(byte[] theMetaBytes, Integer nExplicitVersion, int nMaxVersion) throws IOException {
+    public static byte[] adjustMetadataJSON(String reqURI, byte[] theMetaBytes, Integer nExplicitVersion, int nMaxVersion) throws IOException {
         try {
             JSONObject theMetaJSON = new JSONObject(new String(theMetaBytes));
             if (nExplicitVersion == null) {
-                theMetaJSON.put("version", nMaxVersion);
+                theMetaJSON.put("version", nMaxVersion);                
             } else {
                 theMetaJSON.put("version", nExplicitVersion);
             }
+            String theRulesheet = new String(getResponseBytesForURI(reqURI.replace("METADATA",theMetaJSON.getString("rulesheet"))));
+            MetadataCompleter.completeMetadataFromRulesheet(theMetaJSON, theRulesheet);
             return theMetaJSON.toString().getBytes();
         } catch (JSONException je) {
             throw new IOException(je);
