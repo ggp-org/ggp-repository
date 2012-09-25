@@ -5,7 +5,8 @@ import ggp.repository.base.BaseRepository;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import util.configuration.RemoteResourceLoader;
@@ -67,9 +68,9 @@ public class DresdenRepository {
     public static void performRegularIngestion() throws IOException {
         try {
             Set<CachedGame> theKnownGames = CachedGame.loadCachedGames();
-            Set<String> theKnownGameKeys = new HashSet<String>();
+            Map<String,CachedGame> gamesByKey = new HashMap<String,CachedGame>();
             for (CachedGame g : theKnownGames) {
-                theKnownGameKeys.add(g.getGameKey());
+           		gamesByKey.put(g.getGameKey(),g);
             }
             
             boolean foundNewGames = false;
@@ -78,9 +79,9 @@ public class DresdenRepository {
             for (int i = 0; i < theObservedGames.length(); i++) {
                 String observedGame = theObservedGames.getString(i);
                 String gameKey = observedGame.replace("http://games.ggp.org/dresden/games/", "").replace("/v0/","");
-                if (!theKnownGameKeys.contains(gameKey)) {
-                    foundNewGames = true;
-                    CachedGame.ingestCachedGame(gameKey);
+                if (!gamesByKey.containsKey(gameKey) || gamesByKey.get(gameKey).needsUpdateFromDresden()) {
+            		foundNewGames = true;
+            		CachedGame.ingestCachedGame(gameKey);
                 }
             }
             if (foundNewGames) {
