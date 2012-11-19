@@ -65,6 +65,7 @@ public class DresdenRepository {
         return cachedGame.getResource(theResource);
     }
     
+    private static final String DRESDEN_HASH = "f69721b2f73839e513eed991e96824f1af218ac1";
     public static void performRegularIngestion() throws IOException {
         try {
             Set<CachedGame> theKnownGames = CachedGame.loadCachedGames();
@@ -74,7 +75,7 @@ public class DresdenRepository {
             }
             
             boolean foundNewGames = false;
-            JSONObject theJSON = RemoteResourceLoader.loadJSON("http://database.ggp.org/statistics/f69721b2f73839e513eed991e96824f1af218ac1/overall");
+            JSONObject theJSON = RemoteResourceLoader.loadJSON("http://database.ggp.org/statistics/" + DRESDEN_HASH + "/overall");
             JSONArray theObservedGames = theJSON.getJSONArray("observedGames");
             for (int i = 0; i < theObservedGames.length(); i++) {
                 String observedGame = theObservedGames.getString(i);
@@ -88,7 +89,7 @@ public class DresdenRepository {
                 CachedStaticServlet.getCache().clear();
             }
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            throw new IOException(e);
         }
     }
 }

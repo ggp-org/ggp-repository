@@ -58,11 +58,22 @@ public abstract class CachedStaticServlet extends HttpServlet {
             resp.setStatus(200);
             return;
         }
-        
+
         // Cron handler should never hit the cache.
         if (reqURI.startsWith("/cron/")) {
             handleCronRequest(reqURI.substring("/cron".length()));
             resp.setStatus(200);
+            return;
+        }
+
+        // Task queue handler should never hit the cache.
+        if (reqURI.startsWith("/tasks/")) {
+        	int nRetryAttempt = Integer.parseInt(req.getHeader("X-AppEngine-TaskRetryCount"));
+            if (handleTaskQueueRequest(reqURI.substring("/tasks".length()), nRetryAttempt)) {
+            	resp.setStatus(200);
+            } else {
+            	resp.setStatus(503);
+            }            
             return;
         }
 
@@ -126,4 +137,5 @@ public abstract class CachedStaticServlet extends HttpServlet {
     
     protected abstract byte[] getResponseBytesForURI(String reqURI) throws IOException;
     protected abstract void handleCronRequest(String reqURI) throws IOException;
+    protected abstract boolean handleTaskQueueRequest(String reqURI, int nRetryAttempt) throws IOException;
 }
