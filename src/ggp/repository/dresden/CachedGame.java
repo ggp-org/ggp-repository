@@ -1,7 +1,7 @@
 package ggp.repository.dresden;
 
 import ggp.repository.MetadataCompleter;
-import ggp.repository.Persistence;
+import org.ggp.shared.persistence.Persistence;
 
 import java.io.IOException;
 import java.util.Set;
