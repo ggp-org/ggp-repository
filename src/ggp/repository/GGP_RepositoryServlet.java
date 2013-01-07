@@ -6,6 +6,8 @@ import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 import java.io.File;
 import java.io.IOException;
 
+import org.ggp.shared.website.CachedStaticServlet;
+
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
 
@@ -62,5 +64,19 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
         	}
         }
         return false;
-    }    
+    }
+    
+    @Override
+    protected String getContentTypeForUnknown(String theURL) {
+    	if (theURL.equals("/")) {
+    		return "text/html";
+    	} else if (theURL.equals("/base/")) {
+    		return "text/html";
+    	} else if (theURL.equals("/dresden/")) {
+    		return "text/html";
+    	} else if (theURL.endsWith("/")) {
+    		return "text/javascript";
+    	}
+    	return "text/plain";
+    }
 }

@@ -1,6 +1,5 @@
 package ggp.repository.dresden;
 
-import ggp.repository.CachedStaticServlet;
 import ggp.repository.base.BaseRepository;
 
 import java.io.File;
@@ -11,6 +10,7 @@ import java.util.Set;
 
 import util.configuration.RemoteResourceLoader;
 
+import org.ggp.shared.website.CachedStaticServlet;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
