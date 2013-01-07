@@ -11,9 +11,9 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import util.configuration.RemoteResourceLoader;
-
 import com.google.appengine.api.datastore.Text;
+
+import org.ggp.shared.loader.RemoteResourceLoader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
