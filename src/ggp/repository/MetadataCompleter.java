@@ -3,16 +3,15 @@ package ggp.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.ggp.shared.gdl.factory.GdlFactory;
+import org.ggp.shared.gdl.factory.exceptions.GdlFormatException;
+import org.ggp.shared.gdl.grammar.Gdl;
+import org.ggp.shared.gdl.grammar.GdlRelation;
+import org.ggp.shared.symbol.factory.SymbolFactory;
+import org.ggp.shared.symbol.factory.exceptions.SymbolFormatException;
+import org.ggp.shared.symbol.grammar.SymbolList;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import util.gdl.factory.GdlFactory;
-import util.gdl.factory.exceptions.GdlFormatException;
-import util.gdl.grammar.Gdl;
-import util.gdl.grammar.GdlRelation;
-import util.symbol.factory.SymbolFactory;
-import util.symbol.factory.exceptions.SymbolFormatException;
-import util.symbol.grammar.SymbolList;
 
 public class MetadataCompleter {
 	/**
