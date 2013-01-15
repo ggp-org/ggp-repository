@@ -3,13 +3,13 @@ package ggp.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ggp.shared.gdl.factory.GdlFactory;
-import org.ggp.shared.gdl.factory.exceptions.GdlFormatException;
-import org.ggp.shared.gdl.grammar.Gdl;
-import org.ggp.shared.gdl.grammar.GdlRelation;
-import org.ggp.shared.symbol.factory.SymbolFactory;
-import org.ggp.shared.symbol.factory.exceptions.SymbolFormatException;
-import org.ggp.shared.symbol.grammar.SymbolList;
+import org.ggp.galaxy.shared.gdl.factory.GdlFactory;
+import org.ggp.galaxy.shared.gdl.factory.exceptions.GdlFormatException;
+import org.ggp.galaxy.shared.gdl.grammar.Gdl;
+import org.ggp.galaxy.shared.gdl.grammar.GdlRelation;
+import org.ggp.galaxy.shared.symbol.factory.SymbolFactory;
+import org.ggp.galaxy.shared.symbol.factory.exceptions.SymbolFormatException;
+import org.ggp.galaxy.shared.symbol.grammar.SymbolList;
 import org.json.JSONException;
 import org.json.JSONObject;
 

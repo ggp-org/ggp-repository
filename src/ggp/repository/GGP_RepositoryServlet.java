@@ -6,7 +6,7 @@ import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 import java.io.File;
 import java.io.IOException;
 
-import org.ggp.shared.website.CachedStaticServlet;
+import org.ggp.galaxy.shared.website.CachedStaticServlet;
 
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;

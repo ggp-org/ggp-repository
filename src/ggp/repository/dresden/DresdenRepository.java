@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.ggp.shared.loader.RemoteResourceLoader;
-import org.ggp.shared.website.CachedStaticServlet;
+import org.ggp.galaxy.shared.loader.RemoteResourceLoader;
+import org.ggp.galaxy.shared.website.CachedStaticServlet;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
