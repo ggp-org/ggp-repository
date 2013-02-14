@@ -19,7 +19,7 @@ public class MetadataCompleter {
 	 * @throws JSONException
 	 */
 	public static void completeMetadataFromRulesheet(JSONObject theMetaJSON, String theRulesheet) throws JSONException {
-        List<Role> theRoles = Role.computeRoles(Game.createEphemeralGame(theRulesheet).getRules());
+        List<Role> theRoles = Role.computeRoles(Game.createEphemeralGame(Game.preprocessRulesheet(theRulesheet)).getRules());
         theMetaJSON.put("roleNames", theRoles);
         theMetaJSON.put("numRoles", theRoles.size());
 	}
