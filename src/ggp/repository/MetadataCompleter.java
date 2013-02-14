@@ -1,15 +1,9 @@
 package ggp.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.ggp.galaxy.shared.gdl.factory.GdlFactory;
-import org.ggp.galaxy.shared.gdl.factory.exceptions.GdlFormatException;
-import org.ggp.galaxy.shared.gdl.grammar.Gdl;
-import org.ggp.galaxy.shared.gdl.grammar.GdlRelation;
-import org.ggp.galaxy.shared.symbol.factory.SymbolFactory;
-import org.ggp.galaxy.shared.symbol.factory.exceptions.SymbolFormatException;
-import org.ggp.galaxy.shared.symbol.grammar.SymbolList;
+import org.ggp.galaxy.shared.game.Game;
+import org.ggp.galaxy.shared.statemachine.Role;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,42 +19,8 @@ public class MetadataCompleter {
 	 * @throws JSONException
 	 */
 	public static void completeMetadataFromRulesheet(JSONObject theMetaJSON, String theRulesheet) throws JSONException {
-        List<String> theRoles = getRolesFromRulesheet(theRulesheet);
+        List<Role> theRoles = Role.computeRoles(Game.createEphemeralGame(theRulesheet).getRules());
         theMetaJSON.put("roleNames", theRoles);
         theMetaJSON.put("numRoles", theRoles.size());
 	}
-	
-    private static List<String> getRolesFromRulesheet(String gameRulesheet) {
-        List<String> theRoles = new ArrayList<String>();
-        try {
-            List<Gdl> gdlRulesheet = new ArrayList<Gdl>();
-            StringBuilder cleanRulesheet = new StringBuilder("( ");
-            String[] splitRulesheet = gameRulesheet.split("\n");
-            for (int i = 0; i < splitRulesheet.length; i++) {
-                String line = splitRulesheet[i].trim();
-                int comment = line.indexOf(';');
-                int cutoff = (comment == -1) ? line.length() : comment;
-                cleanRulesheet.append(line.substring(0, cutoff));
-                cleanRulesheet.append(" ");                
-            }
-            cleanRulesheet.append(" )");
-            SymbolList list = (SymbolList) SymbolFactory.create(cleanRulesheet.toString().trim());
-            for (int i = 0; i < list.size(); i++) {
-                gdlRulesheet.add(GdlFactory.create(list.get(i)));
-            }
-            for (Gdl gdl : gdlRulesheet) {
-                if (gdl instanceof GdlRelation) {
-                    GdlRelation relation = (GdlRelation) gdl;
-                    if (relation.getName().getValue().equals("role")) {
-                        theRoles.add(relation.getBody().iterator().next().toString());
-                    }
-                }
-            }
-        } catch (SymbolFormatException se) {
-            throw new RuntimeException(se);
-        } catch (GdlFormatException ge) {
-            throw new RuntimeException(ge);
-        }
-        return theRoles;
-    }
 }
