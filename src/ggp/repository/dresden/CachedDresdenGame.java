@@ -32,7 +32,7 @@ public class CachedDresdenGame extends CachedGame {
     	try {
     		String theDescPrefix = theHTML.substring(theHTML.indexOf("<th><a name=\"description\">description</a></th>\n			<td>"));
     		String theDesc = theDescPrefix.substring("<th><a name=\"description\">description</a></th>\n			<td>".length(), theDescPrefix.indexOf("</td>"));
-    		return theDesc;
+    		return theDesc.trim();
     	} catch (StringIndexOutOfBoundsException e) {
     		return "";
     	}

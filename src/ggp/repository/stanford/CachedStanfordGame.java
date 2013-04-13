@@ -33,7 +33,7 @@ public class CachedStanfordGame extends CachedGame {
     		if (description.contains("<") || description.contains(">")) {
     			return null;
     		}
-    		return description;
+    		return description.trim();
 		} catch (Exception e) {
 			;
 		}
