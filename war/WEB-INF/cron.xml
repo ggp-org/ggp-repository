@@ -5,4 +5,9 @@
     <description>Fetch new games that have been observed on the Dresden server.</description>
     <schedule>every 1 hours</schedule>
   </cron>
+  <cron>
+    <url>/cron/update_stanford</url>
+    <description>Fetch new games that have been observed on the Dresden server.</description>
+    <schedule>every 1 hours</schedule>
+  </cron>  
 </cronentries>

@@ -1,11 +1,10 @@
-package ggp.repository.dresden;
+package ggp.repository.stanford;
 
 import ggp.repository.base.BaseRepository;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.ggp.galaxy.shared.loader.RemoteResourceLoader;
@@ -14,11 +13,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DresdenRepository {
+public class StanfordRepository {
     public static byte[] getResponseBytesForURI(String reqURI) throws IOException {
         // Special case: the main page.
         if (reqURI.equals("/") || reqURI.equals("/index.html")) {
-            return BaseRepository.readFile(new File("root/gameListDresden.html")).getBytes();
+            return BaseRepository.readFile(new File("root/gameListStanford.html")).getBytes();
         }
         
         // Files not under /games/ aren't versioned, and can just be
@@ -35,7 +34,7 @@ public class DresdenRepository {
         // the games, on request.
         if (reqURI.equals("metadata")) {
             JSONObject theGameMetaMap = new JSONObject();
-            for (CachedDresdenGame cachedGame : CachedDresdenGame.loadCachedGames()) {
+            for (CachedStanfordGame cachedGame : CachedStanfordGame.loadCachedGames()) {
                 try {
                     theGameMetaMap.put(cachedGame.getGameKey(), new JSONObject(new String(getResponseBytesForURI("/games/" + cachedGame.getGameKey() + "/"))));
                 } catch (JSONException e) {
@@ -47,7 +46,7 @@ public class DresdenRepository {
 
         if (reqURI.isEmpty()) {
             JSONArray theGamesList = new JSONArray();
-            for (CachedDresdenGame cachedGame : CachedDresdenGame.loadCachedGames()) {
+            for (CachedStanfordGame cachedGame : CachedStanfordGame.loadCachedGames()) {
                 theGamesList.put(cachedGame.getGameKey());
             }
             return theGamesList.toString().getBytes();
@@ -59,36 +58,36 @@ public class DresdenRepository {
         if (theGameKey.endsWith("/v0")) {
             theGameKey = theGameKey.substring(0, theGameKey.length()-3);
         }
-        CachedDresdenGame cachedGame = CachedDresdenGame.loadCachedGame(theGameKey);
+        CachedStanfordGame cachedGame = CachedStanfordGame.loadCachedGame(theGameKey);
         if (cachedGame == null) return null;
         return cachedGame.getResource(theResource);
     }
     
-    private static final String DRESDEN_HASH = "f69721b2f73839e513eed991e96824f1af218ac1";
     public static void performRegularIngestion() throws IOException {
-        try {
-            Set<CachedDresdenGame> theKnownGames = CachedDresdenGame.loadCachedGames();
-            Map<String,CachedDresdenGame> gamesByKey = new HashMap<String,CachedDresdenGame>();
-            for (CachedDresdenGame g : theKnownGames) {
-           		gamesByKey.put(g.getGameKey(),g);
-            }
-            
-            boolean foundNewGames = false;
-            JSONObject theJSON = RemoteResourceLoader.loadJSON("http://database.ggp.org/statistics/" + DRESDEN_HASH + "/overall");
-            JSONArray theObservedGames = theJSON.getJSONArray("observedGames");
-            for (int i = 0; i < theObservedGames.length(); i++) {
-                String observedGame = theObservedGames.getString(i);
-                String gameKey = observedGame.replace("http://games.ggp.org/dresden/games/", "").replace("/v0/","");
-                if (!gamesByKey.containsKey(gameKey) || gamesByKey.get(gameKey).needsUpdateFromDresden()) {
-            		foundNewGames = true;
-            		CachedDresdenGame.ingestCachedGame(gameKey);
-                }
-            }
-            if (foundNewGames) {
-                CachedStaticServlet.getCache().clear();
-            }
-        } catch (JSONException e) {
-            throw new IOException(e);
+        Set<CachedStanfordGame> theKnownGames = CachedStanfordGame.loadCachedGames();
+        Set<String> knownGameKeys = new HashSet<String>();
+        for (CachedStanfordGame g : theKnownGames) {
+        	knownGameKeys.add(g.getGameKey());
         }
-    }
+        
+        // Load all of the game keys directly 
+       	Set<String> allGameKeys = new HashSet<String>();
+   		String gamesListPage = RemoteResourceLoader.loadRaw("http://gamemaster.stanford.edu/showgames");
+    	for (String gameToken : gamesListPage.split("'")) {
+    		if (gameToken.startsWith("inspectgame.php?id=")) {
+    			allGameKeys.add(gameToken.substring("inspectgame.php?id=".length()));
+    		}
+    	}
+    	
+    	Set<String> newGameKeys = new HashSet<String>();
+    	newGameKeys.addAll(allGameKeys);
+    	newGameKeys.removeAll(knownGameKeys);
+    	if (newGameKeys.size() == 0)
+    		return;
+        
+    	for (String newGameKey : newGameKeys) {
+    		CachedStanfordGame.ingestCachedGame(newGameKey);
+    	}
+    	CachedStaticServlet.getCache().clear();
+    }   
 }

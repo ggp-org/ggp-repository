@@ -1,24 +1,24 @@
-package ggp.repository.dresden;
+package ggp.repository;
 
 import ggp.repository.MetadataCompleter;
+
 import org.ggp.galaxy.shared.persistence.Persistence;
 
-import java.io.IOException;
-import java.util.Set;
-
 import javax.jdo.PersistenceManager;
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Text;
 
-import org.ggp.galaxy.shared.loader.RemoteResourceLoader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 @PersistenceCapable
-public class CachedGame {
+@Inheritance(strategy=InheritanceStrategy.SUBCLASS_TABLE)
+public abstract class CachedGame {
     @PrimaryKey @Persistent private String gameKey;
     @Persistent private Text rulesheet;
     @Persistent private Text description;
@@ -68,37 +68,5 @@ public class CachedGame {
         PersistenceManager pm = Persistence.getPersistenceManager();
         pm.makePersistent(this);
         pm.close();
-    }    
-
-    /* Static */
-    
-    public static CachedGame loadCachedGame(String gameKey) {
-        return Persistence.loadSpecific(gameKey, CachedGame.class);
-    }
-    
-    public static Set<CachedGame> loadCachedGames() {
-        return Persistence.loadAll(CachedGame.class);
-    }
-    
-    private final static String descLoadingPrefix = "http://130.208.241.192/ggpserver/public/view_game.jsp?name=";
-    private final static String gameLoadingPrefix = "http://130.208.241.192/ggpserver/public/download_gdl.jsp?name=";
-
-    public static void ingestCachedGame(String gameKey) throws IOException {
-    	String theDescription = extractDescription(RemoteResourceLoader.loadRaw(descLoadingPrefix + gameKey));
-        String theRulesheet = RemoteResourceLoader.loadRaw(gameLoadingPrefix + gameKey);
-        if (!theRulesheet.startsWith("<html><head>")) {
-            // Don't store error pages as rulesheets.
-            new CachedGame(gameKey, theRulesheet, theDescription);
-        }
-    }
-    
-    public static String extractDescription(String theHTML) {
-    	try {
-    		String theDescPrefix = theHTML.substring(theHTML.indexOf("<th><a name=\"description\">description</a></th>\n			<td>"));
-    		String theDesc = theDescPrefix.substring("<th><a name=\"description\">description</a></th>\n			<td>".length(), theDescPrefix.indexOf("</td>"));
-    		return theDesc;
-    	} catch (StringIndexOutOfBoundsException e) {
-    		return "";
-    	}
     }
 }

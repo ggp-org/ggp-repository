@@ -13,16 +13,22 @@ import com.google.appengine.api.taskqueue.TaskOptions.Method;
 
 import ggp.repository.base.BaseRepository;
 import ggp.repository.dresden.DresdenRepository;
+import ggp.repository.stanford.StanfordRepository;
 
 @SuppressWarnings("serial")
 public class GGP_RepositoryServlet extends CachedStaticServlet {
-	private final int DRESDEN_UPDATE_RETRIES = 10;
+	private final int UPDATE_RETRIES = 10;
 	
     protected byte[] getResponseBytesForURI(String reqURI) throws IOException {
         // Repository: the /dresden/ games.
         if (reqURI.startsWith("/dresden/")) {
             return DresdenRepository.getResponseBytesForURI(reqURI.substring("/dresden".length()));
         }
+        
+        // Repository: the /stanford/ games.
+        if (reqURI.startsWith("/stanford/")) {
+            return StanfordRepository.getResponseBytesForURI(reqURI.substring("/stanford".length()));
+        }        
 
         // Repository: the /base/ games.
         if (reqURI.startsWith("/base/")) {
@@ -44,7 +50,7 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
 
     @Override
     protected void handleCronRequest(String reqURI) throws IOException {
-    	QueueFactory.getDefaultQueue().add(withUrl("/tasks/update_dresden").method(Method.GET).retryOptions(withTaskRetryLimit(DRESDEN_UPDATE_RETRIES)));
+    	QueueFactory.getDefaultQueue().add(withUrl(reqURI.replace("/cron/", "/tasks")).method(Method.GET).retryOptions(withTaskRetryLimit(UPDATE_RETRIES)));
     }
     
     @Override
@@ -57,7 +63,20 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
         		// For the first few exceptions, silently issue errors to task queue to trigger retries.
         		// After a few retries, start surfacing the exceptions, since they're clearly not transient.
             	// This reduces the amount of noise in the error logs caused by transient server errors.
-            	if (nRetryAttempt > DRESDEN_UPDATE_RETRIES - 3) {
+            	if (nRetryAttempt > UPDATE_RETRIES - 3) {
+            		throw new RuntimeException(e);
+            	}
+            	return false;
+        	}
+        } else if (reqURI.equals("/update_stanford")) {
+        	try {
+        		StanfordRepository.performRegularIngestion();
+        		return true;
+        	} catch (IOException e) {
+        		// For the first few exceptions, silently issue errors to task queue to trigger retries.
+        		// After a few retries, start surfacing the exceptions, since they're clearly not transient.
+            	// This reduces the amount of noise in the error logs caused by transient server errors.
+            	if (nRetryAttempt > UPDATE_RETRIES - 3) {
             		throw new RuntimeException(e);
             	}
             	return false;
@@ -73,6 +92,8 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
     	} else if (theURL.equals("/base/")) {
     		return "text/html";
     	} else if (theURL.equals("/dresden/")) {
+    		return "text/html";
+    	} else if (theURL.equals("/stanford/")) {
     		return "text/html";
     	} else if (theURL.endsWith("/")) {
     		return "text/javascript";
