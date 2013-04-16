@@ -9,43 +9,25 @@ import java.util.Set;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.ggp.galaxy.shared.loader.RemoteResourceLoader;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @PersistenceCapable
 public class CachedStanfordGame extends CachedGame {
-    public CachedStanfordGame(String theGameKey, String theRulesheet, String theDescription) {
-		super(theGameKey, theRulesheet, theDescription);
+    public CachedStanfordGame(String theGameKey, String theName, String theCurator, String theRulesheet, String theDescription) {
+		super(theGameKey, theName, theCurator, theRulesheet, theDescription);
 	}
 
-    private final static String gameLoadingPrefix = "http://gamemaster.stanford.edu/inspectgame.php?id="; 
-
-    public static void ingestCachedGame(String gameKey) throws IOException {
-		String gamePage = RemoteResourceLoader.loadRaw(gameLoadingPrefix + gameKey);
-		String theDescription = extractDescription(gamePage);
-		String theRulesheet = getRulesForGameFromHTML(gamePage);
+    public static void ingestCachedGame(JSONObject gameMeta) throws IOException, JSONException {
+    	String gameKey = gameMeta.getString("id");
+    	String gameName = gameMeta.getString("name");
+    	String gameCurator = gameMeta.getString("curator");
+    	String theDescription = RemoteResourceLoader.loadRaw("http://gamemaster.stanford.edu" + gameMeta.getString("description"));
+    	String theRulesheet = RemoteResourceLoader.loadRaw("http://gamemaster.stanford.edu" + gameMeta.getString("rulesheet"));
 		if (!theRulesheet.startsWith("<html><head>")) {
-			new CachedStanfordGame(gameKey, theRulesheet, theDescription);
+			new CachedStanfordGame(gameKey, gameName, gameCurator, theRulesheet, theDescription);
 		}
     }
-    
-    private static String extractDescription(String theHTML) {
-		try {
-    		String description = theHTML.split("<br/>")[5];
-    		if (description.contains("<") || description.contains(">")) {
-    			return null;
-    		}
-    		return description.trim();
-		} catch (Exception e) {
-			;
-		}
-		return null;
-    }
-    
-    private static String getRulesForGameFromHTML(String theHTML) throws IOException {
-		String x = theHTML.substring(theHTML.indexOf("View Rulesheet")+"View Rulesheet".length());
-		String y = x.substring(x.indexOf("location.href=\"")+"location.href=\"".length());
-		String z = y.substring(0,y.indexOf("\""));        		
-		return RemoteResourceLoader.loadRaw("http://gamemaster.stanford.edu/" + z);
-    } 
     
     public static CachedStanfordGame loadCachedGame(String gameKey) {
         return Persistence.loadSpecific(gameKey, CachedStanfordGame.class);

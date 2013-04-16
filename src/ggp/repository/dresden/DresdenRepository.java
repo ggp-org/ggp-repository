@@ -65,7 +65,7 @@ public class DresdenRepository {
     }
     
     private static final String DRESDEN_HASH = "f69721b2f73839e513eed991e96824f1af218ac1";
-    public static void performRegularIngestion() throws IOException {
+    public static void performRegularIngestion(boolean fullRefresh) throws IOException {
         try {
             Set<CachedDresdenGame> theKnownGames = CachedDresdenGame.loadCachedGames();
             Map<String,CachedDresdenGame> gamesByKey = new HashMap<String,CachedDresdenGame>();
@@ -79,7 +79,7 @@ public class DresdenRepository {
             for (int i = 0; i < theObservedGames.length(); i++) {
                 String observedGame = theObservedGames.getString(i);
                 String gameKey = observedGame.replace("http://games.ggp.org/dresden/games/", "").replace("/v0/","");
-                if (!gamesByKey.containsKey(gameKey) || gamesByKey.get(gameKey).needsUpdateFromDresden()) {
+                if (!gamesByKey.containsKey(gameKey) || gamesByKey.get(gameKey).needsUpdateFromDresden() || fullRefresh) {
             		foundNewGames = true;
             		CachedDresdenGame.ingestCachedGame(gameKey);
                 }

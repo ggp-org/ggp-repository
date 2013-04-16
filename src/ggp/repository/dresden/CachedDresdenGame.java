@@ -13,7 +13,7 @@ import org.ggp.galaxy.shared.loader.RemoteResourceLoader;
 @PersistenceCapable
 public class CachedDresdenGame extends CachedGame {
     public CachedDresdenGame(String theGameKey, String theRulesheet, String theDescription) {
-		super(theGameKey, theRulesheet, theDescription);
+		super(theGameKey, null, null, theRulesheet, theDescription);
 	}
 
 	private final static String descLoadingPrefix = "http://130.208.241.192/ggpserver/public/view_game.jsp?name=";
@@ -38,11 +38,15 @@ public class CachedDresdenGame extends CachedGame {
     	}
     }
     
+    public boolean needsUpdateFromDresden() {
+    	return false;
+    }    
+    
     public static CachedDresdenGame loadCachedGame(String gameKey) {
         return Persistence.loadSpecific(gameKey, CachedDresdenGame.class);
     }
     
     public static Set<CachedDresdenGame> loadCachedGames() {
         return Persistence.loadAll(CachedDresdenGame.class);
-    }    
+    }
 }

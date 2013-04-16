@@ -55,34 +55,26 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
     
     @Override
     protected boolean handleTaskQueueRequest(String reqURI, int nRetryAttempt) throws IOException {
-        if (reqURI.equals("/update_dresden")) {
-        	try {
-        		DresdenRepository.performRegularIngestion();
-        		return true;
-        	} catch (IOException e) {
-        		// For the first few exceptions, silently issue errors to task queue to trigger retries.
-        		// After a few retries, start surfacing the exceptions, since they're clearly not transient.
-            	// This reduces the amount of noise in the error logs caused by transient server errors.
-            	if (nRetryAttempt > UPDATE_RETRIES - 3) {
-            		throw new RuntimeException(e);
-            	}
-            	return false;
+    	try {
+    		if (reqURI.equals("/update_dresden_quick")) {
+	        	DresdenRepository.performRegularIngestion(false);
+	        } else if (reqURI.equals("/update_stanford_quick")) {
+	        	StanfordRepository.performRegularIngestion(false);
+	        } else if (reqURI.equals("/update_dresden_full")) {
+	        	DresdenRepository.performRegularIngestion(true);
+	        } else if (reqURI.equals("/update_stanford_full")) {
+	        	StanfordRepository.performRegularIngestion(true);
+	        }
+	        return true;
+    	} catch (IOException e) {
+    		// For the first few exceptions, silently issue errors to task queue to trigger retries.
+    		// After a few retries, start surfacing the exceptions, since they're clearly not transient.
+        	// This reduces the amount of noise in the error logs caused by transient server errors.
+        	if (nRetryAttempt > UPDATE_RETRIES - 3) {
+        		throw new RuntimeException(e);
         	}
-        } else if (reqURI.equals("/update_stanford")) {
-        	try {
-        		StanfordRepository.performRegularIngestion();
-        		return true;
-        	} catch (IOException e) {
-        		// For the first few exceptions, silently issue errors to task queue to trigger retries.
-        		// After a few retries, start surfacing the exceptions, since they're clearly not transient.
-            	// This reduces the amount of noise in the error logs caused by transient server errors.
-            	if (nRetryAttempt > UPDATE_RETRIES - 3) {
-            		throw new RuntimeException(e);
-            	}
-            	return false;
-        	}
-        }
-        return false;
+        	return false;
+    	}
     }
     
     @Override

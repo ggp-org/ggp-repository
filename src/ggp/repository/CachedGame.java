@@ -22,11 +22,15 @@ public abstract class CachedGame {
     @PrimaryKey @Persistent private String gameKey;
     @Persistent private Text rulesheet;
     @Persistent private Text description;
+    @Persistent private String curator;
+    @Persistent private String name;
 
-    public CachedGame(String theGameKey, String theRulesheet, String theDescription) {
-        gameKey = theGameKey;
+    public CachedGame(String theGameKey, String theName, String theCurator, String theRulesheet, String theDescription) {
+    	name = theName;
+        gameKey = theGameKey;        
+        curator = theCurator;
         rulesheet = new Text(theRulesheet);
-        description = new Text(theDescription);
+        description = new Text(theDescription);        
         save();
     }
 
@@ -45,10 +49,6 @@ public abstract class CachedGame {
         return null;
     }
     
-    public boolean needsUpdateFromDresden() {
-    	return false;
-    }
-
     private String getMetadata() {
         JSONObject metadata = new JSONObject();
         try {
@@ -56,6 +56,12 @@ public abstract class CachedGame {
             metadata.put("rulesheet", "rulesheet.kif");
             if (description != null && !description.getValue().isEmpty()) {
             	metadata.put("description", "description.txt");
+            }
+            if (curator != null && !curator.isEmpty()) {
+            	metadata.put("curator", curator);
+            }
+            if (name != null && !name.isEmpty()) {
+            	metadata.put("gameName", name);
             }
             MetadataCompleter.completeMetadataFromRulesheet(metadata, rulesheet.getValue());
             return metadata.toString(); 

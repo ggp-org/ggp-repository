@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.ggp.galaxy.shared.loader.RemoteResourceLoader;
 import org.ggp.galaxy.shared.website.CachedStaticServlet;
@@ -63,31 +64,30 @@ public class StanfordRepository {
         return cachedGame.getResource(theResource);
     }
     
-    public static void performRegularIngestion() throws IOException {
-        Set<CachedStanfordGame> theKnownGames = CachedStanfordGame.loadCachedGames();
-        Set<String> knownGameKeys = new HashSet<String>();
-        for (CachedStanfordGame g : theKnownGames) {
-        	knownGameKeys.add(g.getGameKey());
-        }
-        
-        // Load all of the game keys directly 
-       	Set<String> allGameKeys = new HashSet<String>();
-   		String gamesListPage = RemoteResourceLoader.loadRaw("http://gamemaster.stanford.edu/showgames");
-    	for (String gameToken : gamesListPage.split("'")) {
-    		if (gameToken.startsWith("inspectgame.php?id=")) {
-    			allGameKeys.add(gameToken.substring("inspectgame.php?id=".length()));
-    		}
+    public static void performRegularIngestion(boolean fullRefresh) throws IOException {
+    	Set<String> knownGameKeys = new HashSet<String>();
+    	if (!fullRefresh) {
+	        Set<CachedStanfordGame> theKnownGames = CachedStanfordGame.loadCachedGames();        
+	        for (CachedStanfordGame g : theKnownGames) {
+	        	knownGameKeys.add(g.getGameKey());
+	        }
     	}
-    	
-    	Set<String> newGameKeys = new HashSet<String>();
-    	newGameKeys.addAll(allGameKeys);
-    	newGameKeys.removeAll(knownGameKeys);
-    	if (newGameKeys.size() == 0)
-    		return;
-        
-    	for (String newGameKey : newGameKeys) {
-    		CachedStanfordGame.ingestCachedGame(newGameKey);
+
+    	boolean foundNewGames = false;
+   		String gameMetaListing = RemoteResourceLoader.loadRaw("http://gamemaster.stanford.edu/findgames.php");
+    	for (String gameMeta : gameMetaListing.split("\n")) {
+    		try {
+	    		JSONObject gameMetaJSON = new JSONObject(gameMeta);
+	    		if (knownGameKeys.contains(gameMetaJSON.getString("id")))
+	    			continue;
+	    		CachedStanfordGame.ingestCachedGame(gameMetaJSON);
+	    		foundNewGames = true;
+    		} catch (JSONException je) {
+    			Logger.getAnonymousLogger().severe("JSON Exception " + je.toString() + " on " + gameMeta);
+    		}    		
     	}
-    	CachedStaticServlet.getCache().clear();
-    }   
+    	if (foundNewGames) {
+    		CachedStaticServlet.getCache().clear();
+    	}
+    }
 }
