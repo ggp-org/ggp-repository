@@ -50,7 +50,7 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
 
     @Override
     protected void handleCronRequest(String reqURI) throws IOException {
-    	QueueFactory.getDefaultQueue().add(withUrl(reqURI.replace("/cron/", "/tasks")).method(Method.GET).retryOptions(withTaskRetryLimit(UPDATE_RETRIES)));
+    	QueueFactory.getDefaultQueue().add(withUrl("/tasks" + reqURI).method(Method.GET).retryOptions(withTaskRetryLimit(UPDATE_RETRIES)));
     }
     
     @Override
