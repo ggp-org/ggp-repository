@@ -64,6 +64,8 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
 	        	DresdenRepository.performRegularIngestion(true);
 	        } else if (reqURI.equals("/update_stanford_full")) {
 	        	StanfordRepository.performRegularIngestion(true);
+	        } else {
+	        	return false;
 	        }
 	        return true;
     	} catch (IOException e) {

@@ -22,7 +22,10 @@ public class CachedStanfordGame extends CachedGame {
     	String gameKey = gameMeta.getString("id");
     	String gameName = gameMeta.getString("name");
     	String gameCurator = gameMeta.getString("curator");
-    	String theDescription = RemoteResourceLoader.loadRaw("http://gamemaster.stanford.edu" + gameMeta.getString("description"));
+    	String theDescription = "";
+    	if (gameMeta.has("description")) {
+    		theDescription = RemoteResourceLoader.loadRaw("http://gamemaster.stanford.edu" + gameMeta.getString("description"));
+    	}
     	String theRulesheet = RemoteResourceLoader.loadRaw("http://gamemaster.stanford.edu" + gameMeta.getString("rulesheet"));
 		if (!theRulesheet.startsWith("<html><head>")) {
 			new CachedStanfordGame(gameKey, gameName, gameCurator, theRulesheet, theDescription);
