@@ -1,0 +1,11 @@
+The game of English draughts, or checkers.
+
+In this version of the game, captures are forced and may be
+chained (in this implementation, chains are across multiple
+turns).
+
+The game ends when one player cannot move (and loses), or
+when twenty turns have passed without a player moving a pawn
+or making a capture.
+
+Note that the white player appears as red in the visualization.

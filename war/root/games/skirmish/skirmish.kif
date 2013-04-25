@@ -57,6 +57,42 @@
 (init (control white))
 
 (init (step 1))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; BASE & INPUT Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (<= (base (location ?x ?y ?piece))
+      (index ?x)
+      (index ?y)
+      (owns ?piece ?role))
+
+  (<= (base (captureCount ?role ?n))
+      (role ?role)
+      (scoreMap ?n ?s))
+
+  (<= (base (control ?role))
+      (role ?role))
+
+  (base (step 1))
+
+  (<= (base (step ?n))
+      (pp ?m ?n))
+
+  (<= (input ?role (move ?u ?v ?x ?y))
+      (role ?role)
+      (rookMove ?u ?v ?x ?y))
+
+  (<= (input ?role (move ?u ?v ?x ?y))
+      (role ?role)
+      (bishopMove ?u ?v ?x ?y))
+
+  (<= (input ?role (move ?u ?v ?x ?y))
+      (role ?role)
+      (knightMove ?u ?v ?x ?y))
+
+  (<= (input ?role noop)
+      (role ?role))
 	
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; LEGAL Relations

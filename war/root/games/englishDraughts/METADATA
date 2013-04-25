@@ -1,0 +1,6 @@
+{
+  "gameName": "English Draughts",
+  "rulesheet": "englishDraughts.kif",
+  "stylesheet": "englishDraughts.xsl",
+  "description": "englishDraughts.txt"
+}

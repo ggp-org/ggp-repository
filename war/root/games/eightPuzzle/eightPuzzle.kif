@@ -3,6 +3,28 @@
 
 (role player)
 
+;;;; base & input propositions
+
+(<= (base (cell ?m ?n ?t)) (index ?m) (index ?n) (tile ?t))
+(<= (base (step ?x)) (successor ?y ?x))
+(<= (base (step 0)))
+
+(index 1)
+(index 2)
+(index 3)
+
+(tile 1)
+(tile 2)
+(tile 3)
+(tile 4)
+(tile 5)
+(tile 6)
+(tile 7)
+(tile 8)
+(tile b)
+
+(<= (input player (move ?m ?n)) (index ?m) (index ?n))
+
 ;;;; initial state
 
 (init (cell 1 1 8))

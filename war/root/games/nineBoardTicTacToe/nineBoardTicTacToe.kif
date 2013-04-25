@@ -18,6 +18,46 @@
 (init (control xPlayer))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; BASE & INPUT Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (<= (base (mark ?i ?j ?k ?l x))
+      (index ?i)
+      (index ?j)
+      (index ?k)
+      (index ?l))
+
+  (<= (base (mark ?i ?j ?k ?l o))
+      (index ?i)
+      (index ?j)
+      (index ?k)
+      (index ?l))
+      
+  (<= (base (currentBoard ?i ?j))
+      (index ?i)
+      (index ?j))
+
+  (<= (base (control ?r))
+      (role ?r))
+
+  (<= (input ?r (play ?i ?j ?k ?l x))
+      (role ?r)
+      (index ?i)
+      (index ?j)
+      (index ?k)
+      (index ?l))
+
+  (<= (input ?r (play ?i ?j ?k ?l o))
+      (role ?r)
+      (index ?i)
+      (index ?j)
+      (index ?k)
+      (index ?l))
+
+  (<= (input ?r noop)
+      (role ?r))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LEGAL Relations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
