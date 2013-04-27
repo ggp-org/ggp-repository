@@ -1,35 +1,14 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
-    <title>General Game Playing</title>
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto:bold">
+    <title>GGP.org - Games</title>
+    <meta name="description" content="General game playing is about playing games that you've never seen before. View hundreds of different games here." />
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="//www.ggp.org/viewer/bellerophon.css" />    
+    <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type="text/javascript" src="//www.ggp.org/viewer/bellerophonHeader.js"></script>
+    
     <style>
-      body {
-        font-family: 'Roboto', bold;
-        
-        background: #111111;
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#111111', endColorstr='#333333');
-        background: -webkit-gradient(linear, left top, left bottom, from(#111111), to(#333333));
-        background: -moz-linear-gradient(80deg, #111111, #333333);
-      }
-      h1 {
-        color: #F1F1F1;
-        font-size: 90px;
-        text-shadow: #AAAAAA 0px 0px 25px;
-        margin: 5px;
-      }
-      h2 {
-        color: #F1F1F1;
-        font-size: 24px;
-        text-shadow: #AAAAAA 0px 0px 15px;
-        margin: 5px;
-      }
-      h3 {
-        color: #F1F1F1;
-        font-size: 12px;
-        text-shadow: #AAAAAA 0px 0px 15px;
-        margin: 5px;
-      }      
-      
       #centered {
         position:absolute;
         top:0;
@@ -40,16 +19,28 @@
         height:40%;
         width:100%;
       }
-      
-      a { text-shadow: #CCCCCC 0px 0px 0px; }
-      a:link {color: #FFFFFF; text-decoration: underline; }
-      a:active {color: #DDDDDD; text-decoration: underline; }
-      a:visited {color: #EEEEEE; text-decoration: underline; }
-      a:hover {color: #0000FF; text-decoration: none; }
+      h1 {
+        color: #444;
+        font-size: 90px;
+        margin: 5px;
+      }
+      h2 {
+        color: #444;
+        font-size: 24px;
+        margin: 5px;
+      }
+      h3 {
+        color: #444;
+        font-size: 12px;
+        margin: 5px;
+      }      
     </style>
-    <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
   </head>
-  <body> 
+  <body>
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/ResourceLoader.js'></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/UserInterface.js'></script>
+
+    <div class="header" id="header"></div>
     <div id="centered">
       <center>
         <h1>GGP.org Games</h1>
@@ -61,5 +52,9 @@
         <h3>what is a game repository? <a href="http://code.google.com/p/ggp-galaxy/wiki/Repository_Servers">learn more</a> </h3>
       </center>        
     </div>
+
+    <script type="text/javascript" language="javascript">
+      generateHeader(document.getElementById('header'), "Games", "");  
+    </script>
   </body>
 </html>

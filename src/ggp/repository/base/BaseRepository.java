@@ -17,11 +17,6 @@ public class BaseRepository {
     public static final String repositoryRootDirectory = "http://games.ggp.org/base";    
     
     public static byte[] getResponseBytesForURI(String reqURI) throws IOException {
-        // Special case: the main page.
-        if (reqURI.equals("/") || reqURI.equals("/index.html")) {
-            return BaseRepository.readFile(new File("root/gameListBase.html")).getBytes();
-        }
-        
         // Files not under /games/ aren't versioned, and can just be
         // accessed directly.
         if (!reqURI.startsWith("/games/")) {

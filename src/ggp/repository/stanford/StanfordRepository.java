@@ -1,8 +1,5 @@
 package ggp.repository.stanford;
 
-import ggp.repository.base.BaseRepository;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,11 +13,6 @@ import org.json.JSONObject;
 
 public class StanfordRepository {
     public static byte[] getResponseBytesForURI(String reqURI) throws IOException {
-        // Special case: the main page.
-        if (reqURI.equals("/") || reqURI.equals("/index.html")) {
-            return BaseRepository.readFile(new File("root/gameListStanford.html")).getBytes();
-        }
-        
         // Files not under /games/ aren't versioned, and can just be
         // accessed directly.
         if (!reqURI.startsWith("/games/")) {

@@ -20,6 +20,12 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
 	private final int UPDATE_RETRIES = 10;
 	
     protected byte[] getResponseBytesForURI(String reqURI) throws IOException {
+    	// Main pages
+    	if (reqURI.equals("/base/") || reqURI.equals("/stanford/") || reqURI.equals("/dresden/") ||
+    		reqURI.equals("/base") || reqURI.equals("/stanford") || reqURI.equals("/dresden")) {
+    		return BaseRepository.readFile(new File("root/gameList.html")).getBytes();
+    	}
+    	
         // Repository: the /dresden/ games.
         if (reqURI.startsWith("/dresden/")) {
             return DresdenRepository.getResponseBytesForURI(reqURI.substring("/dresden".length()));
@@ -89,6 +95,12 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
     		return "text/html";
     	} else if (theURL.equals("/stanford/")) {
     		return "text/html";
+    	} else if (theURL.equals("/base")) {
+    		return "text/html";
+    	} else if (theURL.equals("/dresden")) {
+    		return "text/html";
+    	} else if (theURL.equals("/stanford")) {
+    		return "text/html";    		
     	} else if (theURL.endsWith("/")) {
     		return "text/javascript";
     	}
