@@ -1,0 +1,1 @@
+Chinook consists of two games of a variant of checkers played on a single checkers board, with one game on the even squares and another played on the odd squares. The board in this version is a cylinder, i.e. it wraps around vertically. Captures are not required. The first player to get a piece to the opposite side of the board is the winner.

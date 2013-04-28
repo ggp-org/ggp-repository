@@ -1,0 +1,7 @@
+{
+  "gameName": "Chinook",    
+  "rulesheet": "chinook.kif",
+  "stylesheet": "chinook.xsl",
+  "description": "chinook.txt",
+  "user_interface": "chinook.js"
+}
