@@ -1,0 +1,7 @@
+{
+  "gameName": "Reversi",
+  "rulesheet": "reversi.kif",
+  "stylesheet": "reversi.xsl",
+  "description": "reversi.txt",
+  "user_interface": "reversi.js"
+}

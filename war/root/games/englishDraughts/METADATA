@@ -2,5 +2,6 @@
   "gameName": "English Draughts",
   "rulesheet": "englishDraughts.kif",
   "stylesheet": "englishDraughts.xsl",
-  "description": "englishDraughts.txt"
+  "description": "englishDraughts.txt",
+  "user_interface": "englishDraughts.js"
 }
