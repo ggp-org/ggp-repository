@@ -16,8 +16,8 @@ public class CachedDresdenGame extends CachedGame {
 		super(theGameKey, null, null, theRulesheet, theDescription);
 	}
 
-	private final static String descLoadingPrefix = "http://130.208.241.192/ggpserver/public/view_game.jsp?name=";
-    private final static String gameLoadingPrefix = "http://130.208.241.192/ggpserver/public/download_gdl.jsp?name=";
+	private final static String descLoadingPrefix = "http://ggpserver.general-game-playing.de/public/view_game.jsp?name=";
+    private final static String gameLoadingPrefix = "http://ggpserver.general-game-playing.de/public/download_gdl.jsp?name=";
 
     public static void ingestCachedGame(String gameKey) throws IOException {
     	String theDescription = extractDescription(RemoteResourceLoader.loadRaw(descLoadingPrefix + gameKey));
