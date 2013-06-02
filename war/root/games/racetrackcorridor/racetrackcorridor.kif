@@ -54,6 +54,8 @@
     (init (walls white 4))
     (init (walls black 4))
     
+    (init (step 0))
+    
     ;;;;
     
     (<= (next (cell ?lane ?x ?y ?q))
