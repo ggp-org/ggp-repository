@@ -1,2 +1,0 @@
-Another version of tic-tac-toe. This version was included in the
-original paper defining the Game Description Language.
