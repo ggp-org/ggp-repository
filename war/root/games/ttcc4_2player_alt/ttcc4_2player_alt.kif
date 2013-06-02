@@ -16,9 +16,9 @@
       (board ?x ?y)
       (piece ?p ?type ?color))
 
-  (base (cell 7 5 blackpawn))
+  (base (cell 7 5 blackknight))
   (base (cell 7 4 blackchecker))
-  (base (cell 7 3 blackknight))
+  (base (cell 7 3 blackpawn))
 
   (<= (base (control ?r))
       (role ?r))
@@ -28,10 +28,11 @@
 
   (<= (base (step 61)))
 
-
   (<= (input white (pawnmove 1 5 2 5)))
-
   (<= (input white (pawnmove 1 5 2 4)))
+  (<= (input black (pawnmove 7 3 6 4)))
+  (<= (input black (pawnmove 7 3 6 3)))
+  (<= (input black (pawnmove 7 3 6 2)))
 
   (<= (input ?player (pawnmove ?u ?v ?x ?y))
       (role ?player)
@@ -42,16 +43,13 @@
   (<= (input ?player (pawnmove ?u ?v ?x ?y))
       (role ?player)
       (board ?u ?v)
-      (diagonal 1 5 ?x ?y)
+      (diagonal ?u ?v ?x ?y)
       (board ?x ?y))
 
-  (<= (input black (pawnmove 7 5 6 5)))
-
-  (<= (input black (pawnmove 7 5 6 4)))
-
   (<= (input white (checkermove 1 4 2 5)))
-
   (<= (input white (checkermove 1 4 2 3)))
+  (<= (input black (checkermove 7 4 6 5)))
+  (<= (input black (checkermove 7 4 6 3)))  
 
   (<= (input ?player (checkermove ?u ?v ?x ?y))
       (role ?player)
@@ -66,23 +64,24 @@
       (board ?v ?w)
       (diagonal ?w ?x ?y ?z)
       (board ?y ?z))
-
-  (<= (input black (checkermove 7 4 6 5)))
-
-  (<= (input black (checkermove 7 4 6 3)))
-
-  (<= (input white (knightmove 1 3 ?x ?y))
-      (ell 1 3 ?x ?y)
-      (board ?x ?y))
+      
+  (<= (input black (jump 7 4 6 5 5 6)))
+  (<= (input black (jump 7 4 6 3 5 2)))
+  (<= (input white (jump 1 4 2 5 3 6)))
+  (<= (input white (jump 1 4 2 3 3 2)))
 
   (<= (input ?player (knightmove ?u ?v ?x ?y))
       (role ?player)
       (board ?u ?v)
       (ell ?u ?v ?x ?y)
       (board ?x ?y))
+      
+  (<= (input white (knightmove 1 3 ?x ?y))
+      (ell 1 3 ?x ?y)
+      (board ?x ?y))      
 
-  (<= (input black (knightmove 7 3 ?x ?y))
-      (ell 7 3 ?x ?y)
+  (<= (input black (knightmove 7 5 ?x ?y))
+      (ell 7 5 ?x ?y)
       (board ?x ?y))
 
   (<= (input ?player (drop ?x))
