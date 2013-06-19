@@ -66,7 +66,7 @@ public class StanfordRepository {
     	}
 
     	boolean foundNewGames = false;
-   		String gameMetaListing = RemoteResourceLoader.loadRaw("http://gamemaster.stanford.edu/findgames.php");
+   		String gameMetaListing = RemoteResourceLoader.loadRaw("http://gamemaster.stanford.edu/findgames.php", 5);
     	for (String gameMeta : gameMetaListing.split("\n")) {
     		try {
 	    		JSONObject gameMetaJSON = new JSONObject(gameMeta);

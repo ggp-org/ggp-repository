@@ -66,7 +66,7 @@ public class DresdenRepository {
             }
             
             boolean foundNewGames = false;
-            JSONObject theJSON = RemoteResourceLoader.loadJSON("http://database.ggp.org/statistics/" + DRESDEN_HASH + "/overall");
+            JSONObject theJSON = RemoteResourceLoader.loadJSON("http://database.ggp.org/statistics/" + DRESDEN_HASH + "/overall", 5);
             JSONArray theObservedGames = theJSON.getJSONArray("observedGames");
             for (int i = 0; i < theObservedGames.length(); i++) {
                 String observedGame = theObservedGames.getString(i);
