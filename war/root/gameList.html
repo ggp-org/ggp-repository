@@ -17,15 +17,10 @@
     <center>
     <table id="game_table" cellspacing=15>
     <tr>
-      <th align=left>Game Name</th>    
-      <th align=left>Version</th>
-      <th align=left>Roles</th>
-      <th align=left>Metadata</th>
-      <th align=left>Rulesheet</th>
-      <th align=left>Stylesheet</th>
-      <th align=left>Interface</th>
-      <th align=left>Description</th>
-      <th align=left>Curator</th>
+      <th class="padded">Game Name</th>
+      <th class="padded">Players</th>
+      <th class="padded">Version</th>
+      <th class="padded" colspan=5>Contents</th>
     </tr>
     </table>
     </center>
@@ -50,43 +45,31 @@
         gameRow.innerHTML = "<td><b><tt>[" + games_listing[i] + "]</tt></b></td> <td colspan=8>Loading game information...</td>";
         game_table.appendChild(gameRow);
       }
+      function curry(f, x) {
+        return function(z) { return f(x, z); };
+      }      
       for (var i = 0; i < games_listing.length; i++) {
         ResourceLoader.load_raw_async_with_timeout(repo_prefix + 'games/' + games_listing[i] + '/', curry(addGameToListing, games_listing[i]), 60000);
       }
+      
+      function addGameToListing(gameKey, metadata) {
+        var theGame = JSON.parse(metadata);
+        var gameRow = document.getElementById("gamerow_" + gameKey);
 
-      function curry(f, x) {
-        return function(z) { return f(x, z); };
+        var gameUrlPrefix = "//games.ggp.org/" + repoName + "/games/" + gameKey + "/";
+        var gameListHTML = "";
+        gameListHTML += '<td class="padded"><a href=' + gameUrlPrefix + '>' + ("gameName" in theGame ? theGame.gameName : gameKey) + '</a></td>';
+        gameListHTML += '<td class="padded">' + UserInterface.properNameForInteger(theGame.numRoles) + '</td>';
+        gameListHTML += '<td class="padded">' + ("version" in theGame ? UserInterface.properNameForInteger(theGame.version) : "") + '</td>';
+        gameListHTML += '<td class="padded">' + ("rulesheet" in theGame ? '<a href=' + gameUrlPrefix + theGame.rulesheet + '><img src="//www.ggp.org/viewer/images/glyphicons/glyphicons_023_cogwheels.png" title="Game rules written in GDL are available for this game."></img></a>' : "") + '</td>';
+        gameListHTML += '<td class="padded">' + ("stylesheet" in theGame ? '<a href=' + gameUrlPrefix + theGame.stylesheet + '><img src="//www.ggp.org/viewer/images/glyphicons/glyphicons_086_display.png" title="Game visualization is available for this game."></img></a>' : "") + '</td>';
+        gameListHTML += '<td class="padded">' + ("user_interface" in theGame ? '<a href=' + gameUrlPrefix + theGame.user_interface + '><img src="//www.ggp.org/viewer/images/glyphicons/glyphicons_035_woman.png" title="User interface is available for playing this game as a human."></img></a>' : "") + '</td>';
+        gameListHTML += '<td class="padded">' + ("description" in theGame ? '<a href=' + gameUrlPrefix + theGame.description + '><img src="//www.ggp.org/viewer/images/glyphicons/glyphicons_195_circle_info.png" title="Human-readable game description is available for this game."></img></a>' : "") + '</td>';
+        gameListHTML += '<td class="padded">' + ("curator" in theGame ? '<img src="//www.ggp.org/viewer/images/glyphicons/glyphicons_324_tie.png" title="Curator listed as ' + theGame.curator + '"></img>' : "") + '</td>';
+        gameListHTML += '</td>';
+        
+        gameRow.innerHTML = gameListHTML;
       }
-      function addGameToListing(key, metadata) {
-        var meta = JSON.parse(metadata);
-        var gameRow = document.getElementById("gamerow_" + key);
-
-        var theHTML = "<td><b>";
-        if (meta.gameName) {
-          theHTML += meta.gameName;
-        } else {
-          theHTML += "<tt>[" + key + "]</tt>";
-        }
-        theHTML += "</b></td> <td>"
-        if (meta.version != null) theHTML += "v" + meta.version;
-        theHTML += "</td> <td>";      
-        if (meta.numRoles) theHTML += meta.numRoles;
-        theHTML += "</td> <td>";
-        theHTML += "<a href='//games.ggp.org/" + repoName + "/games/" + key + "/'>Metadata</a>";
-        theHTML += "</td> <td>";
-        if (meta.rulesheet) theHTML += "<a href='//games.ggp.org/" + repoName + "/games/" + key + "/" + meta.rulesheet + "'>Rulesheet</a>";
-        theHTML += "</td> <td>";
-        if (meta.stylesheet) theHTML += "<a href='//games.ggp.org/" + repoName + "/games/" + key + "/" + meta.stylesheet + "'>Stylesheet</a>";
-        theHTML += "</td> <td>";
-        if (meta.user_interface) theHTML += "<a href='//games.ggp.org/" + repoName + "/games/" + key + "/" + meta.user_interface + "'>Interface</a>";
-        theHTML += "</td> <td>";
-        if (meta.description) theHTML += "<a href='//games.ggp.org/" + repoName + "/games/" + key + "/" + meta.description + "'>Description</a>";
-        theHTML += "</td> <td>";
-        if (meta.curator) theHTML += "" + meta.curator;
-        theHTML += "</td>";
-
-        gameRow.innerHTML = theHTML;
-      }    
     </script>
   </body>
 </html>
