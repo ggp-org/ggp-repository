@@ -20,7 +20,7 @@
       <th class="padded">Game Name</th>
       <th class="padded">Players</th>
       <th class="padded">Version</th>
-      <th class="padded" colspan=5>Contents</th>
+      <th class="padded" colspan=6>Contents</th>
     </tr>
     </table>
     </center>
@@ -42,7 +42,7 @@
       for (var i = 0; i < games_listing.length; i++) {
         var gameRow = document.createElement('tr');      
         gameRow.id = "gamerow_" + games_listing[i];
-        gameRow.innerHTML = "<td><b><tt>[" + games_listing[i] + "]</tt></b></td> <td colspan=8>Loading game information...</td>";
+        gameRow.innerHTML = "<td><b><tt>[" + games_listing[i] + "]</tt></b></td> <td colspan=9>Loading game information...</td>";
         game_table.appendChild(gameRow);
       }
       function curry(f, x) {
@@ -58,9 +58,10 @@
 
         var gameUrlPrefix = "//games.ggp.org/" + repoName + "/games/" + gameKey + "/";
         var gameListHTML = "";
-        gameListHTML += '<td class="padded"><a href=' + gameUrlPrefix + '>' + ("gameName" in theGame ? theGame.gameName : gameKey) + '</a></td>';
+        gameListHTML += '<td class="padded"><a href="//www.ggp.org/view/all/games/' + repoName + '/' + gameKey + '/v' + theGame.version + '/">' + ("gameName" in theGame ? theGame.gameName : gameKey) + '</a></td>';
         gameListHTML += '<td class="padded">' + UserInterface.properNameForInteger(theGame.numRoles) + '</td>';
         gameListHTML += '<td class="padded">' + ("version" in theGame ? UserInterface.properNameForInteger(theGame.version) : "") + '</td>';
+        gameListHTML += '<td class="padded"><a href=' + gameUrlPrefix + '><img src="//www.ggp.org/viewer/images/glyphicons/glyphicons_440_folder_closed.png" title="Game packaging metadata is available for this game."></img></a></td>';
         gameListHTML += '<td class="padded">' + ("rulesheet" in theGame ? '<a href=' + gameUrlPrefix + theGame.rulesheet + '><img src="//www.ggp.org/viewer/images/glyphicons/glyphicons_023_cogwheels.png" title="Game rules written in GDL are available for this game."></img></a>' : "") + '</td>';
         gameListHTML += '<td class="padded">' + ("stylesheet" in theGame ? '<a href=' + gameUrlPrefix + theGame.stylesheet + '><img src="//www.ggp.org/viewer/images/glyphicons/glyphicons_086_display.png" title="Game visualization is available for this game."></img></a>' : "") + '</td>';
         gameListHTML += '<td class="padded">' + ("user_interface" in theGame ? '<a href=' + gameUrlPrefix + theGame.user_interface + '><img src="//www.ggp.org/viewer/images/glyphicons/glyphicons_035_woman.png" title="User interface is available for playing this game as a human."></img></a>' : "") + '</td>';
