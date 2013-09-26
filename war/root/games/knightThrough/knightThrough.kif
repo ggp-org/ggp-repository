@@ -1,5 +1,6 @@
 (role white)
 (role black)
+
 (init (cell 1 1 white))
 (init (cell 2 1 white))
 (init (cell 3 1 white))
@@ -33,10 +34,12 @@
 (init (cell 7 8 black))
 (init (cell 8 8 black))
 (init (control white))
+
 (<= (legal white noop)
     (true (control black)))
 (<= (legal black noop)
     (true (control white)))
+
 (<= (legal white (move ?x1 ?y1 ?x2 ?y2))
     (true (control white))
     (true (cell ?x1 ?y1 white))
@@ -47,6 +50,7 @@
     (true (cell ?x1 ?y1 black))
     (blackknightmove ?x1 ?y1 ?x2 ?y2)
     (not (true (cell ?x2 ?y2 black))))
+
 (<= (next (cell ?x ?y ?state))
     (true (cell ?x ?y ?state))
     (does ?player (move ?x1 ?y1 ?x2 ?y2))
@@ -54,14 +58,17 @@
     (distinctcell ?x ?y ?x2 ?y2))
 (<= (next (cell ?x2 ?y2 ?player))
     (does ?player (move ?x1 ?y1 ?x2 ?y2)))
+
 (<= (next (control black))
     (true (control white)))
 (<= (next (control white))
     (true (control black)))
+
 (<= terminal
     whitewin)
 (<= terminal
     blackwin)
+
 (<= (goal white 100)
     whitewin)
 (<= (goal white 0)
@@ -70,12 +77,21 @@
     blackwin)
 (<= (goal black 0)
     whitewin)
+
 (<= whitewin
     (index ?x)
     (true (cell ?x 8 white)))
 (<= blackwin
     (index ?x)
     (true (cell ?x 1 black)))
+(<= whitewin
+    (not (hasAnyPiece black)))
+(<= blackwin
+    (not (hasAnyPiece white)))
+
+(<= (hasAnyPiece ?player)
+    (true (cell ?x ?y ?player)))
+
 (<= (whiteknightmove ?x1 ?y1 ?x2 ?y2)
     (plus 1 ?x1 ?x2)
     (plus 2 ?y1 ?y2))
@@ -100,6 +116,7 @@
 (<= (blackknightmove ?x1 ?y1 ?x2 ?y2)
     (plus 2 ?x2 ?x1)
     (plus 1 ?y2 ?y1))
+
 (<= (cell ?x ?y)
     (index ?x)
     (index ?y))

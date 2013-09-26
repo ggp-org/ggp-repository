@@ -159,12 +159,15 @@
 (<= (cell ?x ?y)
     (index ?x)
     (index ?y))
-    
+
 (<= (cellEmpty ?x ?y)
     (cell ?x ?y)
     (not (true (cellHolds ?x ?y white)))
     (not (true (cellHolds ?x ?y black))))
-    
+
+(<= (hasPiece ?player)
+    (true (cellHolds ?x ?y ?player)))
+
 (<= (distinctCell ?x1 ?y1 ?x2 ?y2)
     (cell ?x1 ?y1)
     (cell ?x2 ?y2)
@@ -173,14 +176,17 @@
     (cell ?x1 ?y1)
     (cell ?x2 ?y2)
     (distinct ?y1 ?y2))
-    
+
 (<= whiteWin
     (index ?x)
     (true (cellHolds ?x 8 white)))
 (<= blackWin
     (index ?x)
     (true (cellHolds ?x 1 black)))
-
+(<= whiteWin
+    (not (hasPiece black)))
+(<= blackWin
+    (not (hasPiece white)))
     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Static Relations
