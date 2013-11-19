@@ -22,6 +22,27 @@
 (role red)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; BASE & INPUT Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (base (control ?p)) (role ?p))
+(<= (base (position ?n empty)) (isNumber ?n))
+(<= (base (position ?n ?s)) (isNumber ?n) (isStone ?s))
+(<= (base (step ?x)) (succ ?y ?x))
+(base (step 1))
+(<= (base (owner ?n ?p)) (isNumber ?n) (role ?p))
+(<= (base (legalPlayLoc ?n)) (isNumber ?n))
+(base oldStoneAdded)
+(base oldStoneRemoved)
+(<= (base (redPlayerRemovedLastTurn ?s ?n)) (isNumber ?n) (isStone ?s))
+(<= (base (blackPlayerRemovedLastTurn ?s ?n)) (isNumber ?n) (isStone ?s))
+(<= (base (hadLegalMove ?p)) (role ?p))
+
+(<= (input ?p noop) (role ?p))
+(<= (input ?p (add ?n ?s)) (role ?p) (isNumber ?n) (isStone ?s))
+(<= (input ?p (remove ?n ?s)) (role ?p) (isNumber ?n) (isStone ?s))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; INIT Relations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

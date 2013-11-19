@@ -14,6 +14,15 @@
 (role black)
 (init (control red))
 
+;;;; BASE & INPUT ;;;;
+
+(<= (base (control ?p)) (role ?p))
+(<= (base (cell ?x ?y ?v ?p)) (num ?x) (num ?y) (side ?v) (role ?p))
+
+(<= (input ?p noop) (role ?p))
+(<= (input ?p (play ?x ?y ?v ?m)) (role ?p) (num ?x) (num ?y) (side ?v) (mask ?m))
+(<= (input ?p (play ?x ?y 1 0)) (role ?p) (num ?x) (num ?y))
+
 ;;;; LEGAL MOVES ;;;;
 
 (<= (legal red noop)
@@ -233,9 +242,6 @@
 	(addRow 0 1 ?player ?result1)
 	(addRow ?result1 2 ?player ?result2)	
 	(addRow ?result2 3 ?player ?val))
-	
-;; (<= (next (count ?player ?num))
-;;   (pieceCount ?player ?num))
 	
 (<= (addRow ?inVal ?row ?player ?outVal)	
 	(addCell ?inVal ?row 1 ?player ?result1)

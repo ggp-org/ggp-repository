@@ -6,6 +6,15 @@
 
    (role jumper)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+   (base (pegs s36))
+   (<= (base (pegs ?x)) (succ ?x ?y)) 
+   (<= (base (hole ?sr ?sc peg)) (row ?sr) (column ?sc))
+   (<= (base (hole ?sr ?sc empty)) (row ?sr) (column ?sc))
+
+   (<= (input jumper (jump ?sr ?sc ?dr ?dc)) (row ?sr) (row ?dr) (column ?sc) (column ?dc))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
    (init (hole a c3 peg))

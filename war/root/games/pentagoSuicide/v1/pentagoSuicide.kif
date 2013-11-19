@@ -266,3 +266,29 @@
 
 (++  1 2) (++  2 3) (++  3 4) (++  4 5) (++  5 6)
 (+ 3 1 4) (+ 3 2 5) (+ 3 3 6)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Bases and inputs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
+(<= (base (placeControl ?player))
+	(role ?player))
+(<= (base (rotateControl ?player))
+	(role ?player))
+(<= (base (cellHolds ?q ?x ?y ?state))
+	(quadrant ?q)
+	(index ?x)
+	(index ?y)
+	(role ?state))
+
+(<= (input ?player noop)
+	(role ?player))
+(<= (input ?player (place ?q ?x ?y))
+    (role ?player)
+    (quadrant ?q)
+    (index ?x)
+    (index ?y))
+(<= (input ?player (rotate ?q ?dir))
+    (role ?player)
+    (quadrant ?q)
+    (direction ?dir))

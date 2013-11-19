@@ -1,6 +1,11 @@
 (role white)
 (role black)
 
+(<= (base (cell ?x ?y ?p)) (index ?x) (index ?y) (role ?p))
+(<= (base (control ?p)) (role ?p))
+(<= (input ?p noop) (role ?p))
+(<= (input ?p (move ?x1 ?y1 ?x2 ?y2)) (role ?p) (index ?x1) (index ?x2) (index ?y1) (index ?y2))
+
 (init (cell 1 1 white))
 (init (cell 2 1 white))
 (init (cell 3 1 white))
