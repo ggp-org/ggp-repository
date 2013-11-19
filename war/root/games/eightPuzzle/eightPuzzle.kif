@@ -7,7 +7,7 @@
 
 (<= (base (cell ?m ?n ?t)) (index ?m) (index ?n) (tile ?t))
 (<= (base (step ?x)) (successor ?y ?x))
-(<= (base (step 0)))
+(base (step 0))
 
 (index 1)
 (index 2)

@@ -80,7 +80,7 @@
 ;;; GOAL Relations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(<= (goal dropper 100))
+(goal dropper 100)
 (<= (goal player ?goal)
     (true (blocksCaught ?n))
     (scoreMap ?n ?goal))
@@ -117,9 +117,6 @@
 (minusminus 30 29) (minusminus 29 28) (minusminus 28 27) (minusminus 27 26) (minusminus 26 25) (minusminus 25 24) (minusminus 24 23) (minusminus 23 22) (minusminus 22 21) (minusminus 21 20)
 (minusminus 20 19) (minusminus 19 18) (minusminus 18 17) (minusminus 17 16) (minusminus 16 15) (minusminus 15 14) (minusminus 14 13) (minusminus 13 12) (minusminus 12 11) (minusminus 11 10)
 (minusminus 10  9) (minusminus  9  8) (minusminus  8  7) (minusminus  7  6) (minusminus  6  5) (minusminus  5  4) (minusminus  4  3) (minusminus  3  2) (minusminus  2  1)
-
-
-
 
 (scoreMap  0   0)
 (scoreMap  1   3)
