@@ -7,6 +7,22 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(<= (base (cell ?m ?n x)) (index ?m) (index ?n))
+(<= (base (cell ?m ?n o)) (index ?m) (index ?n))
+(<= (base (cell ?m ?n b)) (index ?m) (index ?n))
+(base (control white))
+(base (control black))
+(base (step 1))
+(<= (base (step ?n)) (succ ?m ?n))
+
+(<= (input ?p (mark ?m ?n)) (index ?m) (index ?n) (role ?p))
+
+(index 1)
+(index 2)
+(index 3)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (init (cell 1 1 b))
 (init (cell 1 2 b))
 (init (cell 1 3 b))

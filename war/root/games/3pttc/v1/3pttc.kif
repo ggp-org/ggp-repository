@@ -2,6 +2,14 @@
 (role yellow)
 (role blue)
 
+(<= (base (control ?p)) (role ?p))
+(<= (base (cell ?x ?y ?p)) (index ?x) (index ?y) (role ?p))
+(<= (base (step ?t)) (stepcount ?y ?t))
+(base (step 1))
+
+(<= (input ?p noop) (role ?p))
+(<= (input ?p (move ?x1 ?y1 ?x2 ?y2)) (index ?x1) (index ?x2) (index ?y1) (index ?y2) (role ?p))
+
 (init (control red))
 (init (cell 1 4 red))
 (init (cell 4 1 yellow))

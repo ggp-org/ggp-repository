@@ -1,5 +1,12 @@
 (role white)
 
+(<= (base (cell ?x ?y wn)) (coordinate ?x) (coordinate ?y))
+(<= (base (cell ?x ?y b)) (coordinate ?x) (coordinate ?y))
+(<= (base (points ?n)) (succ ?y ?n))
+(base (points 0))
+(base initial)
+(<= (input white (place ?x ?y)) (coordinate ?x) (coordinate ?y))
+
 (init (cell a 1 b))
 (init (cell a 2 b))
 (init (cell a 3 b))
