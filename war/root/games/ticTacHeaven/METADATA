@@ -1,6 +1,5 @@
 {
   "gameName": "Tic Tac Heaven",
-  "numRoles": 2,
 
   "rulesheet": "ticTacHeaven.kif",
   "stylesheet": "ticTacHeaven.xsl",

@@ -1,6 +1,5 @@
 {
   "gameName": "Breakthrough Suicide",
-  "numRoles": 2,
 
   "rulesheet": "breakthroughSuicide.kif",
   "stylesheet": "breakthrough.xsl",

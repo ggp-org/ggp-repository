@@ -1,7 +1,5 @@
 {
   "gameName": "Three-Player Connect Four",
-  "numRoles": 3,
-  "version": 0,
   
   "user_interface": "3pConnectFour.js",
   "rulesheet": "3pConnectFour.kif",  

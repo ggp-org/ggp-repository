@@ -1,6 +1,5 @@
 {
   "gameName": "Checkers Small",
-  "numRoles": 2,
 
   "rulesheet": "checkersSmall.kif",
   "stylesheet": "checkersSmall.xsl",

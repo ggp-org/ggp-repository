@@ -1,7 +1,5 @@
 {
   "gameName": "Advertising Game",
-  "version": 0,
-  "numRoles": 2,
 
   "rulesheet": "ad_game_2x2.kif"
 }

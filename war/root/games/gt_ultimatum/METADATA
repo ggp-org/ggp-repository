@@ -1,6 +1,5 @@
 {
-  "version": 0,
-  "numRoles": 2,
-
+  "gameName": "Iterated Ultimatum Game",
+  
   "rulesheet": "gt_ultimatum.kif"
 }

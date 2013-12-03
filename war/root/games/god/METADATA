@@ -1,6 +1,5 @@
 {
   "gameName": "Cell Puzzle",
-  "numRoles": 1,
 
   "rulesheet": "god.kif",
   "stylesheet": "god.xsl",

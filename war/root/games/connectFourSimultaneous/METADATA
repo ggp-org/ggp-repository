@@ -1,6 +1,5 @@
 {
   "gameName": "Connect Four Simultaneous",
-  "numRoles": 2,
   
   "rulesheet": "connectFourSimultaneous.kif",  
   "stylesheet": "connectFourSimultaneous.xsl"

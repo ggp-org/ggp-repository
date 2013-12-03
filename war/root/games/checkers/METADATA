@@ -1,6 +1,5 @@
 {
   "gameName": "Checkers",
-  "numRoles": 2,
   
   "user_interface": "checkers.js",
   "rulesheet": "checkers.kif",  

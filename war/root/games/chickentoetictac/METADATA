@@ -1,7 +1,5 @@
 {
   "gameName": "Chicken Toe-Tic-Tac",
-  "version": 0,
-  "numRoles": 2,
 
   "rulesheet": "chickentoetictac.kif"
 }

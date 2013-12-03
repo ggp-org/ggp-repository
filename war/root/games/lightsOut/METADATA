@@ -1,7 +1,5 @@
 {
   "gameName": "Lights Out",
-  "numRoles": 1,
-  "version": 0,
   
   "user_interface": "lightsOut.js",
   "rulesheet": "lightsOut.kif",  

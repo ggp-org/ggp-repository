@@ -1,6 +1,5 @@
 {
-  "version": 0,
-  "numRoles": 4,
+  "gameName": "Four-Way Battle",
 
   "rulesheet": "four_way_battle.kif"
 }

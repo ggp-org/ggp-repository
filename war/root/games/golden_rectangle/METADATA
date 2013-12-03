@@ -1,6 +1,5 @@
 {
   "gameName": "Golden Rectangle",
-  "numRoles": 2,
 
   "rulesheet": "golden_rectangle.kif",
   "stylesheet": "golden_rectangle.xsl"

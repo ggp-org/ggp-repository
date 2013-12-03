@@ -1,7 +1,5 @@
 {
   "gameName": "Nine-Board Tic-Tac-Toe",
-  "numRoles": 2,
-  "version": 0,
   
   "user_interface": "nineBoardTicTacToe.js",
   "rulesheet": "nineBoardTicTacToe.kif",  

@@ -1,7 +1,5 @@
 {
   "gameName": "Pawn Whopping",
-  "numRoles": 2,
-  "version": 0,
   
   "user_interface": "pawnWhopping.js",
   "rulesheet": "pawnWhopping.kif",  

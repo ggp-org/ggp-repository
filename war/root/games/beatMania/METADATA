@@ -1,6 +1,5 @@
 {
   "gameName": "Beat-Mania",
-  "numRoles": 2,
 
   "rulesheet": "beatMania.kif",
   "stylesheet": "beatMania.xsl"

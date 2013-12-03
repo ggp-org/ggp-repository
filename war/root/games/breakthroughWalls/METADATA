@@ -1,7 +1,5 @@
 {
   "gameName": "Breakthrough w/ Walls",
-  "numRoles": 2,
-  "version": 0,
   
   "user_interface": "breakthroughWalls.js",
   "rulesheet": "breakthroughWalls.kif",  

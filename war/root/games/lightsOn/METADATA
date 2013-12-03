@@ -1,6 +1,5 @@
 {
   "gameName": "Lights On",
-  "numRoles": 1,
 
   "rulesheet": "lightsOn.kif",
   "stylesheet": "lightsOn.xsl",

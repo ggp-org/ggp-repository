@@ -1,6 +1,5 @@
 {
   "gameName": "Amazons Suicide",
-  "numRoles": 2,
 
   "rulesheet": "amazonsSuicide.kif",
   "stylesheet": "amazonsSuicide.xsl"

@@ -1,6 +1,5 @@
 {
   "gameName": "Max Knights",
-  "numRoles": 1,
 
   "rulesheet": "max_knights.kif",
   "stylesheet": "chess.xsl",

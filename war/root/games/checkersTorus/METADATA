@@ -1,6 +1,5 @@
 {
   "gameName": "Checkers on a Torus",
-  "numRoles": 2,
 
   "rulesheet": "checkersTorus.kif"
 }

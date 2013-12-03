@@ -1,7 +1,5 @@
 {
   "gameName": "Knight's Tour (Large)",
-  "numRoles": 1,
-  "version": 0,
   
   "user_interface": "knightsTourLarge.js",
   "rulesheet": "knightsTourLarge.kif",  

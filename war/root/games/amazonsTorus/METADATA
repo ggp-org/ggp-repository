@@ -1,6 +1,5 @@
 {
   "gameName": "Amazons Torus",
-  "numRoles": 2,
 
   "rulesheet": "amazonsTorus.kif",
   "stylesheet": "amazonsTorus.xsl"

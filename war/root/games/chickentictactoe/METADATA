@@ -1,7 +1,5 @@
 {
   "gameName": "Chicken Tic-Tac-Toe",
-  "version": 0,
-  "numRoles": 2,
 
   "rulesheet": "chickentictactoe.kif",
   "stylesheet": "chickentictactoe.xsl",

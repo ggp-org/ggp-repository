@@ -1,6 +1,5 @@
 {
   "gameName": "Blocks World in Series",
-  "numRoles": 1,
 
   "rulesheet": "blocksWorldSerial.kif"
 }

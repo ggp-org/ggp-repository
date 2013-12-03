@@ -1,6 +1,5 @@
 {
   "gameName": "Lights On Simult-4",
-  "numRoles": 1,
 
   "rulesheet": "lightsOnSimul4.kif",
   "stylesheet": "lightsOnSimul4.xsl"

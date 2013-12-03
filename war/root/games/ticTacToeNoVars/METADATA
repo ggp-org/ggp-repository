@@ -1,7 +1,4 @@
 {
-  "version": 0,
-  "numRoles": 2,
-
   "rulesheet": "ticTacToeNoVars.kif",
   "description": "ticTacToeNoVars.txt"
 }

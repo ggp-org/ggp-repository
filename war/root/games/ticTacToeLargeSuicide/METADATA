@@ -1,6 +1,5 @@
 {
   "gameName": "Tic-Tac-Toe Large Suicide",
-  "numRoles": 2,
 
   "user_interface": "ticTacToeLargeSuicide.js",
   "rulesheet": "ticTacToeLargeSuicide.kif",

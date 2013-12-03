@@ -1,6 +1,5 @@
 {
   "gameName": "Skirmish",
-  "numRoles": 2,  
 
   "rulesheet": "skirmish.kif",
   "stylesheet": "skirmish.xsl",

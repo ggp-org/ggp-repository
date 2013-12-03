@@ -1,6 +1,4 @@
 {
-  "numRoles": 2,
-
   "rulesheet": "toetictac.kif",
   "description": "toetictac.txt"
 }

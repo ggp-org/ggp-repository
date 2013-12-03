@@ -1,7 +1,5 @@
 {
   "gameName": "Breakthrough (Small)",
-  "numRoles": 2,
-  "version": 0,
   
   "user_interface": "breakthroughSmall.js",
   "rulesheet": "breakthroughSmall.kif",  

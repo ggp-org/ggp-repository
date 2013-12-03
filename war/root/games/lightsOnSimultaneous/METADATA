@@ -1,6 +1,5 @@
 {
   "gameName": "Lights On Simultaneous",
-  "numRoles": 1,
 
   "rulesheet": "lightsOnSimultaneous.kif",
   "stylesheet": "lightsOnSimultaneous.xsl",

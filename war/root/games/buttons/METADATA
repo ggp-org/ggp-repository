@@ -1,7 +1,5 @@
 {
   "gameName": "Buttons Puzzle",
-  "version": 0,
-  "numRoles": 1,
 
   "rulesheet": "buttons.kif"
 }

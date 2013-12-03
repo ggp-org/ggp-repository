@@ -1,6 +1,5 @@
 {
   "gameName": "Chinese Checkers, Four Players",
-  "numRoles": 4,
 
   "rulesheet": "chineseCheckers4.kif",
   "stylesheet": "chineseCheckers.xsl"

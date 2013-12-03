@@ -1,6 +1,5 @@
 {
-  "version": 0,
-  "numRoles": 2,
-
+  "gameName": "Iterated Chicken",
+  
   "rulesheet": "gt_chicken.kif"
 }

@@ -1,7 +1,5 @@
 {
   "gameName": "Cit-Tac-Eot",
-  "version": 0,
-  "numRoles": 2,
 
   "user_interface": "cittaceot.js",
   "rulesheet": "cittaceot.kif",

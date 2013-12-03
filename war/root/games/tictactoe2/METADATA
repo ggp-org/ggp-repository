@@ -1,6 +1,4 @@
 {
-  "numRoles": 2,
-
   "rulesheet": "tictactoe.kif",
   "description": "tictactoe2.txt"
 }

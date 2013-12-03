@@ -1,6 +1,5 @@
 {
   "gameName": "Slaughter",
-  "numRoles": 2,
 
   "rulesheet": "slaughter.kif",
   "stylesheet": "chess.xsl",

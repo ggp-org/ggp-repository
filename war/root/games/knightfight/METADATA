@@ -1,7 +1,5 @@
 {
   "gameName": "Knight Fight",
-  "version": 0,
-  "numRoles": 2,
 
   "rulesheet": "knightfight.kif",
   "stylesheet": "knightfight.xsl"

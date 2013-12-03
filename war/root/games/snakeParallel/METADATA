@@ -1,6 +1,5 @@
 {
   "gameName": "Snake Parallel",
-  "numRoles": 1,
 
   "rulesheet": "snakeParallel.kif",
   "stylesheet": "snakeParallel.xsl"

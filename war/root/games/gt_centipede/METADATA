@@ -1,6 +1,5 @@
 {
-  "version": 0,
-  "numRoles": 2,
+  "gameName": "The Centipede Game",
 
   "rulesheet": "gt_centipede.kif"
 }

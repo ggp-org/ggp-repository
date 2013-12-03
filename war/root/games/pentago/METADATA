@@ -1,6 +1,5 @@
 {
   "gameName": "Pentago",
-  "numRoles": 2,
 
   "rulesheet": "pentago.kif",
   "stylesheet": "pentago.xsl"

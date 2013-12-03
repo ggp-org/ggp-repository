@@ -1,6 +1,5 @@
 {
   "gameName": "Ghost Maze",
-  "numRoles": 2,
 
   "rulesheet": "ghostMaze2p.kif",
   "stylesheet": "ghostMaze2p.xsl"

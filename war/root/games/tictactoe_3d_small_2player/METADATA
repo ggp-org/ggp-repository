@@ -1,6 +1,4 @@
 {
-  "numRoles": 2,
-
   "rulesheet": "tictactoe_3d_small_2player.kif",
   "description": "tictactoe_3d_small_2player.txt"
 }

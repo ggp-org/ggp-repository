@@ -1,6 +1,5 @@
 {
   "gameName": "Pacman 3P",
-  "numRoles": 3,
 
   "rulesheet": "pacman3p.kif",
   "stylesheet": "pacman3p.xsl"

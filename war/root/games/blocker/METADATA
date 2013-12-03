@@ -1,7 +1,5 @@
 {
   "gameName": "Blocker",
-  "numRoles": 2,
-  "version": 0,
   
   "user_interface": "blocker.js",
   "rulesheet": "blocker.kif",  

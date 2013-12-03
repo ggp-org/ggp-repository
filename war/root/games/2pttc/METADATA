@@ -1,6 +1,5 @@
 {
   "gameName": "Two-Player Tic-Tac-Chess",
-  "numRoles": 2,
   
   "user_interface": "2pttc.js",
   "rulesheet": "2pttc.kif",  

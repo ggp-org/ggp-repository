@@ -1,7 +1,5 @@
 {
   "gameName": "Blob Wars",
-  "version": 0,
-  "numRoles": 4,
 
   "rulesheet": "blobwars.kif"
 }

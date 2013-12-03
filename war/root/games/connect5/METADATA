@@ -1,6 +1,5 @@
 {
   "gameName": "Connect Five",
-  "numRoles": 2,
 
   "rulesheet": "connect5.kif",
   "stylesheet": "connect5.xsl",

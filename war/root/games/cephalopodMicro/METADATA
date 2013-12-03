@@ -1,7 +1,5 @@
 {
   "gameName": "Cephalopod Micro",
-  "version": 0,
-  "numRoles": 2,
 
   "rulesheet": "cephalopodMicro.kif",
   "stylesheet": "cephalopodMicro.xsl"

@@ -1,7 +1,5 @@
 {
   "gameName": "Three-Player Free-For-All",
-  "numRoles": 3,
-  "version": 0,
   
   "user_interface": "3pffa.js",
   "rulesheet": "3pffa.kif",  

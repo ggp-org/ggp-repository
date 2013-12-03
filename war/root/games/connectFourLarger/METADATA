@@ -1,6 +1,5 @@
 {
   "gameName": "Connect Four Larger",
-  "numRoles": 2,
     
   "user_interface": "connectFourLarger.js",
   "rulesheet": "connectFourLarger.kif",

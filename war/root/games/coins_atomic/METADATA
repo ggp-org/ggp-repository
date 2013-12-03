@@ -1,7 +1,5 @@
 {
   "gameName": "Coins Variant",
-  "version": 0,
-  "numRoles": 1,
 
   "rulesheet": "coins_atomic.kif"
 }

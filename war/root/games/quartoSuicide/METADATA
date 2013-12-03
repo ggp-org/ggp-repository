@@ -1,6 +1,5 @@
 {
   "gameName": "Quarto Suicide",
-  "numRoles": 2,
 
   "rulesheet": "quartoSuicide.kif",
   "stylesheet": "quartoSuicide.xsl"

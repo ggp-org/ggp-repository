@@ -1,6 +1,5 @@
 {
   "gameName": "Tic-Tac-Toe Large",
-  "numRoles": 2,
 
   "user_interface": "ticTacToeLarge.js",
   "rulesheet": "ticTacToeLarge.kif",

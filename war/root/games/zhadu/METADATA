@@ -1,6 +1,5 @@
 {
-  "version": 0,
-  "numRoles": 2,
+  "gameName": "Zhadu",
 
   "rulesheet": "zhadu.kif",
   "description": "zhadu.txt"

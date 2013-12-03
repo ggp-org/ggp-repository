@@ -1,6 +1,5 @@
 {
   "gameName": "Tic-Tac-Toe Serial",
-  "numRoles": 2,
 
   "rulesheet": "ticTacToeSerial.kif",
   "stylesheet": "ticTacToeSerial.xsl",

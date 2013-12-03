@@ -1,6 +1,5 @@
 {
   "gameName": "Quarto",
-  "numRoles": 2,
 
   "rulesheet": "quarto.kif",
   "stylesheet": "quarto.xsl"

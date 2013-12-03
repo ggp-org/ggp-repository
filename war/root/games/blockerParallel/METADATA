@@ -1,7 +1,5 @@
 {
   "gameName": "Blocker in Parallel",
-  "version": 0,
-  "numRoles": 2,
 
   "rulesheet": "blockerParallel.kif"
 }

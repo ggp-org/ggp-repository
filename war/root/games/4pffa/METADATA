@@ -1,7 +1,5 @@
 {
   "gameName": "Four-Player Free-For-All",
-  "numRoles": 4,
-  "version": 0,
   
   "user_interface": "4pffa.js",
   "rulesheet": "4pffa.kif",  

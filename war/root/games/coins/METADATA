@@ -1,7 +1,5 @@
 {
   "gameName": "Coins",
-  "version": 0,
-  "numRoles": 1,
 
   "rulesheet": "coins.kif"
 }

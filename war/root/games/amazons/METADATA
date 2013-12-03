@@ -1,6 +1,5 @@
 {
   "gameName": "Amazons",
-  "numRoles": 2,
 
   "rulesheet": "amazons.kif",
   "stylesheet": "amazons.xsl"

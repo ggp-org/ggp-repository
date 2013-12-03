@@ -1,7 +1,5 @@
 {
   "gameName": "Peg Jumping",
-  "numRoles": 1,
-  "version": 0,
   
   "user_interface": "peg.js",
   "rulesheet": "peg.kif",  

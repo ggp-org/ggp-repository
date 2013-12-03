@@ -1,7 +1,5 @@
 {
   "gameName": "Blocks World in Parallel",
-  "version": 0,
-  "numRoles": 1,
 
   "rulesheet": "blocksWorldParallel.kif"
 }
