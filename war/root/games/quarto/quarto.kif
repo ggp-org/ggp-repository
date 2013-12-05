@@ -12,6 +12,38 @@
 (role black)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; BASE & INPUT Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(piece p0000)
+(piece p0001)
+(piece p0010)
+(piece p0011)
+(piece p0100)
+(piece p0101)
+(piece p0110)
+(piece p0111)
+(piece p1000)
+(piece p1001)
+(piece p1010)
+(piece p1011)
+(piece p1100)
+(piece p1101)
+(piece p1110)
+(piece p1111)
+
+(<= (base (pool ?piece)) (piece ?piece))
+(<= (base (selected ?piece)) (piece ?piece))
+(<= (base (cell ?x ?y ?piece)) (index ?x) (index ?y) (piece ?piece))
+(<= (base (cell ?x ?y empty)) (index ?x) (index ?y) (piece ?piece))
+(<= (base (selectControl ?p)) (role ?p))
+(<= (base (placeControl ?p)) (role ?p))
+
+(<= (input ?p noop) (role ?p))
+(<= (input ?p (select ?piece)) (role ?p) (piece ?piece))
+(<= (input ?p (place ?piece ?x ?y)) (role ?p) (piece ?piece) (index ?x) (index ?y))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; INIT Relations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -32,23 +64,8 @@
 (init (cell 4 3 empty)) 
 (init (cell 4 4 empty))
 
-(init (pool p0000))
-(init (pool p0001))
-(init (pool p0010))
-(init (pool p0011))
-(init (pool p0100))
-(init (pool p0101))
-(init (pool p0110))
-(init (pool p0111))
-(init (pool p1000))
-(init (pool p1001))
-(init (pool p1010))
-(init (pool p1011))
-(init (pool p1100))
-(init (pool p1101))
-(init (pool p1110))
-(init (pool p1111))
-	
+(<= (init (pool ?piece)) (piece ?piece))
+
 (init (selectControl white))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
