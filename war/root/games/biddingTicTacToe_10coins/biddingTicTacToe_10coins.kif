@@ -6,6 +6,18 @@
 (role x)
 (role o)
 
+(<= (base (cell ?x ?y b)) (xcoord ?x) (ycoord ?y))
+(<= (base (cell ?x ?y ?p)) (role ?p) (xcoord ?x) (ycoord ?y))
+(<= (base (coins ?p ?m)) (role ?p) (number ?m))
+(<= (base (control ?p)) (role ?p))
+(<= (base (tiebreaker ?p)) (role ?p))
+(base (stage bidding))
+
+(<= (input ?p (bid ?b no_tiebreaker)) (role ?p) (number ?b))
+(<= (input ?p (bid ?b with_tiebreaker)) (role ?p) (number ?b))
+(<= (input ?p (mark ?x ?y)) (xcoord ?x) (ycoord ?y) (role ?p))
+(<= (input ?p noop) (role ?p))
+
 (other x o)
 (other o x)
 
