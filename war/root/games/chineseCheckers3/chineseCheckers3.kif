@@ -8,8 +8,28 @@
    (role green)
    (role blue)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
-;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (base (cell ?c ?r)) (index ?c) (role ?r))
+(<= (base (cell ?c blank)) (index ?c))
+(<= (base (control ?r)) (role ?r))
+(<= (base (step ?n)) (succ ?x ?n))
+(base (step 1))
+
+(<= (input ?r (move ?c1 ?c2)) (role ?r) (index ?c1) (index ?c2))
+(<= (input ?r noop) (role ?r))
+
+(index a1)
+(index b1) (index b2)
+(index c1) (index c2) (index c3) (index c4) (index c5) (index c6) (index c7)
+(index d1) (index d2) (index d3) (index d4) (index d5) (index d6)
+(index e1) (index e2) (index e3) (index e4) (index e5)
+(index f1) (index f2) (index f3) (index f4) (index f5) (index f6)
+(index g1) (index g2) (index g3) (index g4) (index g5) (index g6) (index g7)
+(index h1) (index h2)
+(index i1)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
    (init (cell a1 red))
    (init (cell b1 red))
