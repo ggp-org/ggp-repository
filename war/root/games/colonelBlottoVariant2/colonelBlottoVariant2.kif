@@ -134,7 +134,7 @@
 
     
 
-(<= (next (finished))
+(<= (next finished)
 
 	(does white (commit 0))
 
@@ -152,7 +152,7 @@
 
 (<= terminal
 
-    (true (finished)))
+    (true finished))
 
 
 

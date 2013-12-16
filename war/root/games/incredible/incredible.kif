@@ -213,7 +213,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(<= (legal robot move))
+(legal robot move)
 
 (<= (legal robot grab)
 (true (cell ?x))

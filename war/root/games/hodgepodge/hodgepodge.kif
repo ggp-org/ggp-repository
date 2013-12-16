@@ -139,7 +139,7 @@
         (true (clear ?x))
         (true (on ?x ?y)))
 
-    (<= (legal black move))
+    (legal black move)
 
     (<= (legal black grab)
         (true (cell ?x))

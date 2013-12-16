@@ -20,7 +20,7 @@
 ;;; LEGAL Relations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(<= (legal robot giveUp))
+(legal robot giveUp)
 (<= (legal robot continue)
     (prereq1 0))
 
