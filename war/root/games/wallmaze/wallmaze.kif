@@ -215,7 +215,7 @@
 ;; cell the player moves from is blank, if no collision
 (<= (next (cell ?x1 ?y1 o))
 	(does ?p (move ?x1 ?y1 ?x2 ?y2))
-	(not (collision)))
+	(not collision))
 
 ;; what cells are blank
 (<= (next (cell ?x ?y o))
@@ -228,7 +228,7 @@
 ;; white's new position
 (<= (next (cell ?x ?y a))
 	(does white (move ?x1 ?y1 ?x ?y))
-	(not (collision)))
+	(not collision))
 (<= (next (cell ?x ?y a))
 	(true (cell ?x ?y a))
 	(does white noop))
@@ -236,14 +236,14 @@
 ;; black's new position
 (<= (next (cell ?x ?y b))
 	(does black (move ?x1 ?y1 ?x ?y))
-	(not (collision)))
+	(not collision))
 (<= (next (cell ?x ?y b))
 	(true (cell ?x ?y b))
 	(does black noop))
 
 ;; everything stays the same if there's a collision
 (<= (next (cell ?z ?w ?c))
-	(collision)
+	collision
 	(true (cell ?z ?w ?c)))
 
 ;; walls stay walls
@@ -251,7 +251,7 @@
 	(true (cell ?x ?y w)))
 
 ;; defn of collision
-(<= (collision)
+(<= collision
 	(does white (move ?x1 ?y1 ?x ?y))
 	(does black (move ?x2 ?y2 ?x ?y)))
 

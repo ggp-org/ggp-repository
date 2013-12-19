@@ -1052,21 +1052,27 @@
     (queenvalue white ?q)
     (+ ?k ?q ?n))
 
-(<= (kingvalue ?player 55)
+(<= (has-king ?player)
     (piece-owner-type ?king ?player king)
     (true (cell ?x ?y ?king)))
 
-(<= (kingvalue ?player 0)
-    (piece-owner-type ?king ?player king)
-    (not (true (cell ?x ?y ?king))))
+(<= (kingvalue ?player 55)
+    (has-king ?player))
 
-(<= (queenvalue ?player 45)
+(<= (kingvalue ?player 0)
+    (role ?player)
+    (not (has-king ?player)))
+
+(<= (has-queen ?player)
     (piece-owner-type ?queen ?player queen)
     (true (cell ?x ?y ?queen)))
 
+(<= (queenvalue ?player 45)
+    (has-queen ?player))
+
 (<= (queenvalue ?player 0)
-    (piece-owner-type ?queen ?player queen)
-    (not (true (cell ?x ?y ?queen))))
+    (role ?player)
+    (not (has-queen ?player)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; TERMINAL STATES

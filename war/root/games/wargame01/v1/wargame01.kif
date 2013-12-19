@@ -67,7 +67,7 @@
 
 ;;; It is always legal for the soldier to stand still.
 
-(<= (legal soldier noop))
+(legal soldier noop)
 
 ;;; The soldier may step in any of the cardinal directions so long as a wall 
 ;;;  does not block the way.
@@ -284,9 +284,9 @@
 	
 ;;; Defines the legal distances that an object may be thrown (0, 1, or 2 cells)
 	
-(<= (legalThrowDist 0))
-(<= (legalThrowDist 1))
-(<= (legalThrowDist 2))
+(legalThrowDist 0)
+(legalThrowDist 1)
+(legalThrowDist 2)
 
 ;;; Every item (with the exception of the flag) is used if the soldier performs
 ;;;  the action that it enables.

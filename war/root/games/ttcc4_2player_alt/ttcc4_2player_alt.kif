@@ -26,13 +26,13 @@
   (<= (base (step ?m))
       (successor ?m ?n))
 
-  (<= (base (step 61)))
+  (base (step 61))
 
-  (<= (input white (pawnmove 1 5 2 5)))
-  (<= (input white (pawnmove 1 5 2 4)))
-  (<= (input black (pawnmove 7 3 6 4)))
-  (<= (input black (pawnmove 7 3 6 3)))
-  (<= (input black (pawnmove 7 3 6 2)))
+  (input white (pawnmove 1 5 2 5))
+  (input white (pawnmove 1 5 2 4))
+  (input black (pawnmove 7 3 6 4))
+  (input black (pawnmove 7 3 6 3))
+  (input black (pawnmove 7 3 6 2))
 
   (<= (input ?player (pawnmove ?u ?v ?x ?y))
       (role ?player)
@@ -46,10 +46,10 @@
       (diagonal ?u ?v ?x ?y)
       (board ?x ?y))
 
-  (<= (input white (checkermove 1 4 2 5)))
-  (<= (input white (checkermove 1 4 2 3)))
-  (<= (input black (checkermove 7 4 6 5)))
-  (<= (input black (checkermove 7 4 6 3)))  
+  (input white (checkermove 1 4 2 5))
+  (input white (checkermove 1 4 2 3))
+  (input black (checkermove 7 4 6 5))
+  (input black (checkermove 7 4 6 3))  
 
   (<= (input ?player (checkermove ?u ?v ?x ?y))
       (role ?player)
@@ -65,10 +65,10 @@
       (diagonal ?w ?x ?y ?z)
       (board ?y ?z))
       
-  (<= (input black (jump 7 4 6 5 5 6)))
-  (<= (input black (jump 7 4 6 3 5 2)))
-  (<= (input white (jump 1 4 2 5 3 6)))
-  (<= (input white (jump 1 4 2 3 3 2)))
+  (input black (jump 7 4 6 5 5 6))
+  (input black (jump 7 4 6 3 5 2))
+  (input white (jump 1 4 2 5 3 6))
+  (input white (jump 1 4 2 3 3 2))
 
   (<= (input ?player (knightmove ?u ?v ?x ?y))
       (role ?player)

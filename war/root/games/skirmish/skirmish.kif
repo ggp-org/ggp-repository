@@ -79,13 +79,38 @@
   (<= (base (step ?n))
       (pp ?m ?n))
 
-  (<= (input ?role (move ?u ?v ?x ?y))
-      (role ?role)
-      (rookMove ?u ?v ?x ?y))
 
   (<= (input ?role (move ?u ?v ?x ?y))
       (role ?role)
-      (bishopMove ?u ?v ?x ?y))
+      (horizontal ?u ?v ?x ?y))
+
+  (<= (input ?role (move ?u ?v ?x ?y))
+      (role ?role)
+      (horizontal ?x ?y ?u ?v))
+
+  (<= (input ?role (move ?u ?v ?x ?y))
+      (role ?role)
+      (vertical ?u ?v ?x ?y))
+
+  (<= (input ?role (move ?u ?v ?x ?y))
+      (role ?role)
+      (vertical ?x ?y ?u ?v))
+
+  (<= (input ?role (move ?u ?v ?x ?y))
+      (role ?role)
+      (diagonalUp ?u ?v ?x ?y))
+
+  (<= (input ?role (move ?u ?v ?x ?y))
+      (role ?role)
+      (diagonalUp ?x ?y ?u ?v))
+
+  (<= (input ?role (move ?u ?v ?x ?y))
+      (role ?role)
+      (diagonalDown ?u ?v ?x ?y))
+
+  (<= (input ?role (move ?u ?v ?x ?y))
+      (role ?role)
+      (diagonalDown ?x ?y ?u ?v))
 
   (<= (input ?role (move ?u ?v ?x ?y))
       (role ?role)
@@ -93,6 +118,43 @@
 
   (<= (input ?role noop)
       (role ?role))
+
+
+  (<= (horizontal ?x1 ?y ?x2 ?y)
+      (plus 1 ?x1 ?x2)
+      (index ?y))
+
+  (<= (horizontal ?x1 ?y ?x3 ?y)
+      (plus 1 ?x1 ?x2)
+      (horizontal ?x2 ?y ?x3 ?y)
+      (index ?y))
+
+  (<= (vertical ?x ?y1 ?x ?y2)
+      (plus 1 ?y1 ?y2)
+      (index ?x))
+
+  (<= (vertical ?x ?y1 ?x ?y3)
+      (plus 1 ?y1 ?y2)
+      (vertical ?x ?y2 ?x ?y3)
+      (index ?x))
+
+  (<= (diagonalUp ?x1 ?y1 ?x2 ?y2)
+      (plus 1 ?x1 ?x2)
+      (plus 1 ?y2 ?y1))
+
+  (<= (diagonalUp ?x1 ?y1 ?x3 ?y3)
+      (plus 1 ?x1 ?x2)
+      (plus 1 ?y2 ?y1)
+      (diagonalUp ?x2 ?y2 ?x3 ?y3))
+
+  (<= (diagonalDown ?x1 ?y1 ?x2 ?y2)
+      (plus 1 ?x1 ?x2)
+      (plus 1 ?y1 ?y2))
+
+  (<= (diagonalDown ?x1 ?y1 ?x3 ?y3)
+      (plus 1 ?x1 ?x2)
+      (plus 1 ?y1 ?y2)
+      (diagonalDown ?x2 ?y2 ?x3 ?y3))
 	
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; LEGAL Relations
