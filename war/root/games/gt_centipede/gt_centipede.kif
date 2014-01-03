@@ -40,6 +40,20 @@
 (role black)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; BASE & INPUT Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(base (whitePayoff 0))
+(base (blackPayoff 0))
+(<= (base (whitePayoff ?y)) (succ ?x ?y))
+(<= (base (blackPayoff ?y)) (succ ?x ?y))
+(<= (base (control ?r)) (role ?r))
+(<= (input ?r finish) (role ?r))
+(<= (input ?r continue) (role ?r))
+(<= (input ?r noop) (role ?r))
+(base gameOver)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; INIT Relations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

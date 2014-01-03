@@ -35,7 +35,19 @@
 
 (init (whiteScore 0))
 (init (blackScore 0))
-(init (rounds 0))
+(init (round 0))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; BASE & INPUT Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(base (whiteScore 0))
+(base (blackScore 0))
+(<= (base (whiteScore ?y)) (succ ?x ?y))
+(<= (base (blackScore ?y)) (succ ?x ?y))
+(<= (base (round ?x)) (succ ?x ?y))
+(<= (input ?r straight) (role ?r))
+(<= (input ?r swerve) (role ?r))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LEGAL Relations
@@ -43,24 +55,24 @@
 
 (<= (legal black straight)
 	(maxRounds ?x)
-    (not (true (rounds ?x))))
+    (not (true (round ?x))))
 (<= (legal black swerve)
 	(maxRounds ?x)
-    (not (true (rounds ?x))))
+    (not (true (round ?x))))
 
 (<= (legal white straight)
 	(maxRounds ?x)
-    (not (true (rounds ?x))))
+    (not (true (round ?x))))
 (<= (legal white swerve)
 	(maxRounds ?x)
-    (not (true (rounds ?x))))
+    (not (true (round ?x))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; NEXT Relations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(<= (next (rounds ?x1))
-    (true (rounds ?x))
+(<= (next (round ?x1))
+    (true (round ?x))
     (succ ?x ?x1))
 
 (<= (next (whiteScore ?x5))
@@ -129,7 +141,7 @@
 
 (<= terminal
 	(maxRounds ?x)
-    (true (rounds ?x)))
+    (true (round ?x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GOAL Relations
