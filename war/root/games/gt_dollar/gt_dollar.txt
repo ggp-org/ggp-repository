@@ -1,0 +1,10 @@
+A two player game with alternating play. Each player starts with 16 points.
+On their turn, a player may either choose to end the game, or spend one point
+in order to "lay claim to the prize" (as long as they have a point to spend).
+When the game is ended, the player who last "laid claim to the prize" gets
+a prize consisting of five points.
+
+Scores are equal to a player's total points multiplied by five, so that
+the maximum score a player can achieve is 100.
+
+Background: http://en.wikipedia.org/wiki/Dollar_auction

@@ -1,5 +1,6 @@
 {
   "gameName": "Dollar Auction",
 
-  "rulesheet": "gt_dollar.kif"
+  "rulesheet": "gt_dollar.kif",
+  "description": "gt_dollar.txt"
 }

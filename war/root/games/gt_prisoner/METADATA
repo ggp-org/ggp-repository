@@ -1,5 +1,6 @@
 {
   "gameName": "Iterated Prisoner's Dilemma",
   
-  "rulesheet": "gt_prisoner.kif"
+  "rulesheet": "gt_prisoner.kif",
+  "description": "gt_prisoner.txt"
 }

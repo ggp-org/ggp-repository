@@ -1,5 +1,6 @@
 {
   "gameName": "The Centipede Game",
 
-  "rulesheet": "gt_centipede.kif"
+  "rulesheet": "gt_centipede.kif",
+  "description": "gt_centipede.txt"
 }

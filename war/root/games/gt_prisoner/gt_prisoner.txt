@@ -1,0 +1,9 @@
+A two player game with simultaneous play in which, in each round,
+players may either cooperate or defect. Should both players cooperate,
+they each receive three points. Should one cooperate and one defect,
+the defector receives five points and the cooperator receives zero points.
+Should they both defect, they both receive one point. The game is played
+for twenty rounds and a player's final score is equal to their accumulated
+points at the end.
+
+Background: http://en.wikipedia.org/wiki/Prisoner's_dilemma

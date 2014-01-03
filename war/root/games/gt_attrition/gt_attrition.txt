@@ -1,0 +1,7 @@
+A five-round bidding war. Each player starts with fifty points.
+During each round, both players bid points in order to win ten
+points. Both players must pay the amount that the loser bids,
+and the winner gets the ten points (five to each in a tie).
+At the end of the game, you get as many points as you have.
+
+Background: http://en.wikipedia.org/wiki/War_of_attrition_(game)

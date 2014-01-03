@@ -1,5 +1,6 @@
 {
   "gameName": "Iterated Chicken",
   
-  "rulesheet": "gt_chicken.kif"
+  "rulesheet": "gt_chicken.kif",
+  "description": "gt_chicken.txt"
 }

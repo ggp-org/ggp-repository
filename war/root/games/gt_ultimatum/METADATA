@@ -1,5 +1,6 @@
 {
   "gameName": "Iterated Ultimatum Game",
   
-  "rulesheet": "gt_ultimatum.kif"
+  "rulesheet": "gt_ultimatum.kif",
+  "description": "gt_ultimatum.txt"
 }

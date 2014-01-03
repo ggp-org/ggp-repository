@@ -1,5 +1,6 @@
 {
   "gameName": "War of Attrition",
 
-  "rulesheet": "gt_attrition.kif"
+  "rulesheet": "gt_attrition.kif",
+  "description": "gt_attrition.txt"
 }

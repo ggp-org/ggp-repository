@@ -1,0 +1,7 @@
+A two player game with alternating play in which, in each round,
+the first player picks a way to split 10 points between both players.
+The second player then picks whether or not to accept the split.
+If the second player accepts, both players receive the points;
+otherwise, neither player receives anything.
+
+Background: http://en.wikipedia.org/wiki/Ultimatum_game
