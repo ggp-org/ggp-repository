@@ -232,6 +232,7 @@
 (captureplus 7 8)
 (captureplus 8 9)
 (captureplus 9 10)
+(captureplus 10 10) ; If we capture additional pieces after the tenth, keep a count of 10
 (scoremap 0 0)
 (scoremap 1 10)
 (scoremap 2 20)
