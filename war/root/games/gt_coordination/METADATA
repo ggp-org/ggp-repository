@@ -1,0 +1,6 @@
+{
+  "gameName": "Iterated Coordination",
+  
+  "rulesheet": "gt_coordination.kif",
+  "description": "gt_coordination.txt"
+}

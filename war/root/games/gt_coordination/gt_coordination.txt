@@ -1,0 +1,6 @@
+A two player game with simultaneous play in which, in each round,
+players choose either to swerve left or swerve right. If they both
+swerve the same way, they both receive five points. Otherwise they
+crash and neither receives any points.
+
+Background: http://en.wikipedia.org/wiki/Coordination_game
