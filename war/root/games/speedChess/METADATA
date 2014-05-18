@@ -1,0 +1,6 @@
+{
+  "gameName": "Speed Chess",
+
+  "rulesheet": "speedChess.kif",
+  "stylesheet": "speedChess.xsl"
+}
