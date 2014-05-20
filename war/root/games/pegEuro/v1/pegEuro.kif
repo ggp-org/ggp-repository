@@ -177,6 +177,11 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
+;;; The following goals are actually not achievable.  For reference see:
+;;; http://en.wikipedia.org/wiki/Peg_solitaire#Solutions_to_the_European_game
+;;; However they are harmless, so not currently removing them in case the
+;;; initial position is changed at a future release to make them accessible
+
    (<= (goal jumper 100)
        (true (hole d c4 peg))
        (true (pegs s1)))
@@ -191,32 +196,38 @@
        (true (pegs s1))
        (distinct ?col c4))
 
-   (<= (goal jumper 90)
+;;; Because the above are unachievable, re-basing the remainder to make
+;;; the goal value of 100 match the best possible outcome
+
+   (<= (goal jumper 100)
        (true (pegs s2)))
 
-   (<= (goal jumper 80)
+   (<= (goal jumper 90)
        (true (pegs s3)))
 
-   (<= (goal jumper 70)
+   (<= (goal jumper 80)
        (true (pegs s4)))
 
-   (<= (goal jumper 60)
+   (<= (goal jumper 70)
        (true (pegs s5)))
 
-   (<= (goal jumper 50)
+   (<= (goal jumper 60)
        (true (pegs s6)))
 
-   (<= (goal jumper 40)
+   (<= (goal jumper 50)
        (true (pegs s7)))
 
-   (<= (goal jumper 30)
+   (<= (goal jumper 40)
        (true (pegs s8)))
 
-   (<= (goal jumper 20)
+   (<= (goal jumper 30)
        (true (pegs s9)))
 
-   (<= (goal jumper 10)
+   (<= (goal jumper 20)
        (true (pegs s10)))
+
+   (<= (goal jumper 10)
+       (true (pegs s11)))
 
    (<= (goal jumper 0)
        (true (pegs ?x))
