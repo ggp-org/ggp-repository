@@ -231,6 +231,7 @@
 
    (<= (goal jumper 0)
        (true (pegs ?x))
+       (distinct ?x s11)
        (distinct ?x s10)
        (distinct ?x s9)
        (distinct ?x s8)
