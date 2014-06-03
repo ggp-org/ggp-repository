@@ -1,5 +1,3 @@
-<!DOCTYPE stylesheet [<!ENTITY ROOT "http://games.ggp.org/base">]>
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:param name="width" select="400"/>
 <xsl:param name="height" select="400"/>
