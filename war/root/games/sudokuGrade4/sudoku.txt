@@ -1,0 +1,4 @@
+The classic number placing game.  Place the numbers 1-9 on the partially filled
+grid such that no row, column or 3x3 block contains the same number.
+
+See http://en.wikipedia.org/wiki/Sudoku for more details.

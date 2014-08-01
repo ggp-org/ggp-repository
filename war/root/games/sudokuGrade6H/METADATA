@@ -1,0 +1,7 @@
+{
+  "gameName":    "Sudoku Grade 6H",
+  "rulesheet":   "sudoku.kif",
+  "description": "sudoku.txt",
+  "stylesheet":  "sudoku.xsl",
+  "curator":     "arr"
+}
