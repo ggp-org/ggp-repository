@@ -1,0 +1,8 @@
+{
+  "gameName":       "9-Board Tic-Tac-Toe w/Pie",
+  "user_interface": "nineBoardTicTacToe.js",
+  "rulesheet":      "nineBoardTicTacToe.kif",
+  "stylesheet":     "nineBoardTicTacToe.xsl",
+  "description":    "nineBoardTicTacToe.txt",
+  "curator":        "arr"
+}
