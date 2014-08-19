@@ -210,13 +210,13 @@
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
-      <div class="${a6} hex even"><div class="left"></div><div class="middle"><p>a6</p></div><div class="right"></div></div>
-      <div class="${a7} hex     "><div class="left"></div><div class="middle"><p>a7</p></div><div class="right"></div></div>
-      <div class="${b7} hex even"><div class="left"></div><div class="middle"><p>b7</p></div><div class="right"></div></div>
-      <div class="${b8} hex     "><div class="left"></div><div class="middle"><p>b8</p></div><div class="right"></div></div>
-      <div class="${c8} hex even"><div class="left"></div><div class="middle"><p>c8</p></div><div class="right"></div></div>
-      <div class="${c9} hex     "><div class="left"></div><div class="middle"><p>c9</p></div><div class="right"></div></div>
-      <div class="${d9} hex even"><div class="left"></div><div class="middle"><p>d9</p></div><div class="right"></div></div>
+      <div class="{$a6} hex even"><div class="left"></div><div class="middle"><p>a6</p></div><div class="right"></div></div>
+      <div class="{$a7} hex     "><div class="left"></div><div class="middle"><p>a7</p></div><div class="right"></div></div>
+      <div class="{$b7} hex even"><div class="left"></div><div class="middle"><p>b7</p></div><div class="right"></div></div>
+      <div class="{$b8} hex     "><div class="left"></div><div class="middle"><p>b8</p></div><div class="right"></div></div>
+      <div class="{$c8} hex even"><div class="left"></div><div class="middle"><p>c8</p></div><div class="right"></div></div>
+      <div class="{$c9} hex     "><div class="left"></div><div class="middle"><p>c9</p></div><div class="right"></div></div>
+      <div class="{$d9} hex even"><div class="left"></div><div class="middle"><p>d9</p></div><div class="right"></div></div>
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
@@ -227,94 +227,75 @@
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
-      <div class="${a4} hex even"><div class="left"></div><div class="middle"><p>a4</p></div><div class="right"></div></div>
-      <div class="${a5} hex     "><div class="left"></div><div class="middle"><p>a5</p></div><div class="right"></div></div>
-      <div class="${b5} hex even"><div class="left"></div><div class="middle"><p>b5</p></div><div class="right"></div></div>
-      <div class="${b6} hex     "><div class="left"></div><div class="middle"><p>b6</p></div><div class="right"></div></div>
-      <div class="${c6} hex even"><div class="left"></div><div class="middle"><p>c6</p></div><div class="right"></div></div>
-      <div class="${c7} hex     "><div class="left"></div><div class="middle"><p>c7</p></div><div class="right"></div></div>
-      <div class="${d7} hex even"><div class="left"></div><div class="middle"><p>d7</p></div><div class="right"></div></div>
-      <div class="${d8} hex     "><div class="left"></div><div class="middle"><p>d8</p></div><div class="right"></div></div>
-      <div class="${e8} hex even"><div class="left"></div><div class="middle"><p>e8</p></div><div class="right"></div></div>
-      <div class="${e9} hex     "><div class="left"></div><div class="middle"><p>e9</p></div><div class="right"></div></div>
-      <div class="${f9} hex even"><div class="left"></div><div class="middle"><p>f9</p></div><div class="right"></div></div>
+      <div class="{$a4} hex even"><div class="left"></div><div class="middle"><p>a4</p></div><div class="right"></div></div>
+      <div class="{$a5} hex     "><div class="left"></div><div class="middle"><p>a5</p></div><div class="right"></div></div>
+      <div class="{$b5} hex even"><div class="left"></div><div class="middle"><p>b5</p></div><div class="right"></div></div>
+      <div class="{$b6} hex     "><div class="left"></div><div class="middle"><p>b6</p></div><div class="right"></div></div>
+      <div class="{$c6} hex even"><div class="left"></div><div class="middle"><p>c6</p></div><div class="right"></div></div>
+      <div class="{$c7} hex     "><div class="left"></div><div class="middle"><p>c7</p></div><div class="right"></div></div>
+      <div class="{$d7} hex even"><div class="left"></div><div class="middle"><p>d7</p></div><div class="right"></div></div>
+      <div class="{$d8} hex     "><div class="left"></div><div class="middle"><p>d8</p></div><div class="right"></div></div>
+      <div class="{$e8} hex even"><div class="left"></div><div class="middle"><p>e8</p></div><div class="right"></div></div>
+      <div class="{$e9} hex     "><div class="left"></div><div class="middle"><p>e9</p></div><div class="right"></div></div>
+      <div class="{$f9} hex even"><div class="left"></div><div class="middle"><p>f9</p></div><div class="right"></div></div>
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
     </div>
     <div class="hex-row">
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
-      <div class="${a2} hex even"><div class="left"></div><div class="middle"><p>a2</p></div><div class="right"></div></div>
-      <div class="${a3} hex     "><div class="left"></div><div class="middle"><p>a3</p></div><div class="right"></div></div>
-      <div class="${b3} hex even"><div class="left"></div><div class="middle"><p>b3</p></div><div class="right"></div></div>
-      <div class="${b4} hex     "><div class="left"></div><div class="middle"><p>b4</p></div><div class="right"></div></div>
-      <div class="${c4} hex even"><div class="left"></div><div class="middle"><p>c4</p></div><div class="right"></div></div>
-      <div class="${c5} hex     "><div class="left"></div><div class="middle"><p>c5</p></div><div class="right"></div></div>
-      <div class="${d5} hex even"><div class="left"></div><div class="middle"><p>d5</p></div><div class="right"></div></div>
-      <div class="${d6} hex     "><div class="left"></div><div class="middle"><p>d6</p></div><div class="right"></div></div>
-      <div class="${e6} hex even"><div class="left"></div><div class="middle"><p>e6</p></div><div class="right"></div></div>
-      <div class="${e7} hex     "><div class="left"></div><div class="middle"><p>e7</p></div><div class="right"></div></div>
-      <div class="${f7} hex even"><div class="left"></div><div class="middle"><p>f7</p></div><div class="right"></div></div>
-      <div class="${f8} hex     "><div class="left"></div><div class="middle"><p>f8</p></div><div class="right"></div></div>
-      <div class="${g8} hex even"><div class="left"></div><div class="middle"><p>g8</p></div><div class="right"></div></div>
-      <div class="${g9} hex     "><div class="left"></div><div class="middle"><p>g9</p></div><div class="right"></div></div>
-      <div class="${h9} hex even"><div class="left"></div><div class="middle"><p>h9</p></div><div class="right"></div></div>
+      <div class="{$a2} hex even"><div class="left"></div><div class="middle"><p>a2</p></div><div class="right"></div></div>
+      <div class="{$a3} hex     "><div class="left"></div><div class="middle"><p>a3</p></div><div class="right"></div></div>
+      <div class="{$b3} hex even"><div class="left"></div><div class="middle"><p>b3</p></div><div class="right"></div></div>
+      <div class="{$b4} hex     "><div class="left"></div><div class="middle"><p>b4</p></div><div class="right"></div></div>
+      <div class="{$c4} hex even"><div class="left"></div><div class="middle"><p>c4</p></div><div class="right"></div></div>
+      <div class="{$c5} hex     "><div class="left"></div><div class="middle"><p>c5</p></div><div class="right"></div></div>
+      <div class="{$d5} hex even"><div class="left"></div><div class="middle"><p>d5</p></div><div class="right"></div></div>
+      <div class="{$d6} hex     "><div class="left"></div><div class="middle"><p>d6</p></div><div class="right"></div></div>
+      <div class="{$e6} hex even"><div class="left"></div><div class="middle"><p>e6</p></div><div class="right"></div></div>
+      <div class="{$e7} hex     "><div class="left"></div><div class="middle"><p>e7</p></div><div class="right"></div></div>
+      <div class="{$f7} hex even"><div class="left"></div><div class="middle"><p>f7</p></div><div class="right"></div></div>
+      <div class="{$f8} hex     "><div class="left"></div><div class="middle"><p>f8</p></div><div class="right"></div></div>
+      <div class="{$g8} hex even"><div class="left"></div><div class="middle"><p>g8</p></div><div class="right"></div></div>
+      <div class="{$g9} hex     "><div class="left"></div><div class="middle"><p>g9</p></div><div class="right"></div></div>
+      <div class="{$h9} hex even"><div class="left"></div><div class="middle"><p>h9</p></div><div class="right"></div></div>
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
     </div>
     <div class="hex-row">
-      <div class="${a1} hex     "><div class="left"></div><div class="middle"><p>a1</p></div><div class="right"></div></div>
-      <div class="${b1} hex even"><div class="left"></div><div class="middle"><p>b1</p></div><div class="right"></div></div>
-      <div class="${b2} hex     "><div class="left"></div><div class="middle"><p>b2</p></div><div class="right"></div></div>
-      <div class="${c2} hex even"><div class="left"></div><div class="middle"><p>c2</p></div><div class="right"></div></div>
-      <div class="${c3} hex     "><div class="left"></div><div class="middle"><p>c3</p></div><div class="right"></div></div>
-      <div class="${d3} hex even"><div class="left"></div><div class="middle"><p>d3</p></div><div class="right"></div></div>
-      <div class="${d4} hex     "><div class="left"></div><div class="middle"><p>d4</p></div><div class="right"></div></div>
-      <div class="${e4} hex even"><div class="left"></div><div class="middle"><p>e4</p></div><div class="right"></div></div>
-      <div class="${e5} hex     "><div class="left"></div><div class="middle"><p>e5</p></div><div class="right"></div></div>
-      <div class="${f5} hex even"><div class="left"></div><div class="middle"><p>f5</p></div><div class="right"></div></div>
-      <div class="${f6} hex     "><div class="left"></div><div class="middle"><p>f6</p></div><div class="right"></div></div>
-      <div class="${g6} hex even"><div class="left"></div><div class="middle"><p>g6</p></div><div class="right"></div></div>
-      <div class="${g7} hex     "><div class="left"></div><div class="middle"><p>g7</p></div><div class="right"></div></div>
-      <div class="${h7} hex even"><div class="left"></div><div class="middle"><p>h7</p></div><div class="right"></div></div>
-      <div class="${h8} hex     "><div class="left"></div><div class="middle"><p>h8</p></div><div class="right"></div></div>
-      <div class="${i8} hex even"><div class="left"></div><div class="middle"><p>i8</p></div><div class="right"></div></div>
-      <div class="${i9} hex     "><div class="left"></div><div class="middle"><p>i9</p></div><div class="right"></div></div>
-    </div>
-    <div class="hex-row">
-      <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
-      <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
-      <div class="${c1} hex     "><div class="left"></div><div class="middle"><p>c1</p></div><div class="right"></div></div>
-      <div class="${d1} hex even"><div class="left"></div><div class="middle"><p>d1</p></div><div class="right"></div></div>
-      <div class="${d2} hex     "><div class="left"></div><div class="middle"><p>d2</p></div><div class="right"></div></div>
-      <div class="${e2} hex even"><div class="left"></div><div class="middle"><p>e2</p></div><div class="right"></div></div>
-      <div class="${e3} hex     "><div class="left"></div><div class="middle"><p>e3</p></div><div class="right"></div></div>
-      <div class="${f3} hex even"><div class="left"></div><div class="middle"><p>f3</p></div><div class="right"></div></div>
-      <div class="${f4} hex     "><div class="left"></div><div class="middle"><p>f4</p></div><div class="right"></div></div>
-      <div class="${g4} hex even"><div class="left"></div><div class="middle"><p>g4</p></div><div class="right"></div></div>
-      <div class="${g5} hex     "><div class="left"></div><div class="middle"><p>g5</p></div><div class="right"></div></div>
-      <div class="${h5} hex even"><div class="left"></div><div class="middle"><p>h5</p></div><div class="right"></div></div>
-      <div class="${h6} hex     "><div class="left"></div><div class="middle"><p>h6</p></div><div class="right"></div></div>
-      <div class="${i6} hex even"><div class="left"></div><div class="middle"><p>i6</p></div><div class="right"></div></div>
-      <div class="${i7} hex     "><div class="left"></div><div class="middle"><p>i7</p></div><div class="right"></div></div>
-      <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
-      <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
+      <div class="{$a1} hex     "><div class="left"></div><div class="middle"><p>a1</p></div><div class="right"></div></div>
+      <div class="{$b1} hex even"><div class="left"></div><div class="middle"><p>b1</p></div><div class="right"></div></div>
+      <div class="{$b2} hex     "><div class="left"></div><div class="middle"><p>b2</p></div><div class="right"></div></div>
+      <div class="{$c2} hex even"><div class="left"></div><div class="middle"><p>c2</p></div><div class="right"></div></div>
+      <div class="{$c3} hex     "><div class="left"></div><div class="middle"><p>c3</p></div><div class="right"></div></div>
+      <div class="{$d3} hex even"><div class="left"></div><div class="middle"><p>d3</p></div><div class="right"></div></div>
+      <div class="{$d4} hex     "><div class="left"></div><div class="middle"><p>d4</p></div><div class="right"></div></div>
+      <div class="{$e4} hex even"><div class="left"></div><div class="middle"><p>e4</p></div><div class="right"></div></div>
+      <div class="{$e5} hex     "><div class="left"></div><div class="middle"><p>e5</p></div><div class="right"></div></div>
+      <div class="{$f5} hex even"><div class="left"></div><div class="middle"><p>f5</p></div><div class="right"></div></div>
+      <div class="{$f6} hex     "><div class="left"></div><div class="middle"><p>f6</p></div><div class="right"></div></div>
+      <div class="{$g6} hex even"><div class="left"></div><div class="middle"><p>g6</p></div><div class="right"></div></div>
+      <div class="{$g7} hex     "><div class="left"></div><div class="middle"><p>g7</p></div><div class="right"></div></div>
+      <div class="{$h7} hex even"><div class="left"></div><div class="middle"><p>h7</p></div><div class="right"></div></div>
+      <div class="{$h8} hex     "><div class="left"></div><div class="middle"><p>h8</p></div><div class="right"></div></div>
+      <div class="{$i8} hex even"><div class="left"></div><div class="middle"><p>i8</p></div><div class="right"></div></div>
+      <div class="{$i9} hex     "><div class="left"></div><div class="middle"><p>i9</p></div><div class="right"></div></div>
     </div>
     <div class="hex-row">
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
-      <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
-      <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
-      <div class="${e1} hex     "><div class="left"></div><div class="middle"><p>e1</p></div><div class="right"></div></div>
-      <div class="${f1} hex even"><div class="left"></div><div class="middle"><p>f1</p></div><div class="right"></div></div>
-      <div class="${f2} hex     "><div class="left"></div><div class="middle"><p>f2</p></div><div class="right"></div></div>
-      <div class="${g2} hex even"><div class="left"></div><div class="middle"><p>g2</p></div><div class="right"></div></div>
-      <div class="${g3} hex     "><div class="left"></div><div class="middle"><p>g3</p></div><div class="right"></div></div>
-      <div class="${h3} hex even"><div class="left"></div><div class="middle"><p>h3</p></div><div class="right"></div></div>
-      <div class="${h4} hex     "><div class="left"></div><div class="middle"><p>h4</p></div><div class="right"></div></div>
-      <div class="${i4} hex even"><div class="left"></div><div class="middle"><p>i4</p></div><div class="right"></div></div>
-      <div class="${i5} hex     "><div class="left"></div><div class="middle"><p>i5</p></div><div class="right"></div></div>
-      <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
-      <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
+      <div class="{$c1} hex     "><div class="left"></div><div class="middle"><p>c1</p></div><div class="right"></div></div>
+      <div class="{$d1} hex even"><div class="left"></div><div class="middle"><p>d1</p></div><div class="right"></div></div>
+      <div class="{$d2} hex     "><div class="left"></div><div class="middle"><p>d2</p></div><div class="right"></div></div>
+      <div class="{$e2} hex even"><div class="left"></div><div class="middle"><p>e2</p></div><div class="right"></div></div>
+      <div class="{$e3} hex     "><div class="left"></div><div class="middle"><p>e3</p></div><div class="right"></div></div>
+      <div class="{$f3} hex even"><div class="left"></div><div class="middle"><p>f3</p></div><div class="right"></div></div>
+      <div class="{$f4} hex     "><div class="left"></div><div class="middle"><p>f4</p></div><div class="right"></div></div>
+      <div class="{$g4} hex even"><div class="left"></div><div class="middle"><p>g4</p></div><div class="right"></div></div>
+      <div class="{$g5} hex     "><div class="left"></div><div class="middle"><p>g5</p></div><div class="right"></div></div>
+      <div class="{$h5} hex even"><div class="left"></div><div class="middle"><p>h5</p></div><div class="right"></div></div>
+      <div class="{$h6} hex     "><div class="left"></div><div class="middle"><p>h6</p></div><div class="right"></div></div>
+      <div class="{$i6} hex even"><div class="left"></div><div class="middle"><p>i6</p></div><div class="right"></div></div>
+      <div class="{$i7} hex     "><div class="left"></div><div class="middle"><p>i7</p></div><div class="right"></div></div>
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
     </div>
@@ -323,13 +304,32 @@
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
+      <div class="{$e1} hex     "><div class="left"></div><div class="middle"><p>e1</p></div><div class="right"></div></div>
+      <div class="{$f1} hex even"><div class="left"></div><div class="middle"><p>f1</p></div><div class="right"></div></div>
+      <div class="{$f2} hex     "><div class="left"></div><div class="middle"><p>f2</p></div><div class="right"></div></div>
+      <div class="{$g2} hex even"><div class="left"></div><div class="middle"><p>g2</p></div><div class="right"></div></div>
+      <div class="{$g3} hex     "><div class="left"></div><div class="middle"><p>g3</p></div><div class="right"></div></div>
+      <div class="{$h3} hex even"><div class="left"></div><div class="middle"><p>h3</p></div><div class="right"></div></div>
+      <div class="{$h4} hex     "><div class="left"></div><div class="middle"><p>h4</p></div><div class="right"></div></div>
+      <div class="{$i4} hex even"><div class="left"></div><div class="middle"><p>i4</p></div><div class="right"></div></div>
+      <div class="{$i5} hex     "><div class="left"></div><div class="middle"><p>i5</p></div><div class="right"></div></div>
+      <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
-      <div class="${g1} hex     "><div class="left"></div><div class="middle"><p>g1</p></div><div class="right"></div></div>
-      <div class="${h1} hex even"><div class="left"></div><div class="middle"><p>h1</p></div><div class="right"></div></div>
-      <div class="${h2} hex     "><div class="left"></div><div class="middle"><p>h2</p></div><div class="right"></div></div>
-      <div class="${i2} hex even"><div class="left"></div><div class="middle"><p>i2</p></div><div class="right"></div></div>
-      <div class="${i3} hex     "><div class="left"></div><div class="middle"><p>i3</p></div><div class="right"></div></div>
+      <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
+    </div>
+    <div class="hex-row">
+      <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
+      <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
+      <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
+      <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
+      <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
+      <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
+      <div class="{$g1} hex     "><div class="left"></div><div class="middle"><p>g1</p></div><div class="right"></div></div>
+      <div class="{$h1} hex even"><div class="left"></div><div class="middle"><p>h1</p></div><div class="right"></div></div>
+      <div class="{$h2} hex     "><div class="left"></div><div class="middle"><p>h2</p></div><div class="right"></div></div>
+      <div class="{$i2} hex even"><div class="left"></div><div class="middle"><p>i2</p></div><div class="right"></div></div>
+      <div class="{$i3} hex     "><div class="left"></div><div class="middle"><p>i3</p></div><div class="right"></div></div>
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
@@ -346,7 +346,7 @@
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
-      <div class="${i1} hex     "><div class="left"></div><div class="middle"><p>i1</p></div><div class="right"></div></div>
+      <div class="{$i1} hex     "><div class="left"></div><div class="middle"><p>i1</p></div><div class="right"></div></div>
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="      hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
