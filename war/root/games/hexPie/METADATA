@@ -1,0 +1,7 @@
+{
+  "gameName":    "Hex w/Pie",
+  "rulesheet":   "hex.kif",
+  "description": "hex.txt",
+  "stylesheet":  "hex.xsl",
+  "curator":     "arr"
+}
