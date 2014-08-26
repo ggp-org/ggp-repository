@@ -1,0 +1,6 @@
+{
+  "gameName": "Skirmish (variant)",
+
+  "rulesheet": "skirmishNew.kif",
+  "stylesheet": "skirmishNew.xsl"
+}
