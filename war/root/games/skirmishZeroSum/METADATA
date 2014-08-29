@@ -1,0 +1,6 @@
+{
+  "gameName": "Skirmish (zero-sum)",
+
+  "rulesheet": "skirmishZeroSum.kif",
+  "stylesheet": "skirmishZeroSum.xsl"
+}
