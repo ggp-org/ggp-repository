@@ -1,5 +1,7 @@
 package ggp.repository.base;
 
+import external.JSON.JSONException;
+import external.JSON.JSONObject;
 import ggp.repository.MetadataCompleter;
 
 import java.io.BufferedReader;
@@ -9,9 +11,6 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class BaseRepository {
     public static final String repositoryRootDirectory = "http://games.ggp.org/base";    
@@ -197,6 +196,7 @@ public class BaseRepository {
         while( (line = br.readLine()) != null ) {
             response += line + "\n";
         }
+        br.close();
         
         return response;
     }

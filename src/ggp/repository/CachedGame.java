@@ -1,5 +1,7 @@
 package ggp.repository;
 
+import external.JSON.JSONException;
+import external.JSON.JSONObject;
 import ggp.repository.MetadataCompleter;
 
 import org.ggp.galaxy.shared.persistence.Persistence;
@@ -12,9 +14,6 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Text;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 @PersistenceCapable
 @Inheritance(strategy=InheritanceStrategy.SUBCLASS_TABLE)

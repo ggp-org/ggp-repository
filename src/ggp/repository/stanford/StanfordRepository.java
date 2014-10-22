@@ -5,11 +5,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.ggp.galaxy.shared.loader.RemoteResourceLoader;
+import org.ggp.base.util.loader.RemoteResourceLoader;
 import org.ggp.galaxy.shared.website.CachedStaticServlet;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import external.JSON.JSONArray;
+import external.JSON.JSONException;
+import external.JSON.JSONObject;
 
 public class StanfordRepository {
     public static byte[] getResponseBytesForURI(String reqURI) throws IOException {

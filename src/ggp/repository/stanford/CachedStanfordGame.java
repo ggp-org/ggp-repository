@@ -1,16 +1,16 @@
 package ggp.repository.stanford;
 
+import external.JSON.JSONException;
+import external.JSON.JSONObject;
 import ggp.repository.CachedGame;
+
+import org.ggp.base.util.loader.RemoteResourceLoader;
 import org.ggp.galaxy.shared.persistence.Persistence;
 
 import java.io.IOException;
 import java.util.Set;
 
 import javax.jdo.annotations.PersistenceCapable;
-
-import org.ggp.galaxy.shared.loader.RemoteResourceLoader;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 @PersistenceCapable
 public class CachedStanfordGame extends CachedGame {

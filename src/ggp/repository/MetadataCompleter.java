@@ -2,10 +2,11 @@ package ggp.repository;
 
 import java.util.List;
 
-import org.ggp.galaxy.shared.game.Game;
-import org.ggp.galaxy.shared.statemachine.Role;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.ggp.base.util.game.Game;
+import org.ggp.base.util.statemachine.Role;
+
+import external.JSON.JSONException;
+import external.JSON.JSONObject;
 
 public class MetadataCompleter {
 	/**

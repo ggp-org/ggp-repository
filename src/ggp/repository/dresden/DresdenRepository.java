@@ -5,11 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.ggp.galaxy.shared.loader.RemoteResourceLoader;
+import org.ggp.base.util.loader.RemoteResourceLoader;
 import org.ggp.galaxy.shared.website.CachedStaticServlet;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import external.JSON.JSONArray;
+import external.JSON.JSONException;
+import external.JSON.JSONObject;
 
 public class DresdenRepository {
     public static byte[] getResponseBytesForURI(String reqURI) throws IOException {
