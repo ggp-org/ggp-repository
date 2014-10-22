@@ -5,5 +5,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/ggp-appengine-common.jar"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/ggp-base.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-14.0.1.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
