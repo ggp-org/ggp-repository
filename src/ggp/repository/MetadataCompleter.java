@@ -1,5 +1,6 @@
 package ggp.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.ggp.base.util.game.Game;
@@ -21,7 +22,9 @@ public class MetadataCompleter {
 	 */
 	public static void completeMetadataFromRulesheet(JSONObject theMetaJSON, String theRulesheet) throws JSONException {
         List<Role> theRoles = Role.computeRoles(Game.createEphemeralGame(Game.preprocessRulesheet(theRulesheet)).getRules());
-        theMetaJSON.put("roleNames", theRoles);
+        List<String> theRoleNames = new ArrayList<String>();
+        for (Role r : theRoles) theRoleNames.add(r.getName().getValue());
+        theMetaJSON.put("roleNames", theRoleNames);
         theMetaJSON.put("numRoles", theRoles.size());
 	}
 }
