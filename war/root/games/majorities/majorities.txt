@@ -1,0 +1,1 @@
+The aim of the game is to control a majority of the (three) directions.  To control a direction, a player must control a majority of lines in that direction.  To control a line, a player must have stones on a majority of the hexes.
