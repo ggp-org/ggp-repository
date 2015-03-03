@@ -11,30 +11,43 @@
   (role red)
   (role blue)
 
-  (<= (base (cell ?m ?n ?role))
+
+  (<= (base (cell ?m ?n ?r))
       (row ?m)
       (col ?n)
-      (role ?role))
+      (role ?r))
 
-  (<= (base (control ?role))
-      (role ?role))
+  (<= (base (control ?r))
+      (role ?r))
 
-  (<= (base (lastcontrol ?role))
-      (role ?role))
+  (<= (base (lastcontrol ?r))
+      (role ?r))
 
-  (<= (base (line_count ?line_id ?role ?count))
-      (line_id ?line_id)
-      (role ?role)
+  (<= (base (line_count ?id ?r ?count))
+      (line_id ?id)
+      (role ?r)
+      (num ?count))
+
+  (<= (base (num_letter_lines ?r ?count))
+      (role ?r)
+      (num ?count))
+
+  (<= (base (num_number_lines ?r ?count))
+      (role ?r)
+      (num ?count))
+
+  (<= (base (num_vertical_lines ?r ?count))
+      (role ?r)
       (num ?count))
 
 
-  (<= (input ?role (place ?m ?n))
-      (role ?role)
+  (<= (input ?r (place ?m ?n))
+      (role ?r)
       (row ?m)
       (col ?n))
 
-  (<= (input ?role noop)
-      (role ?role))
+  (<= (input ?r noop)
+      (role ?r))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
@@ -48,9 +61,18 @@
   (init (control red))
   (init (lastcontrol red))
 
-  (<= (init (line_count ?line_id ?role 0))
-      (line_id ?line_id)
-      (role ?role))
+  (<= (init (line_count ?id ?r 0))
+      (line_id ?id)
+      (role ?r))
+
+  (<= (init (num_letter_lines ?r 0))
+      (role ?r))
+
+  (<= (init (num_number_lines ?r 0))
+      (role ?r))
+
+  (<= (init (num_vertical_lines ?r 0))
+      (role ?r))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
@@ -62,8 +84,8 @@
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (<= (legal ?role (place ?m ?n))
-      (true (control ?role))
+  (<= (legal ?r (place ?m ?n))
+      (true (control ?r))
       (row ?m)
       (col ?n)
       (not (true (cell ?m ?n red)))
@@ -89,17 +111,20 @@
 ;;;   complete history.  So when a player has 2 stones on a line, the props for
 ;;;   0 and 1 stones will also be set.)
 ;;;
+;;; - If a player has just gained a line this turn, increment the number of
+;;;   lines.  (Again, we keep a history.)
+;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (<= (next (cell ?m ?n ?role))
-      (does ?role (place ?m ?n)))
+  (<= (next (cell ?m ?n ?r))
+      (does ?r (place ?m ?n)))
 
-  (<= (next (cell ?m ?n ?role))
-      (true (cell ?m ?n ?role)))
+  (<= (next (cell ?m ?n ?r))
+      (true (cell ?m ?n ?r)))
 
 
-  (<= (next (lastcontrol ?role))
-      (true (control ?role)))
+  (<= (next (lastcontrol ?r))
+      (true (control ?r)))
 
   (<= (next (control red))
       (true (lastcontrol blue)))
@@ -108,14 +133,48 @@
       (true (lastcontrol red)))
 
 
-  (<= (next (line_count ?line_id ?role ?count))
-      (true (line_count ?line_id ?role ?count)))
+  (<= (next (line_count ?id ?r ?count))
+      (true (line_count ?id ?r ?count)))
 
-  (<= (next (line_count ?line_id ?role ?count))
-      (true (line_count ?line_id ?role ?prev))
+  (<= (next (line_count ?id ?r ?count))
+      (true (line_count ?id ?r ?prev))
       (succ ?prev ?count)
-      (does ?role (place ?m ?n))
-      (in_line ?line_id ?m ?n))
+      (does ?r (place ?m ?n))
+      (in_line ?id ?m ?n))
+
+
+  (<= (next (num_letter_lines ?r ?count))
+      (true (num_letter_lines ?r ?count)))
+
+  (<= (next (num_letter_lines ?r ?count))
+      (true (num_letter_lines ?r ?prev))
+      (succ ?prev ?count)
+      (does ?r (place ?m ?n))
+      (in_line ?id ?m ?n)
+      (row ?id)
+      (one_short_of_line_majority ?id ?r))
+
+  (<= (next (num_number_lines ?r ?count))
+      (true (num_number_lines ?r ?count)))
+
+  (<= (next (num_number_lines ?r ?count))
+      (true (num_number_lines ?r ?prev))
+      (succ ?prev ?count)
+      (does ?r (place ?m ?n))
+      (in_line ?id ?m ?n)
+      (col ?id)
+      (one_short_of_line_majority ?id ?r))
+
+  (<= (next (num_vertical_lines ?r ?count))
+      (true (num_vertical_lines ?r ?count)))
+
+  (<= (next (num_vertical_lines ?r ?count))
+      (true (num_vertical_lines ?r ?prev))
+      (succ ?prev ?count)
+      (does ?r (place ?m ?n))
+      (in_line ?id ?m ?n)
+      (ver ?id)
+      (one_short_of_line_majority ?id ?r))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
@@ -165,14 +224,14 @@
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (<= (line_id ?line_id)
-      (row ?line_id))
+  (<= (line_id ?id)
+      (row ?id))
 
-  (<= (line_id ?line_id)
-      (col ?line_id))
+  (<= (line_id ?id)
+      (col ?id))
 
-  (<= (line_id ?line_id)
-      (ver ?line_id))
+  (<= (line_id ?id)
+      (ver ?id))
 
   (<= (in_line ?m ?m ?n)
       (row ?m)
@@ -182,78 +241,27 @@
       (row ?m)
       (col ?n))
 
-  (<= (in_line ?line_id ?m ?n)
-      (in_ver ?line_id ?m ?n))
+  (<= (in_line ?id ?m ?n)
+      (in_ver ?id ?m ?n))
 
-  (<= (has_line_majority ?line_id ?role)
-      (true (line_count ?line_id ?role ?count))
-      (maj ?line_id ?count))
+  (<= (has_line_majority ?id ?r)
+      (true (line_count ?id ?r ?count))
+      (maj ?id ?count))
 
-  (<= (majority_letters ?role)
-      (row ?id1)
-      (row ?id2)
-      (row ?id3)
-      (row ?id4)
-      (row ?id5)
-      (distinct ?id1 ?id2)
-      (distinct ?id1 ?id3)
-      (distinct ?id1 ?id4)
-      (distinct ?id1 ?id5)
-      (distinct ?id2 ?id3)
-      (distinct ?id2 ?id4)
-      (distinct ?id2 ?id5)
-      (distinct ?id3 ?id4)
-      (distinct ?id3 ?id5)
-      (distinct ?id4 ?id5)
-      (has_line_majority ?id1 ?role)
-      (has_line_majority ?id2 ?role)
-      (has_line_majority ?id3 ?role)
-      (has_line_majority ?id4 ?role)
-      (has_line_majority ?id5 ?role))
+  (<= (one_short_of_line_majority ?id ?r)
+      (maj ?id ?maj_req)
+      (succ ?one_short ?maj_req)
+      (true (line_count ?id ?r ?one_short))
+      (not (true (line_count ?id ?r ?maj_req))))
 
-  (<= (majority_numbers ?role)
-      (col ?id1)
-      (col ?id2)
-      (col ?id3)
-      (col ?id4)
-      (col ?id5)
-      (distinct ?id1 ?id2)
-      (distinct ?id1 ?id3)
-      (distinct ?id1 ?id4)
-      (distinct ?id1 ?id5)
-      (distinct ?id2 ?id3)
-      (distinct ?id2 ?id4)
-      (distinct ?id2 ?id5)
-      (distinct ?id3 ?id4)
-      (distinct ?id3 ?id5)
-      (distinct ?id4 ?id5)
-      (has_line_majority ?id1 ?role)
-      (has_line_majority ?id2 ?role)
-      (has_line_majority ?id3 ?role)
-      (has_line_majority ?id4 ?role)
-      (has_line_majority ?id5 ?role))
+  (<= (majority_letters ?r)
+      (true (num_letter_lines ?r 5)))
 
-  (<= (majority_verticals ?role)
-      (ver ?id1)
-      (ver ?id2)
-      (ver ?id3)
-      (ver ?id4)
-      (ver ?id5)
-      (distinct ?id1 ?id2)
-      (distinct ?id1 ?id3)
-      (distinct ?id1 ?id4)
-      (distinct ?id1 ?id5)
-      (distinct ?id2 ?id3)
-      (distinct ?id2 ?id4)
-      (distinct ?id2 ?id5)
-      (distinct ?id3 ?id4)
-      (distinct ?id3 ?id5)
-      (distinct ?id4 ?id5)
-      (has_line_majority ?id1 ?role)
-      (has_line_majority ?id2 ?role)
-      (has_line_majority ?id3 ?role)
-      (has_line_majority ?id4 ?role)
-      (has_line_majority ?id5 ?role))
+  (<= (majority_numbers ?r)
+      (true (num_number_lines ?r 5)))
+
+  (<= (majority_verticals ?r)
+      (true (num_vertical_lines ?r 5)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
