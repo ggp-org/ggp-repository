@@ -1,0 +1,7 @@
+{
+  "gameName":    "Kalah 5x2x3",
+  "rulesheet":   "kalah.kif",
+  "description": "kalah.txt",
+  "stylesheet":  "kalah.xsl",
+  "curator":     "arr"
+}
