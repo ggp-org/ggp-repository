@@ -12,6 +12,52 @@
 (role black)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; BASE & INPUT Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (base (cellHolds ?x ?y ?p))
+    (index ?x)
+    (index ?y)
+    (not (holeCell ?x ?y))
+    (role ?p))
+(<= (base (control ?p))
+    (role ?p))
+(<= (base (cellOffLimits ?x ?y))
+    (holeCell ?x ?y))
+(<= (input ?p noop)
+    (role ?p))
+(<= (input white (move ?x ?y1 ?x ?y2))
+    (index ?x)
+    (plusplus ?y1 ?y2)
+    (not (holeCell ?x ?y1))
+    (not (holeCell ?x ?y2)))
+(<= (input white (move ?x1 ?y1 ?x2 ?y2))
+    (plusplus ?y1 ?y2)
+    (plusplus ?x1 ?x2)
+    (not (holeCell ?x1 ?y1))
+    (not (holeCell ?x2 ?y2)))
+(<= (input white (move ?x1 ?y1 ?x2 ?y2))
+    (plusplus ?y1 ?y2)
+    (plusplus ?x2 ?x1)
+    (not (holeCell ?x1 ?y1))
+    (not (holeCell ?x2 ?y2)))
+(<= (input black (move ?x ?y1 ?x ?y2))
+    (index ?x)
+    (plusplus ?y2 ?y1)
+    (not (holeCell ?x ?y1))
+    (not (holeCell ?x ?y2)))
+(<= (input black (move ?x1 ?y1 ?x2 ?y2))
+    (plusplus ?y2 ?y1)
+    (plusplus ?x1 ?x2)
+    (not (holeCell ?x1 ?y1))
+    (not (holeCell ?x2 ?y2)))
+(<= (input black (move ?x1 ?y1 ?x2 ?y2))
+    (plusplus ?y2 ?y1)
+    (plusplus ?x2 ?x1)
+    (not (holeCell ?x1 ?y1))
+    (not (holeCell ?x2 ?y2)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; INIT Relations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -49,10 +95,9 @@
 (init (cellHolds 7 8 black))
 (init (cellHolds 8 8 black))
 
-(init (cellOffLimits 3 3))
-(init (cellOffLimits 3 6))
-(init (cellOffLimits 6 3))
-(init (cellOffLimits 6 6))
+; cellOffLimits is a state proposition so it can be accessed by the visualization.
+(<= (init (cellOffLimits ?x ?y))
+    (holeCell ?x ?y))
 
 (init (control white))
 
@@ -194,3 +239,7 @@
 
 (index 1) (index 2) (index 3) (index 4) (index 5) (index 6) (index 7) (index 8)
 (plusplus 1 2)  (plusplus 2 3)  (plusplus 3 4)  (plusplus 4 5)  (plusplus 5 6)  (plusplus 6 7)  (plusplus 7 8)
+(holeCell 3 3)
+(holeCell 3 6)
+(holeCell 6 3)
+(holeCell 6 6)

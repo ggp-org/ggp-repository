@@ -15,10 +15,13 @@
 ;;; INIT Relations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(init (cell 2 3 hole))
-(init (cell 3 4 hole))
-(init (cell 4 3 hole))
-(init (cell 5 4 hole))
+(<= (init (cell ?x ?y hole))
+    (holeCell ?x ?y))
+
+(holeCell 2 3)
+(holeCell 3 4)
+(holeCell 4 3)
+(holeCell 5 4)
 
 (init (cell 1 1 white))
 (init (cell 2 1 white))
@@ -178,3 +181,52 @@
 
 (index 1) (index 2) (index 3) (index 4) (index 5) (index 6)
 (plusplus 1 2)  (plusplus 2 3)  (plusplus 3 4)  (plusplus 4 5)  (plusplus 5 6)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Bases and inputs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (base (cell ?x ?y ?player))
+	(index ?x)
+	(index ?y)
+	(not (holeCell ?x ?y))
+	(role ?player))
+(<= (base (control ?player))
+	(role ?player))
+(<= (base (cell ?x ?y hole))
+    (holeCell ?x ?y))
+	
+(<= (input white (move ?x ?y1 ?x ?y2))
+	(index ?x)
+    (plusplus ?y1 ?y2)
+    (not (holeCell ?x ?y1))
+    (not (holeCell ?x ?y2)))
+(<= (input white (move ?x1 ?y1 ?x2 ?y2))
+    (plusplus ?y1 ?y2)
+    (plusplus ?x1 ?x2)
+    (not (holeCell ?x1 ?y1))
+    (not (holeCell ?x2 ?y2)))
+(<= (input white (move ?x1 ?y1 ?x2 ?y2))
+    (plusplus ?y1 ?y2)
+    (plusplus ?x2 ?x1)
+    (not (holeCell ?x1 ?y1))
+    (not (holeCell ?x2 ?y2)))
+
+(<= (input black (move ?x ?y1 ?x ?y2))
+	(index ?x)
+    (plusplus ?y2 ?y1)
+    (not (holeCell ?x ?y1))
+    (not (holeCell ?x ?y2)))
+(<= (input black (move ?x1 ?y1 ?x2 ?y2))
+    (plusplus ?y2 ?y1)
+    (plusplus ?x1 ?x2)
+    (not (holeCell ?x1 ?y1))
+    (not (holeCell ?x2 ?y2)))
+(<= (input black (move ?x1 ?y1 ?x2 ?y2))
+    (plusplus ?y2 ?y1)
+    (plusplus ?x2 ?x1)
+    (not (holeCell ?x1 ?y1))
+    (not (holeCell ?x2 ?y2)))
+	
+(<= (input ?player noop)
+	(role ?player))

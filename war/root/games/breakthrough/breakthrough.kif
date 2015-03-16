@@ -19,10 +19,33 @@
 ;;; BASE & INPUT Relations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(<= (base (cellHolds ?x ?y ?p)) (index ?x) (index ?y) (role ?p))
-(<= (base (control ?p)) (role ?p))
-(<= (input ?p noop) (role ?p))
-(<= (input ?p (move ?x1 ?y1 ?x2 ?y2)) (role ?p) (index ?x1) (index ?x2) (index ?y1) (index ?y2))
+(<= (base (cellHolds ?x ?y ?p))
+    (index ?x)
+    (index ?y)
+    (role ?p))
+(<= (base (control ?p))
+    (role ?p))
+
+(<= (input ?p noop)
+    (role ?p))
+(<= (input white (move ?x ?y1 ?x ?y2))
+    (index ?x)
+    (succ ?y1 ?y2))
+(<= (input white (move ?x1 ?y1 ?x2 ?y2))
+    (succ ?y1 ?y2)
+    (succ ?x1 ?x2))
+(<= (input white (move ?x1 ?y1 ?x2 ?y2))
+    (succ ?y1 ?y2)
+    (succ ?x2 ?x1))
+(<= (input black (move ?x ?y1 ?x ?y2))
+    (index ?x)
+    (succ ?y2 ?y1))
+(<= (input black (move ?x1 ?y1 ?x2 ?y2))
+    (succ ?y2 ?y1)
+    (succ ?x1 ?x2))
+(<= (input black (move ?x1 ?y1 ?x2 ?y2))
+    (succ ?y2 ?y1)
+    (succ ?x2 ?x1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; INIT Relations
@@ -103,7 +126,7 @@
     (succ ?y2 ?y1)
     (succ ?x2 ?x1)
     (not (true (cellHolds ?x2 ?y2 black))))
-    
+
 (<= (legal white noop)
     (true (control black)))
 (<= (legal black noop)
