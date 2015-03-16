@@ -1,0 +1,589 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Kalah (a.k.a. Kalaha and Mancala).
+;;;
+;;; 6 pits (x2), 4 seeds.
+;;;
+;;;   /-------------------------------------\
+;;;   |   |    |    |    |    |    |    |   |
+;;;   | N | 12 | 11 | 10 |  9 |  8 |  7 | S |
+;;;   | O |    |    |    |    |    |    | O |
+;;;   | R |-----------------------------| U |
+;;;   | T |    |    |    |    |    |    | T |
+;;;   | H |  1 |  2 |  3 |  4 |  5 |  6 | H |
+;;;   |   |    |    |    |    |    |    |   |
+;;;   \-------------------------------------/
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Roles.
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(role north)
+(role south)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Base propositions.
+;;;
+;;; - Number of seeds in each pit (or scoring pit).
+;;; - Number of seeds in each hand.
+;;; - Which pit (or scoring pit) we're at.  (Only valid when sowing seeds.)
+;;; - Which role's turn is it.
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (base (pit ?p ?n))
+  (anypit ?p)
+  (number ?n))
+
+(<= (base (hand ?r ?n))
+  (role ?r)
+  (number ?n))
+
+(<= (base (at ?p))
+  (anypit ?p))
+
+(<= (base (control ?r))
+  (role ?r))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Input propositions.
+;;;
+;;; - No-op (Primarily when it isn't a role's turn).
+;;; - Pick up all the seeds from a pit into hand.
+;;; - Put a seed into the next pit (including scoring pits).
+;;; - Clear a pit into the scoring pot (at the end of the game).
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (input ?r noop)
+  (role ?r))
+
+(<= (input ?r (pick ?p))
+  (role ?r)
+  (normalpit ?p))
+
+(<= (input ?r (put ?p))
+  (role ?r)
+  (anypit ?p))
+
+(<= (input ?r (clear ?p))
+  (role ?r)
+  (normalpit ?p))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Initially true propositions.
+;;;
+;;; - 4 seeds in each pit.
+;;; - No seeds in the scoring pits.
+;;; - No seeds in hand.
+;;; - North to play.
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (init (pit ?p s4))
+  (normalpit ?p))
+
+(<= (init (pit ?p s0))
+  (scoringpit ?r ?p))
+
+(<= (init (hand ?r s0))
+  (role ?r))
+
+(init (control north))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Legal moves.
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (legal ?r noop)
+  (role ?r)
+  (true (control ?r2))
+  (distinct ?r ?r2))
+
+(<= (legal ?r noop)
+  (true (control ?r))
+  (allempty ?r)
+  (true (hand ?r s0)))
+
+(<= (legal ?r (clear ?p))
+  (true (control ?r))
+  (owner ?r ?p)
+  (not (true (pit ?p s0)))
+  (role ?r2)
+  (distinct ?r ?r2)
+  (allempty ?r2))
+
+(<= (legal ?r (pick ?p))
+  (true (control ?r))
+  (true (hand ?r s0))
+  (owner ?r ?p)
+  (not (true (pit ?p s0)))
+  (role ?r2)
+  (distinct ?r ?r2)
+  (not (allempty ?r2)))
+
+(<= (legal ?r (put ?p))
+  (true (control ?r))
+  (true (at ?p))
+  (true (hand ?r ?n))
+  (distinct ?n s0))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Game end.
+;;;
+;;; - Game ends when all the (non-scoring) pits are empty (for both roles).
+;;; - Score is mapped from the number of seeds in the scoring pits.
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= terminal
+  (allempty north)
+  (allempty south))
+
+(<= (goal ?r ?score)
+  (scoringpit ?r ?p)
+  (true (pit ?p ?n))
+  (map_to_score ?n ?score))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Next state.
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (next (control ?r))
+  (does ?r (pick ?p)))
+
+(<= (next (control ?r))
+  (does ?r (clear ?p)))
+
+(<= (next (control ?r))
+  (does ?r (put ?p))
+  (true (hand ?r ?n))
+  (distinct ?n s1))
+
+(<= (next (control ?r))
+  (does ?r (put ?p))
+  (true (hand ?r s1))
+  (scoringpit ?r ?p))
+
+(<= (next (control ?r2))
+  (does ?r (put ?p))
+  (true (hand ?r s1))
+  (not (scoringpit ?r ?p))
+  (role ?r2)
+  (distinct ?r2 ?r))
+
+(<= (next (control ?r2))
+  (true (control ?r))
+  (does ?r noop)
+  (role ?r2)
+  (distinct ?r2 ?r))
+
+
+(<= (next (hand ?r ?n))
+  (does ?r (pick ?p))
+  (true (pit ?p ?n)))
+
+(<= (next (hand ?r ?n))
+  (does ?r (put ?p))
+  (true (hand ?r ?n1))
+  (succ ?n ?n1))
+
+(<= (next (hand ?r ?n))
+  (does ?r noop)
+  (true (hand ?r ?n)))
+
+(<= (next (hand ?r ?n))
+  (does ?r (clear ?p))
+  (true (hand ?r ?n)))
+
+
+(<= (next (at ?p2))
+  (does ?r (pick ?p))
+  (nextpit ?r ?p ?p2))
+
+(<= (next (at ?p2))
+  (does ?r (put ?p))
+  (true (hand ?r ?n))
+  (distinct ?n s1)
+  (nextpit ?r ?p ?p2))
+
+
+(<= (next (pit ?p s0))
+  (does ?r (clear ?p)))
+
+(<= (next (pit ?p ?n2))
+  (does ?r (clear ?p2))
+  (scoringpit ?r ?p)
+  (true (pit ?p ?n))
+  (true (pit ?p2 ?n1))
+  (plus ?n ?n1 ?n2))
+
+(<= (next (pit ?p ?n))
+  (true (pit ?p ?n))
+  (does ?r (clear ?p2))
+  (distinct ?p ?p2)
+  (not (scoringpit ?r ?p)))
+
+(<= (next (pit ?p s0))
+  (does ?r (pick ?p)))
+(<= (next (pit ?p ?n))
+  (does ?r (pick ?p2))
+  (true (pit ?p ?n))
+  (distinct ?p ?p2))
+
+(<= (next (pit ?p ?n2))
+  (does ?r (put ?p))
+  (not (true (hand ?r s1)))
+  (true (pit ?p ?n))
+  (succ ?n ?n2))
+
+(<= (next (pit ?p ?n))
+  (does ?r (put ?p2))
+  (true (pit ?p ?n))
+  (distinct ?p ?p2)
+  (not (true (hand ?r s1))))
+
+(<= (next (pit ?p ?n2))
+  (does ?r (put ?p))
+  (true (hand ?r s1))
+  (not (emptyonlastput ?r ?p ?p))
+  (true (pit ?p ?n))
+  (succ ?n ?n2))
+
+(<= (next (pit ?p ?n))
+  (does ?r (put ?p2))
+  (true (pit ?p ?n))
+  (distinct ?p ?p2)
+  (true (hand ?r s1))
+  (not (emptyonlastput ?r ?p2 ?p2)))
+
+(<= (next (pit ?p s0))
+  (does ?r (put ?p2))
+  (true (hand ?r s1))
+  (emptyonlastput ?r ?p2 ?p))
+
+(<= (next (pit ?p ?n2))
+  (does ?r (put ?p2))
+  (true (hand ?r s1))
+  (scoringpit ?r ?p)
+  (emptyonlastput ?r ?p2 ?p2)
+  (opposite ?p2 ?p3)
+  (true (pit ?p ?n))
+  (true (pit ?p3 ?np3))
+  (plus ?n ?np3 ?n1)
+  (succ ?n1 ?n2))
+
+(<= (next (pit ?p ?n))
+  (does ?r (put ?p2))
+  (true (hand ?r s1))
+  (true (pit ?p ?n))
+  (distinct ?p ?p2)
+  (not (scoringpit ?r ?p))
+  (not (opposite ?p ?p2))
+  (emptyonlastput ?r ?p2 ?p2))
+
+(<= (next (pit ?p ?n))
+  (does north noop)
+  (does south noop)
+  (true (pit ?p ?n)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Views.
+;;;
+;;; - Emptiness checking.
+;;; - The 'opposite' relation is symmetric.
+;;; - Addition (recursive).
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (allempty north)
+  (true (pit p7  s0))
+  (true (pit p8  s0))
+  (true (pit p9  s0))
+  (true (pit p10 s0))
+  (true (pit p11 s0))
+  (true (pit p12 s0)))
+
+(<= (allempty south)
+  (true (pit p1 s0))
+  (true (pit p2 s0))
+  (true (pit p3 s0))
+  (true (pit p4 s0))
+  (true (pit p5 s0))
+  (true (pit p6 s0)))
+
+(<= (some_not_empty ?r)
+  (owner ?r ?p)
+  (true (pit ?p ?n))
+  (distinct ?n s0))
+
+(<= (emptyonlastput ?r ?p ?p)
+  (owner ?r ?p)
+  (true (pit ?p s0)))
+
+(<= (emptyonlastput ?r ?p ?p2)
+  (opposite ?p ?p2)
+  (owner ?r ?p)
+  (true (pit ?p s0)))
+
+(<= (opposite ?p1 ?p2)
+  (basicopposite ?p1 ?p2))
+
+(<= (opposite ?p1 ?p2)
+  (basicopposite ?p2 ?p1))
+
+(<= (plus ?x s0 ?x)
+  (number ?x))
+
+(<= (plus ?x ?y ?z)
+  (succ ?y2 ?y)
+  (succ ?x ?x2)
+  (plus ?x2 ?y2 ?z))
+
+(<= (anypit ?p)
+  (normalpit ?p))
+
+(<= (anypit ?p)
+  (scoringpit ?r ?p))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Data.
+;;;
+;;; - Names of the pits.
+;;; - Pit owners (regular and scoring pits).
+;;; - Pit layout.
+;;;   - Which pits are opposite each other (for captures).
+;;;   - Sequence of pits when sowing seeds (different for each role).
+;;; - Score map.  (Strong incentive to win.  Thereafter, small incentive to
+;;;   finish with more seeds.)
+;;; - Numbers (including successors).
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(normalpit p1)
+(normalpit p2)
+(normalpit p3)
+(normalpit p4)
+(normalpit p5)
+(normalpit p6)
+(normalpit p7)
+(normalpit p8)
+(normalpit p9)
+(normalpit p10)
+(normalpit p11)
+(normalpit p12)
+
+(scoringpit north pwinnorth)
+(scoringpit south pwinsouth)
+
+(owner north p7)
+(owner north p8)
+(owner north p9)
+(owner north p10)
+(owner north p11)
+(owner north p12)
+(owner south p1)
+(owner south p2)
+(owner south p3)
+(owner south p4)
+(owner south p5)
+(owner south p6)
+
+(basicopposite p1 p12)
+(basicopposite p2 p11)
+(basicopposite p3 p10)
+(basicopposite p4 p9)
+(basicopposite p5 p8)
+(basicopposite p6 p7)
+
+(nextpit south p1 p2)
+(nextpit south p2 p3)
+(nextpit south p3 p4)
+(nextpit south p4 p5)
+(nextpit south p5 p6)
+(nextpit south p6 pwinsouth)
+(nextpit south pwinsouth p7)
+(nextpit south p7 p8)
+(nextpit south p8 p9)
+(nextpit south p9 p10)
+(nextpit south p10 p11)
+(nextpit south p11 p12)
+(nextpit south p12 p1)
+
+(nextpit north p1 p2)
+(nextpit north p2 p3)
+(nextpit north p3 p4)
+(nextpit north p4 p5)
+(nextpit north p5 p6)
+(nextpit north p6 p7)
+(nextpit north p7 p8)
+(nextpit north p8 p9)
+(nextpit north p9 p10)
+(nextpit north p10 p11)
+(nextpit north p11 p12)
+(nextpit north p12 pwinnorth)
+(nextpit north pwinnorth p1)
+
+(map_to_score s0 0)
+(map_to_score s1 0)
+(map_to_score s2 0)
+(map_to_score s3 0)
+(map_to_score s4 0)
+(map_to_score s5 0)
+(map_to_score s6 0)
+(map_to_score s7 0)
+(map_to_score s8 0)
+(map_to_score s9 0)
+(map_to_score s10 0)
+(map_to_score s11 0)
+(map_to_score s12 0)
+(map_to_score s13 0)
+(map_to_score s14 0)
+(map_to_score s15 0)
+(map_to_score s16 0)
+(map_to_score s17 0)
+(map_to_score s18 0)
+(map_to_score s19 0)
+(map_to_score s20 0)
+(map_to_score s21 0)
+(map_to_score s22 0)
+(map_to_score s23 0)
+(map_to_score s24 50)
+(map_to_score s25 88)
+(map_to_score s26 89)
+(map_to_score s27 89)
+(map_to_score s28 90)
+(map_to_score s29 90)
+(map_to_score s30 91)
+(map_to_score s31 91)
+(map_to_score s32 92)
+(map_to_score s33 92)
+(map_to_score s34 93)
+(map_to_score s35 93)
+(map_to_score s36 94)
+(map_to_score s37 94)
+(map_to_score s38 95)
+(map_to_score s39 95)
+(map_to_score s40 96)
+(map_to_score s41 96)
+(map_to_score s42 97)
+(map_to_score s43 97)
+(map_to_score s44 98)
+(map_to_score s45 98)
+(map_to_score s46 99)
+(map_to_score s47 99)
+(map_to_score s48 100)
+
+(number s0)
+(number s1)
+(number s2)
+(number s3)
+(number s4)
+(number s5)
+(number s6)
+(number s7)
+(number s8)
+(number s9)
+(number s10)
+(number s11)
+(number s12)
+(number s13)
+(number s14)
+(number s15)
+(number s16)
+(number s17)
+(number s18)
+(number s19)
+(number s20)
+(number s21)
+(number s22)
+(number s23)
+(number s24)
+(number s25)
+(number s26)
+(number s27)
+(number s28)
+(number s29)
+(number s30)
+(number s31)
+(number s32)
+(number s33)
+(number s34)
+(number s35)
+(number s36)
+(number s37)
+(number s38)
+(number s39)
+(number s40)
+(number s41)
+(number s42)
+(number s43)
+(number s44)
+(number s45)
+(number s46)
+(number s47)
+(number s48)
+
+(succ s0 s1)
+(succ s1 s2)
+(succ s2 s3)
+(succ s3 s4)
+(succ s4 s5)
+(succ s5 s6)
+(succ s6 s7)
+(succ s7 s8)
+(succ s8 s9)
+(succ s9 s10)
+(succ s10 s11)
+(succ s11 s12)
+(succ s12 s13)
+(succ s13 s14)
+(succ s14 s15)
+(succ s15 s16)
+(succ s16 s17)
+(succ s17 s18)
+(succ s18 s19)
+(succ s19 s20)
+(succ s20 s21)
+(succ s21 s22)
+(succ s22 s23)
+(succ s23 s24)
+(succ s24 s25)
+(succ s25 s26)
+(succ s26 s27)
+(succ s27 s28)
+(succ s28 s29)
+(succ s29 s30)
+(succ s30 s31)
+(succ s31 s32)
+(succ s32 s33)
+(succ s33 s34)
+(succ s34 s35)
+(succ s35 s36)
+(succ s36 s37)
+(succ s37 s38)
+(succ s38 s39)
+(succ s39 s40)
+(succ s40 s41)
+(succ s41 s42)
+(succ s42 s43)
+(succ s43 s44)
+(succ s44 s45)
+(succ s45 s46)
+(succ s46 s47)
+(succ s47 s48)
+

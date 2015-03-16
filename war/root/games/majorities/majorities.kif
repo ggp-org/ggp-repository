@@ -1,0 +1,447 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Majorities
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Components
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (role red)
+  (role blue)
+
+
+  (<= (base (cell ?m ?n ?r))
+      (row ?m)
+      (col ?n)
+      (role ?r))
+
+  (<= (base (control ?r))
+      (role ?r))
+
+  (<= (base (lastcontrol ?r))
+      (role ?r))
+
+  (<= (base (line_count ?id ?r ?count))
+      (line_id ?id)
+      (role ?r)
+      (num ?count))
+
+  (<= (base (num_letter_lines ?r ?count))
+      (role ?r)
+      (num ?count))
+
+  (<= (base (num_number_lines ?r ?count))
+      (role ?r)
+      (num ?count))
+
+  (<= (base (num_vertical_lines ?r ?count))
+      (role ?r)
+      (num ?count))
+
+
+  (<= (input ?r (place ?m ?n))
+      (role ?r)
+      (row ?m)
+      (col ?n))
+
+  (<= (input ?r noop)
+      (role ?r))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Initial state
+;;;
+;;; - Red plays first, but only gets to place one stone.
+;;; - Nobody has any stones in any lines.
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (init (control red))
+  (init (lastcontrol red))
+
+  (<= (init (line_count ?id ?r 0))
+      (line_id ?id)
+      (role ?r))
+
+  (<= (init (num_letter_lines ?r 0))
+      (role ?r))
+
+  (<= (init (num_number_lines ?r 0))
+      (role ?r))
+
+  (<= (init (num_vertical_lines ?r 0))
+      (role ?r))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Legal moves
+;;;
+;;; - On a player's turn, a stone can be placed on any unoccupied cell (that
+;;;   isn't out-out-bounds).
+;;; - The other player must no-op.
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (<= (legal ?r (place ?m ?n))
+      (true (control ?r))
+      (row ?m)
+      (col ?n)
+      (not (true (cell ?m ?n red)))
+      (not (true (cell ?m ?n blue)))
+      (not (oob ?m ?n)))
+
+  (<= (legal red noop)
+      (true (control blue)))
+
+  (<= (legal blue noop)
+      (true (control red)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Next
+;;;
+;;; - A cell has a player's stone if they place one there.
+;;; - Once placed, stones are never [re-]moved.
+;;;
+;;; - After the first turn, players get two turns in a row.
+;;;
+;;; - A player has 1 more stone on each line just played on.  (We also keep a
+;;;   complete history.  So when a player has 2 stones on a line, the props for
+;;;   0 and 1 stones will also be set.)
+;;;
+;;; - If a player has just gained a line this turn, increment the number of
+;;;   lines.  (Again, we keep a history.)
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (<= (next (cell ?m ?n ?r))
+      (does ?r (place ?m ?n)))
+
+  (<= (next (cell ?m ?n ?r))
+      (true (cell ?m ?n ?r)))
+
+
+  (<= (next (lastcontrol ?r))
+      (true (control ?r)))
+
+  (<= (next (control red))
+      (true (lastcontrol blue)))
+
+  (<= (next (control blue))
+      (true (lastcontrol red)))
+
+
+  (<= (next (line_count ?id ?r ?count))
+      (true (line_count ?id ?r ?count)))
+
+  (<= (next (line_count ?id ?r ?count))
+      (true (line_count ?id ?r ?prev))
+      (succ ?prev ?count)
+      (does ?r (place ?m ?n))
+      (in_line ?id ?m ?n))
+
+
+  (<= (next (num_letter_lines ?r ?count))
+      (true (num_letter_lines ?r ?count)))
+
+  (<= (next (num_letter_lines ?r ?count))
+      (true (num_letter_lines ?r ?prev))
+      (succ ?prev ?count)
+      (does ?r (place ?m ?n))
+      (in_line ?id ?m ?n)
+      (row ?id)
+      (one_short_of_line_majority ?id ?r))
+
+  (<= (next (num_number_lines ?r ?count))
+      (true (num_number_lines ?r ?count)))
+
+  (<= (next (num_number_lines ?r ?count))
+      (true (num_number_lines ?r ?prev))
+      (succ ?prev ?count)
+      (does ?r (place ?m ?n))
+      (in_line ?id ?m ?n)
+      (col ?id)
+      (one_short_of_line_majority ?id ?r))
+
+  (<= (next (num_vertical_lines ?r ?count))
+      (true (num_vertical_lines ?r ?count)))
+
+  (<= (next (num_vertical_lines ?r ?count))
+      (true (num_vertical_lines ?r ?prev))
+      (succ ?prev ?count)
+      (does ?r (place ?m ?n))
+      (in_line ?id ?m ?n)
+      (ver ?id)
+      (one_short_of_line_majority ?id ?r))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Goals
+;;;
+;;; - A player scores 100 if they have (at least) 2 of the 3 directions.
+;;; - Otherwise they score 0.
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (<= (goal ?r 100)
+      (role ?r)
+      (majority_numbers ?r)
+      (majority_letters ?r))
+
+  (<= (goal ?r 100)
+      (role ?r)
+      (majority_numbers ?r)
+      (majority_verticals ?r))
+
+  (<= (goal ?r 100)
+      (role ?r)
+      (majority_letters ?r)
+      (majority_verticals ?r))
+
+  (<= (goal ?r 0)
+      (role ?r)
+      (not (goal ?r 100)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Terminality
+;;;
+;;; The game is terminal when one of the players has won.  (When the board is
+;;; full, one of the players has always won, so there is no need for a step
+;;; count or 'open' relation.)
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (<= terminal
+      (role ?r)
+      (goal ?r 100))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Views
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (<= (line_id ?id)
+      (row ?id))
+
+  (<= (line_id ?id)
+      (col ?id))
+
+  (<= (line_id ?id)
+      (ver ?id))
+
+  (<= (in_line ?m ?m ?n)
+      (row ?m)
+      (col ?n))
+
+  (<= (in_line ?n ?m ?n)
+      (row ?m)
+      (col ?n))
+
+  (<= (in_line ?id ?m ?n)
+      (in_ver ?id ?m ?n))
+
+  (<= (has_line_majority ?id ?r)
+      (true (line_count ?id ?r ?count))
+      (maj ?id ?count))
+
+  (<= (one_short_of_line_majority ?id ?r)
+      (maj ?id ?maj_req)
+      (succ ?one_short ?maj_req)
+      (true (line_count ?id ?r ?one_short))
+      (not (true (line_count ?id ?r ?maj_req))))
+
+  (<= (majority_letters ?r)
+      (true (num_letter_lines ?r 5)))
+
+  (<= (majority_numbers ?r)
+      (true (num_number_lines ?r 5)))
+
+  (<= (majority_verticals ?r)
+      (true (num_vertical_lines ?r 5)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Data
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (row a)
+  (row b)
+  (row c)
+  (row d)
+  (row e)
+  (row f)
+  (row g)
+  (row h)
+  (row i)
+
+  (col 1)
+  (col 2)
+  (col 3)
+  (col 4)
+  (col 5)
+  (col 6)
+  (col 7)
+  (col 8)
+  (col 9)
+
+  (ver a5)
+  (ver a6)
+  (ver a7)
+  (ver a8)
+  (ver a9)
+  (ver b9)
+  (ver c9)
+  (ver d9)
+  (ver e9)
+
+  (in_ver a5 a 5)
+  (in_ver a5 b 4)
+  (in_ver a5 c 3)
+  (in_ver a5 d 2)
+  (in_ver a5 e 1)
+
+  (in_ver a6 a 6)
+  (in_ver a6 b 5)
+  (in_ver a6 c 4)
+  (in_ver a6 d 3)
+  (in_ver a6 e 2)
+  (in_ver a6 f 1)
+
+  (in_ver a7 a 7)
+  (in_ver a7 b 6)
+  (in_ver a7 c 5)
+  (in_ver a7 d 4)
+  (in_ver a7 e 3)
+  (in_ver a7 f 2)
+  (in_ver a7 g 1)
+
+  (in_ver a8 a 8)
+  (in_ver a8 b 7)
+  (in_ver a8 c 6)
+  (in_ver a8 d 5)
+  (in_ver a8 e 4)
+  (in_ver a8 f 3)
+  (in_ver a8 g 2)
+  (in_ver a8 h 1)
+
+  (in_ver a9 a 9)
+  (in_ver a9 b 8)
+  (in_ver a9 c 7)
+  (in_ver a9 d 6)
+  (in_ver a9 e 5)
+  (in_ver a9 f 4)
+  (in_ver a9 g 3)
+  (in_ver a9 h 2)
+  (in_ver a9 i 1)
+
+  (in_ver b9 b 9)
+  (in_ver b9 c 8)
+  (in_ver b9 d 7)
+  (in_ver b9 e 6)
+  (in_ver b9 f 5)
+  (in_ver b9 g 4)
+  (in_ver b9 h 3)
+  (in_ver b9 i 2)
+
+  (in_ver c9 c 9)
+  (in_ver c9 d 8)
+  (in_ver c9 e 7)
+  (in_ver c9 f 6)
+  (in_ver c9 g 5)
+  (in_ver c9 h 4)
+  (in_ver c9 i 3)
+
+  (in_ver d9 d 9)
+  (in_ver d9 e 8)
+  (in_ver d9 f 7)
+  (in_ver d9 g 6)
+  (in_ver d9 h 5)
+  (in_ver d9 i 4)
+
+  (in_ver e9 e 9)
+  (in_ver e9 f 8)
+  (in_ver e9 g 7)
+  (in_ver e9 h 6)
+  (in_ver e9 i 5)
+
+  (oob a 1)
+  (oob a 2)
+  (oob a 3)
+  (oob a 4)
+  (oob b 1)
+  (oob b 2)
+  (oob b 3)
+  (oob c 1)
+  (oob c 2)
+  (oob d 1)
+  (oob f 9)
+  (oob g 8)
+  (oob g 9)
+  (oob h 7)
+  (oob h 8)
+  (oob h 9)
+  (oob i 6)
+  (oob i 7)
+  (oob i 8)
+  (oob i 9)
+
+  (oob b 8)
+  (oob d 6)
+  (oob e 2)
+  (oob e 4)
+  (oob f 5)
+  (oob h 5)
+
+  (maj a 3)
+  (maj b 3)
+  (maj c 4)
+  (maj d 4)
+  (maj e 4)
+  (maj f 4)
+  (maj g 4)
+  (maj h 3)
+  (maj i 3)
+
+  (maj 1 3)
+  (maj 2 3)
+  (maj 3 4)
+  (maj 4 4)
+  (maj 5 4)
+  (maj 6 4)
+  (maj 7 4)
+  (maj 8 3)
+  (maj 9 3)
+
+  (maj a5 3)
+  (maj a6 3)
+  (maj a7 4)
+  (maj a8 4)
+  (maj a9 4)
+  (maj b9 4)
+  (maj c9 4)
+  (maj d9 3)
+  (maj e9 3)
+
+  (num 0)
+  (num 1)
+  (num 2)
+  (num 3)
+  (num 4)
+  (num 5)
+  (num 6)
+  (num 7)
+
+  (succ 0 1)
+  (succ 1 2)
+  (succ 2 3)
+  (succ 3 4)
+  (succ 4 5)
+  (succ 5 6)
+  (succ 6 7)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
