@@ -234,3 +234,38 @@
 (plusplus 7 8)
 (plusplus 8 9)
 (plusplus 9 10)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                     Bases and Inputs                    ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (base (cell 0 ?y w))
+    (index ?y))
+(<= (base (cell 5 ?y w))
+    (index ?y))
+(<= (base (cell ?x 0 w))
+    (index ?x))
+(<= (base (cell ?x 5 w))
+    (index ?x))
+(<= (base (cell ?x ?y f))
+    (index ?x)
+    (distinct ?x 0)
+    (distinct ?x 5)
+    (index ?y)
+    (distinct ?y 0)
+    (distinct ?y 5))
+(<= (base (cell ?x ?y redHead))
+    (index ?x)
+    (index ?y))
+(<= (base (cell ?x ?y blueHead))
+    (index ?x)
+    (index ?y))
+
+(<= (input ?player moveDown)
+    (role ?player))
+(<= (input ?player moveUp)
+    (role ?player))
+(<= (input ?player moveLeft)
+    (role ?player))
+(<= (input ?player moveRight)
+    (role ?player))

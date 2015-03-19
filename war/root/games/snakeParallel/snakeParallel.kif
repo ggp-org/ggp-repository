@@ -161,3 +161,29 @@
 (plus 1 17 18)
 (plus 1 18 19)
 (plus 1 19 20)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Bases and inputs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(base (stepCount 0))
+(<= (base (stepCount ?n))
+    (plus 1 ?m ?n))
+
+(<= (base (cell ?i ?x ?y snake))
+    (index ?i)
+    (x ?x)
+    (y ?y))
+(<= (base (cell ?i ?x ?y body))
+    (index ?i)
+    (x ?x)
+    (y ?y))
+
+(<= (input snake (up ?i))
+    (index ?i))
+(<= (input snake (down ?i))
+    (index ?i))
+(<= (input snake (right ?i))
+    (index ?i))
+(<= (input snake (left ?i))
+    (index ?i))
