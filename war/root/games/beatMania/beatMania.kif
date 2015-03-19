@@ -149,3 +149,32 @@
 (scoreMap 28  90)
 (scoreMap 29  95)
 (scoreMap 30 100)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Bases and Inputs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(x 1)
+(x 2)
+(x 3)
+
+; Contains 1 to 30
+(<= (y ?n)
+    (plusplus ?m ?n))
+
+(<= (base (block ?x ?y))
+    (x ?x)
+    (y ?y))
+
+(base (blocksDropped 0))
+(<= (base (blocksDropped ?n))
+    (y ?n))
+(base (blocksCaught 0))
+(<= (base (blocksCaught ?n))
+    (y ?n))
+
+(<= (input dropper (place ?x))
+    (x ?x))
+(input dropper noop)
+(<= (input player (play ?x))
+    (x ?x))
