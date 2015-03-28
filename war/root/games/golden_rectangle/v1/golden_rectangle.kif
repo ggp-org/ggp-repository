@@ -6,6 +6,10 @@
 ;;; one.
 ;;;
 ;;; modified 2009-10-29 by 2MC1
+;;;
+;;; NOTE: It may be a bug in the current game description that there are
+;;; eight rows (0 to 7 inclusive) but only seven are shown in the visualization.
+;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (role red)
@@ -212,4 +216,34 @@
 (succ 4 5) 
 (succ 5 6) 
 (succ 6 7) 
-(succ 7 8) 
+(succ 7 8)
+
+(<= (column ?x)
+    (number ?x)
+    (distinct ?x 0)
+    (distinct ?x 8))
+(<= (row ?y)
+    (number ?y)
+    (distinct ?y 8))
+
+(<= (base (cell ?x ?y dirt))
+    (column ?x)
+    (row ?y))
+(<= (base (cell ?x ?y b))
+    (column ?x)
+    (row ?y))
+(<= (base (cell ?x ?y r))
+    (column ?x)
+    (row ?y))
+(<= (base (cell ?x ?y y))
+    (column ?x)
+    (row ?y))
+(<= (base (control ?player))
+    (role ?player))
+
+(<= (input ?p (mark ?x ?y))
+    (role ?p)
+    (column ?x)
+    (row ?y))
+(<= (input ?player noop)
+    (role ?player))
