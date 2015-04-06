@@ -1,0 +1,6 @@
+{
+  "gameName": "Guess Two-Thirds of the Average, Four Players",
+  
+  "rulesheet": "gt_two_thirds_4p.kif",
+  "description": "gt_two_thirds_4p.txt"
+}

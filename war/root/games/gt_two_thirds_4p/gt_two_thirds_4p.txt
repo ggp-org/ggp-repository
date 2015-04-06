@@ -1,0 +1,7 @@
+A one-shot game-theoretical game in which each player chooses a number
+between 0 and 100, and the player closest to choosing two-thirds of the
+average wins. (Note that in this version, all calculations use integers.)
+
+This version is for four players.
+
+Background: http://en.wikipedia.org/wiki/Guess_2/3_of_the_average
