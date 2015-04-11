@@ -1,0 +1,12 @@
+This is an iterated game-theoretical game. In each round, players perform
+one of three actions for points.
+
+Their first and second options are calling "heads" or "tails" for a simulated
+coin flip. (The caller wins if the choices are the same, the flipper if the choices
+are different.) The winner receives ten points, the loser none.
+
+The third option is to refuse to participate in the coin flip. This yields a consistent
+one point. The other player receives nine points, unless they also refuse to participate.
+
+The name of the game comes from the implications of choosing to not participate: this
+is only rational (risk-neutral) behavior if you think the opponent can read your mind!
