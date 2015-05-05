@@ -7,21 +7,22 @@
   <div>
     <!-- Set Style -->
     <style type="text/css" media="all">
-      table
+      table.board
       {
         border: 1px solid black;
       }
 
-      th, td
+      table.board td
       {
         text-align: center;
         border: 1px solid black;
         overflow: hidden;
-        width: 3em;
+        width:  <xsl:value-of select="$width * 0.125"/>px;
+        height: <xsl:value-of select="$height * 0.4"/>px;
       }
     </style>
 
-    <table>
+    <table class="board">
     <tbody>
       <tr>
         <td rowspan="2"><xsl:value-of select="substring(//fact[relation='pit' and argument[1]='pwinnorth']/argument[2], 2)"/></td>
