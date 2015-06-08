@@ -1,0 +1,6 @@
+{
+  "gameName": "Iterated Tinfoil Hat Game",
+  
+  "rulesheet": "gt_tinfoil.kif",
+  "description": "gt_tinfoil.txt"
+}

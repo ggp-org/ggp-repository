@@ -1,0 +1,7 @@
+{
+  "gameName": "Tron 10x10",
+
+  "rulesheet": "tron_10x10.kif",
+  "stylesheet": "tron_10x10.xsl",
+  "description": "tron_10x10.txt"
+}

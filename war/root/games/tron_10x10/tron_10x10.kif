@@ -1,0 +1,157 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Tron - based on the light-cycle game in the movie Tron (1982)
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(role red)
+(role blue)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; The game board is a 12 x 12 board, starting from (0 0) to (11 11)
+; The four boundary lines are initially filled up, serving as "walls".
+; Thus, the free game board is merely (1 1) to (10 10)
+(<= (base (cell ?x ?y v)) ; visited. Does not include cells currently occupied.
+    (index ?x)
+    (index ?y))
+(<= (base (position ?p ?x ?y)) ; The cell currently occupied by red/blue
+    (role ?p)
+    (index ?x)
+    (index ?y))
+
+(init (position red 3 3))
+(init (position blue 8 8))
+; red starts at (3, 3), blue at (8, 8)
+
+(<= (init (cell 0 ?y v))
+    (index ?y))
+(<= (init (cell 11 ?y v))
+    (index ?y))
+(<= (init (cell ?x 0 v))
+    (index ?x))
+(<= (init (cell ?x 11 v))
+    (index ?x))
+; fill up the four edges with "walls"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(move up) ; For example, goes from (1 1) to (1 2)
+(move down)
+(move left)
+(move right) ; For example, goes from (1 1) to (2 1)
+
+(<= (input ?p ?m) 
+    (role ?p)
+    (move ?m))
+
+(<= (legal ?p ?m) 
+    (role ?p)
+    (move ?m))
+; The players are always allowed to move in the four directions.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (next (cell ?x ?y v))
+    (true (cell ?x ?y v))) ; visited cells remain visited
+(<= (next (cell ?x ?y v))
+    (true (position ?p ?x ?y))) ; currently occupied cells becomes visited
+
+(<= (next (position ?p ?x ?y2))
+    (does ?p up)
+    (true (position ?p ?x ?y1))
+    (succ ?y1 ?y2)) ; y2 = y1 + 1
+(<= (next (position ?p ?x ?y2))
+    (does ?p down)
+    (true (position ?p ?x ?y1))
+    (succ ?y2 ?y1)) ; y2 = y1 - 1
+(<= (next (position ?p ?x2 ?y))
+    (does ?p left)
+    (true (position ?p ?x1 ?y))
+    (succ ?x2 ?x1)) ; x2 = x1 - 1
+(<= (next (position ?p ?x2 ?y))
+    (does ?p right)
+    (true (position ?p ?x1 ?y))
+    (succ ?x1 ?x2)) ; x2 = x1 + 1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= terminal 
+    (true (position ?p ?x ?y))
+    (true (cell ?x ?y v)))
+; someone has hit a visited square
+
+(<= terminal
+    (true (position red ?x ?y))
+    (true (position blue ?x ?y)))
+; they hit each other
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (goal red 100)
+    (true (position red ?x1 ?y1))
+    (not (true (cell ?x1 ?y1 v)))
+    (true (position blue ?x2 ?y2))
+    (true (cell ?x2 ?y2 v)))
+(<= (goal blue 0)
+    (true (position red ?x1 ?y1))
+    (not (true (cell ?x1 ?y1 v)))
+    (true (position blue ?x2 ?y2))
+    (true (cell ?x2 ?y2 v)))
+; blue hits wall; red does not hit wall
+
+(<= (goal red 0)
+    (true (position red ?x1 ?y1))
+    (true (cell ?x1 ?y1 v))
+    (true (position blue ?x2 ?y2))
+    (not (true (cell ?x2 ?y2 v))))
+(<= (goal blue 100)
+    (true (position red ?x1 ?y1))
+    (true (cell ?x1 ?y1 v))
+    (true (position blue ?x2 ?y2))
+    (not (true (cell ?x2 ?y2 v))))
+; red hits wall; blue does not hit wall
+
+(<= (goal ?p 50)
+    (role ?p)
+    (true (position red ?x1 ?y1))
+    (true (cell ?x1 ?y1 v))
+    (true (position blue ?x2 ?y2))
+    (true (cell ?x2 ?y2 v)))
+; red and blue hit wall
+
+(<= (goal ?p 50)
+    (role ?p)
+    (true (position red ?x ?y))
+    (true (position blue ?x ?y)))
+; they hit each other. 
+; This may happen on a visited cell or on an unvisited cell. 
+; If this happens on a visited cell, then this coincides with the last goal
+; block. If this happens not on a visited cell, then this is a new goal block.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(index 0)
+(index 1)
+(index 2)
+(index 3)
+(index 4)
+(index 5)
+(index 6)
+(index 7)
+(index 8)
+(index 9)
+(index 10)
+(index 11)
+
+(succ 0 1)
+(succ 1 2)
+(succ 2 3)
+(succ 3 4)
+(succ 4 5)
+(succ 5 6)
+(succ 6 7)
+(succ 7 8)
+(succ 8 9)
+(succ 9 10)
+(succ 10 11)
