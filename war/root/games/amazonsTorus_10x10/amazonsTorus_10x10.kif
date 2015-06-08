@@ -83,21 +83,6 @@
     (oneInDir ?x1 ?y1 ?x2 ?y2 ?dir)
     (not (occupied ?x2 ?y2))
     (openPath ?x2 ?y2 ?x3 ?y3 ?dir))
-; It's possible that these could be replaced with something that looks like the following
-; for greater efficiency, though this is hard to follow...
-; It's possible that this is also quadratic =/
-; (<= (openPath ?x1 ?y1 ?x2 ?y2 ?dir)
-;     (queenMove ?x1 ?y1 ?x2 ?y2 ?dir) ;count on this getting cached, efficient
-;     (validateOpenPath ?x1 ?y1 ?x2 ?y2 ?dir))
-; (<= (validateOpenPath ?x1 ?y1 ?x2 ?y2 ?dir)
-;     (not (occupied ?x2 ?y2)) ;not valid yet!
-;     (oneInDir ?x1 ?y1 ?x2 ?y2 ?dir))
-; (<= (validateOpenPath ?x1 ?y1 ?x3 ?y3 ?dir)
-;     (not (occupied ?x3 ?y3)) ;not valid yet!
-;     (oneInDir ?x2 ?y2 ?x3 ?y3 ?dir)
-;     (or (distinct ?x1 ?x2)
-;         (distinct ?y1 ?y2)) ;these might be optional; also not valid yet
-;     (validateOpenPath ?x1 ?y1 ?x2 ?y2 ?dir)
 
 (<= (occupied ?x ?y)
     (true (cell ?x ?y ?any)))
