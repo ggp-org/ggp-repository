@@ -1,0 +1,6 @@
+{
+  "gameName": "Amazons Suicide (10x10)",
+
+  "rulesheet": "amazonsSuicide_10x10.kif",
+  "stylesheet": "amazonsSuicide_10x10.xsl"
+}

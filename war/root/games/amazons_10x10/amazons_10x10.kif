@@ -1,0 +1,190 @@
+; Amazons 10x10 (variant)
+;
+; In this version of Amazons, moving and firing an arrow occur on separate turns.
+; This vastly speeds up rule simulation relative to the earlier GDL representation.
+
+(role white)
+(role black)
+
+; Bases and inputs
+
+(base (turn white move))
+(base (turn white fire))
+(base (turn black move))
+(base (turn black fire))
+
+(<= (base (cell ?x ?y white))
+    (index ?x)
+    (index ?y))
+(<= (base (cell ?x ?y black))
+    (index ?x)
+    (index ?y))
+(<= (base (cell ?x ?y arrow))
+    (index ?x)
+    (index ?y))
+(<= (base (justMoved ?x ?y))
+    (index ?x)
+    (index ?y))
+
+(<= (input ?player noop)
+    (role ?player))
+(<= (input ?player (move ?x1 ?y1 ?x2 ?y2))
+    (role ?player)
+    (queenMove ?x1 ?y1 ?x2 ?y2))
+(<= (input ?player (fire ?x ?y))
+    (role ?player)
+    (index ?x)
+    (index ?y))
+
+; Initial state
+
+(init (cell 1 4 white))
+(init (cell 4 1 white))
+(init (cell 7 1 white))
+(init (cell 10 4 white))
+(init (cell 1 7 black))
+(init (cell 4 10 black))
+(init (cell 7 10 black))
+(init (cell 10 7 black))
+
+(init (turn white move))
+
+; Legal moves
+
+(<= (legal white noop)
+    (true (turn black ?any)))
+(<= (legal black noop)
+    (true (turn white ?any)))
+
+(<= (legal ?player ?move)
+    (legalMove ?player ?move))
+(<= (legalMove ?player (move ?x1 ?y1 ?x2 ?y2))
+    (true (turn ?player move))
+    (true (cell ?x1 ?y1 ?player))
+    (dir ?dir)
+    (openPath ?x1 ?y1 ?x2 ?y2 ?dir))
+(<= (legalMove ?player (fire ?x2 ?y2))
+    (true (turn ?player fire))
+    (true (justMoved ?x1 ?y1))
+    (dir ?dir)
+    (openPath ?x1 ?y1 ?x2 ?y2 ?dir))
+
+(<= (openPath ?x1 ?y1 ?x2 ?y2 ?dir)
+    (oneInDir ?x1 ?y1 ?x2 ?y2 ?dir)
+    (not (occupied ?x2 ?y2)))
+; Ideal recursive call would probably look like this, but hard for provers to handle right...
+;(<= (openPath ?x1 ?y1 ?x3 ?y3 ?dir)
+;    (openPath ?x1 ?y1 ?x2 ?y2 ?dir)
+;    (oneInDir ?x2 ?y2 ?x3 ?y3 ?dir)
+;    (not (occupied ?x3 ?y3)))
+; This is in a sense "quadratic", because we also need to compute versions of openPath
+; that start with each intermediate coordinate 
+(<= (openPath ?x1 ?y1 ?x3 ?y3 ?dir)
+    (oneInDir ?x1 ?y1 ?x2 ?y2 ?dir)
+    (not (occupied ?x2 ?y2))
+    (openPath ?x2 ?y2 ?x3 ?y3 ?dir))
+
+(<= (occupied ?x ?y)
+    (true (cell ?x ?y ?any)))
+
+; Game dynamics
+
+(<= (next (turn ?player fire))
+    (true (turn ?player move)))
+(<= (next (turn ?opponent move))
+    (true (turn ?player fire))
+    (opponent ?player ?opponent))
+
+(<= (next (cell ?x2 ?y2 ?player))
+    (does ?player (move ?x1 ?y1 ?x2 ?y2)))
+(<= (next (cell ?x ?y ?player))
+    (true (cell ?x ?y ?player))
+    (not (vacated ?x ?y)))
+(<= (vacated ?x1 ?y1)
+    (does ?player (move ?x1 ?y1 ?x2 ?y2)))
+(<= (next (justMoved ?x2 ?y2))
+    (does ?player (move ?x1 ?y1 ?x2 ?y2)))
+
+(<= (next (cell ?x ?y arrow))
+    (does ?player (fire ?x ?y)))
+
+; Game ending conditions
+(<= terminal
+    (true (turn ?player ?any))
+    (not (anyLegalMove ?player)))
+(<= (anyLegalMove ?player)
+    (legal ?player ?move))
+
+(<= (goal ?player 0)
+    (true (turn ?player ?any)))
+(<= (goal ?player 100)
+    (true (turn ?opponent ?any))
+    (opponent ?opponent ?player))
+
+; Constants
+
+(index 1)
+(index 2)
+(index 3)
+(index 4)
+(index 5)
+(index 6)
+(index 7)
+(index 8)
+(index 9)
+(index 10)
+(nextIndex 1 2)
+(nextIndex 2 3)
+(nextIndex 3 4)
+(nextIndex 4 5)
+(nextIndex 5 6)
+(nextIndex 6 7)
+(nextIndex 7 8)
+(nextIndex 8 9)
+(nextIndex 9 10)
+
+(opponent white black)
+(opponent black white)
+
+(dir n)
+(dir ne)
+(dir e)
+(dir se)
+(dir s)
+(dir sw)
+(dir w)
+(dir nw)
+
+(<= (oneInDir ?x ?y1 ?x ?y2 n)
+    (index ?x)
+    (nextIndex ?y1 ?y2))
+(<= (oneInDir ?x1 ?y1 ?x2 ?y2 ne)
+    (nextIndex ?x1 ?x2)
+    (nextIndex ?y1 ?y2))
+(<= (oneInDir ?x1 ?y ?x2 ?y e)
+    (nextIndex ?x1 ?x2)
+    (index ?y))
+(<= (oneInDir ?x1 ?y2 ?x2 ?y1 se)
+    (nextIndex ?x1 ?x2)
+    (nextIndex ?y1 ?y2))
+(<= (oneInDir ?x ?y2 ?x ?y1 s)
+    (index ?x)
+    (nextIndex ?y1 ?y2))
+(<= (oneInDir ?x2 ?y2 ?x1 ?y1 sw)
+    (nextIndex ?x1 ?x2)
+    (nextIndex ?y1 ?y2))
+(<= (oneInDir ?x2 ?y ?x1 ?y w)
+    (nextIndex ?x1 ?x2)
+    (index ?y))
+(<= (oneInDir ?x2 ?y1 ?x1 ?y2 nw)
+    (nextIndex ?x1 ?x2)
+    (nextIndex ?y1 ?y2))
+
+(<= (queenMove ?x1 ?y1 ?x2 ?y2)
+    (dir ?dir)
+    (queenMoveDir ?x1 ?y1 ?x2 ?y2 ?dir))
+(<= (queenMoveDir ?x1 ?y1 ?x2 ?y2 ?dir)
+    (oneInDir ?x1 ?y1 ?x2 ?y2 ?dir))
+(<= (queenMoveDir ?x1 ?y1 ?x3 ?y3 ?dir)
+    (oneInDir ?x1 ?y1 ?x2 ?y2 ?dir)
+    (queenMoveDir ?x2 ?y2 ?x3 ?y3 ?dir))

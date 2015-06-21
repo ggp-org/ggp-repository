@@ -1,0 +1,6 @@
+{
+  "gameName": "Amazons (10x10)",
+
+  "rulesheet": "amazons_10x10.kif",
+  "stylesheet": "amazons_10x10.xsl"
+}
