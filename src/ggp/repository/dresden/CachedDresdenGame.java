@@ -8,7 +8,7 @@ import java.util.Set;
 
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.ggp.galaxy.shared.loader.RemoteResourceLoader;
+import org.ggp.base.util.loader.RemoteResourceLoader;
 
 @PersistenceCapable
 public class CachedDresdenGame extends CachedGame {
