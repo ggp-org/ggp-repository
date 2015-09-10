@@ -1,0 +1,7 @@
+{
+  "gameName"    : "Futoshiki (4x4)",
+  "rulesheet"   : "futoshiki.kif",
+  "stylesheet"  : "futoshiki.xsl",
+  "description" : "futoshiki.txt",
+  "curator"     : "arr"
+}
