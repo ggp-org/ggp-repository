@@ -1,0 +1,1 @@
+Place numbers such that there are no duplicates in any row or column and the inequalities are obeyed.
