@@ -16,9 +16,10 @@
         {
           float:          left;
           position:       relative;
-          width:          <xsl:value-of select="90 div $boardsize" />vmin;
-          padding-bottom: <xsl:value-of select="90 div $boardsize" />vmin;
+          width:          <xsl:value-of select="85 div $boardsize" />vmin;
+          padding-bottom: <xsl:value-of select="85 div $boardsize" />vmin;
           border:         2px solid black;
+          background:     white;
         }
 
         .content
@@ -29,6 +30,7 @@
           padding:        22% 5%;
           text-align:     center;
           font-size:      <xsl:value-of select="45 div ($boardsize + 1)" />vmin;
+          background:     white;
         }
 
         .row
@@ -125,7 +127,7 @@
       <div class="content">
         <xsl:choose>
           <xsl:when test="//fact[relation='cell' and argument[1]=$row and argument[2]=$col and argument[3]='blank']">
-            <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+            <span style="color:white"><xsl:text>.</xsl:text></span>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="//fact[relation='cell' and argument[1]=$row and argument[2]=$col]/argument[3]"/>
