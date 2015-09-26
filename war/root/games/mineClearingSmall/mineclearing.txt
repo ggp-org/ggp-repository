@@ -1,0 +1,12 @@
+Clear all the mines in a cuboid minefield through which the mine-clearer is falling.
+
+At each step, the mine-clearer can optionally move north, south, east or west and then optionally fire a volley of photon torpedoes in one of 4 patterns.
+
+The firing patterns are defined by the offsets from the mine-clearer's current position.
+
+alpha (-1, -1), (-1, 1), (1, -1), (1, 1)
+beta (-1, 0), (0, -1), (0, 1), (1, 0)
+gamma (-1, 0), (0, 0), (1, 0)
+delta (0, -1), (0, 0), (0, 1)
+
+Torpedos destroy all mines which share the relevant (x,y) co-ordinates, irrespective of their depth and how many mines there are sharing the same (x,y) co-ordinates.

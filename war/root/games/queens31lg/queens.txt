@@ -1,0 +1,3 @@
+The classic queens puzzles.  Place queens on the board so that none of them are attacking each other.  On an NxN board, it's possible to place N queens (except for 2x2 and 3x3).
+
+This is a legal-guided formulation of the puzzle.  That is, it is illegal to place a queen in a position where it would immediately attack another placed queen.
