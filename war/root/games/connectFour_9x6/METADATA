@@ -1,0 +1,7 @@
+{
+  "gameName": "Connect Four (9x6)",
+    
+  "rulesheet": "connectFour_9x6.kif",  
+  "stylesheet": "connectFour_9x6.xsl",
+  "description": "connectFour_9x6.txt"
+}

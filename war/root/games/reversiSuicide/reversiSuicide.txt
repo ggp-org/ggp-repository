@@ -1,0 +1,3 @@
+(Wikipedia) Reversi is a strategy board game for two players, played on an 8x8 uncheckered board. There are 64 identical pieces called 'disks' (often spelled 'discs'), which are light on one side and dark on the other. Players take turns placing discs on the board with their assigned color facing up. During a play, any discs of the opponent's color that are in a straight line and bounded by the disc just placed and another disc of the current player's color are turned over to the current player's color.
+
+In this version of the game, the goal is to end the game with fewer pieces than your opponent.

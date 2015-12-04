@@ -1,0 +1,283 @@
+; Nonogram 5x5 (G)
+; by Alex Landau
+;
+; Board and solution looks like:
+;      11
+;     111
+;    31112
+;  3  XXX
+;  1 X
+; 13 X XXX
+; 11 X   X
+;  3  XXX
+
+
+(role robot)
+
+; This section can be modified to set the specific nonogram puzzle.
+; To change sizes, index and succ must also be updated.
+(row 1 1 3)
+(row 2 1 1)
+(row 3 1 1) (row 3 2 3)
+(row 4 1 1) (row 4 2 1)
+(row 5 1 3)
+
+(col 1 1 3)
+(col 2 1 1) (col 2 2 1)
+(col 3 1 1) (col 3 2 1) (col 3 3 1)
+(col 4 1 1) (col 4 2 1) (col 4 3 1)
+(col 5 1 2)
+
+; Bases and inputs
+
+(<= (base (marked ?col ?row))
+    (index ?col)
+    (index ?row))
+
+(<= (input robot (mark ?col ?row))
+    (index ?col)
+    (index ?row))
+
+; Legal moves
+
+(<= (legal robot (mark ?col ?row))
+    (index ?col)
+    (index ?row)
+    (not (true (marked ?col ?row))))
+    
+; Game dynamics
+
+(<= (next (marked ?col ?row))
+    (does robot (mark ?col ?row)))
+(<= (next (marked ?col ?row))
+    (true (marked ?col ?row)))
+    
+; Terminality and goals
+
+; How do we decide if a row is done (or doomed)?
+; ?row = row index, ?square = square being examined, ?group = group within the row,
+; ?count = squares already seen in the group
+(<= (curRow ?row 0 1 0)
+    (index ?row))
+; Case: We have a 0-length group so far and see a blank square 
+(<= (curRow ?row ?next ?group 0)
+    (succ ?cur ?next)
+    (not (true (marked ?next ?row)))
+    (curRow ?row ?cur ?group 0))
+; Case: We have a group with some length and see a blank square
+(<= (curRow ?row ?next ?nextGroup 0)
+    (succ ?cur ?next)
+    (not (true (marked ?next ?row)))
+    (succ ?group ?nextGroup)
+    (curRow ?row ?cur ?group ?count)
+    ; Normally I'd just have (distinct ?count 0) here, but the recursion restriction
+    ; requires this to be a positive conjunct, and this has the same meaning
+    (index ?count))
+; Case: We see a marked square
+(<= (curRow ?row ?next ?group ?countp1)
+    (succ ?cur ?next)
+    (true (marked ?next ?row))
+    (succ ?count ?countp1)
+    (curRow ?row ?cur ?group ?count))
+; Find the final count for each group in the row
+(<= (rowGroupCount ?row ?group ?count)
+    (curRow ?row ?cur ?group ?count)
+    (distinct ?count 0)
+    (succ ?cur ?next)
+    (not (true (marked ?next ?row))))
+
+; Repeat for columns
+; ?col = column index, ?square = square being examined, ?group = group within the column,
+; ?count = squares already seen in the group
+(<= (curCol ?col 0 1 0)
+    (index ?col))
+; Case: We have a 0-length group so far and see a blank square 
+(<= (curCol ?col ?next ?group 0)
+    (succ ?cur ?next)
+    (not (true (marked ?col ?next)))
+    (curCol ?col ?cur ?group 0))
+; Case: We have a group with some length and see a blank square
+(<= (curCol ?col ?next ?nextGroup 0)
+    (succ ?cur ?next)
+    (not (true (marked ?col ?next)))
+    (succ ?group ?nextGroup)
+    (curCol ?col ?cur ?group ?count)
+    ; Normally I'd just have (distinct ?count 0) here, but the recursion restriction
+    ; requires this to be a positive conjunct, and this has the same meaning
+    (index ?count))
+; Case: We see a marked square
+(<= (curCol ?col ?next ?group ?countp1)
+    (succ ?cur ?next)
+    (true (marked ?col ?next))
+    (succ ?count ?countp1)
+    (curCol ?col ?cur ?group ?count))
+; Find the final count for each group in the column
+(<= (colGroupCount ?col ?group ?count)
+    (curCol ?col ?cur ?group ?count)
+    (distinct ?count 0)
+    (succ ?cur ?next)
+    (not (true (marked ?col ?next))))
+
+(<= (rowAtLeastSize ?row ?size)
+    (someSizeInRow ?row ?startingPoint ?foundSize)
+    (lte ?size ?foundSize))
+(<= (someSizeInRow ?row 0 0)
+    (index ?row))
+(<= (someSizeInRow ?row ?xp1 0)
+    (index ?row)
+    (index ?xp1)
+    (not (true (marked ?xp1 ?row))))
+(<= (someSizeInRow ?row ?xp1 ?np1)
+    (true (marked ?xp1 ?row))
+    (succ ?x ?xp1)
+    (succ ?n ?np1)
+    (someSizeInRow ?row ?x ?n))
+
+(<= (colAtLeastSize ?col ?size)
+    (someSizeInCol ?col ?startingPoint ?foundSize)
+    (lte ?size ?foundSize))
+(<= (someSizeInCol ?col 0 0)
+    (index ?col))
+(<= (someSizeInCol ?col ?yp1 0)
+    (index ?col)
+    (index ?yp1)
+    (not (true (marked ?col ?yp1))))
+(<= (someSizeInCol ?col ?yp1 ?np1)
+    (true (marked ?col ?yp1))
+    (succ ?y ?yp1)
+    (succ ?n ?np1)
+    (someSizeInCol ?col ?y ?n))
+
+; End the game if the longest stretch in a row is longer than the longest specified stretch
+; for that row (or column)
+(<= (allowedSizeInRow ?row ?size)
+    (row ?row ?anyGroup ?size))
+(<= (allowedSizeInRow ?row ?size)
+    (row ?row ?anyGroup ?largerSize)
+    (lessThan ?size ?largerSize))
+(<= (allowedSizeInCol ?col ?size)
+    (col ?col ?anyGroup ?size))
+(<= (allowedSizeInCol ?col ?size)
+    (col ?col ?anyGroup ?largerSize)
+    (lessThan ?size ?largerSize))
+
+(<= (tooBigSizeForRow ?row ?size)
+    (allowedSizeInRow ?row ?smaller)
+    (succ ?smaller ?size)
+    (not (allowedSizeInRow ?row ?size)))
+(<= (tooBigSizeForCol ?col ?size)
+    (allowedSizeInCol ?col ?smaller)
+    (succ ?smaller ?size)
+    (not (allowedSizeInCol ?col ?size)))
+
+(<= (curGroupsInRow ?row ?groupCount)
+    (highestIndex ?end)
+    (curGroupsInRowPartial ?row ?end ?groupCount))
+(<= (curGroupsInRowPartial ?row 0 0)
+    (index ?row))
+(<= (curGroupsInRowPartial ?row ?xp1 ?n)
+    (succ ?x ?xp1)
+    (curGroupsInRowPartial ?row ?x ?n)
+    (or (true (marked ?x ?row))
+        (not (true (marked ?xp1 ?row)))))
+(<= (curGroupsInRowPartial ?row ?xp1 ?np1)
+    (succ ?x ?xp1)
+    (curGroupsInRowPartial ?row ?x ?n)
+    (succ ?n ?np1)
+    (not (true (marked ?x ?row)))
+    (true (marked ?xp1 ?row)))
+
+(<= (curGroupsInCol ?col ?groupCount)
+    (highestIndex ?end)
+    (curGroupsInColPartial ?col ?end ?groupCount))
+(<= (curGroupsInColPartial ?col 0 0)
+    (index ?col))
+(<= (curGroupsInColPartial ?col ?yp1 ?n)
+    (succ ?y ?yp1)
+    (curGroupsInColPartial ?col ?y ?n)
+    (or (true (marked ?col ?y))
+        (not (true (marked ?col ?yp1)))))
+(<= (curGroupsInColPartial ?col ?yp1 ?np1)
+    (succ ?y ?yp1)
+    (curGroupsInColPartial ?col ?y ?n)
+    (succ ?n ?np1)
+    (not (true (marked ?col ?y)))
+    (true (marked ?col ?yp1)))
+
+(<= terminal
+    (tooBigSizeForRow ?row ?size)
+    (rowAtLeastSize ?row ?size))
+(<= terminal
+    (tooBigSizeForCol ?col ?size)
+    (colAtLeastSize ?col ?size))
+(<= terminal
+    (not anyRowBad)
+    (not anyColBad))
+    
+(<= (goal robot 100)
+    (not anyRowBad)
+    (not anyColBad))
+(<= (goal robot 0)
+    anyRowBad)
+(<= (goal robot 0)
+    anyColBad)
+
+; How to do success?
+; Three ways to fail: A group is the wrong size...
+(<= anyRowBad
+    (row ?row ?group ?count)
+    (not (rowGroupCount ?row ?group ?count)))
+(<= anyColBad
+    (col ?col ?group ?count)
+    (not (colGroupCount ?col ?group ?count)))
+; ... or too many or too few groups
+(<= anyRowBad
+    (numGroupsInRow ?row ?groupCount)
+    (curGroupsInRow ?row ?curCount) ; TODO: Test just using "not" here
+    (distinct ?groupCount ?curCount))
+(<= anyColBad
+    (numGroupsInCol ?col ?groupCount)
+    (curGroupsInCol ?col ?curCount) ; TODO: Test just using "not" here
+    (distinct ?groupCount ?curCount))
+
+(<= (numGroupsInRow ?row ?groupNum)
+    (anyGroupInRow ?row ?groupNum)
+    (succ ?groupNum ?oneMore)
+    (not (anyGroupInRow ?row ?oneMore)))
+(<= (anyGroupInRow ?row ?group)
+    (row ?row ?group ?count))
+(<= (numGroupsInCol ?col ?groupNum)
+    (anyGroupInCol ?col ?groupNum)
+    (succ ?groupNum ?oneMore)
+    (not (anyGroupInCol ?col ?oneMore)))
+(<= (anyGroupInCol ?col ?group)
+    (col ?col ?group ?count))
+
+; Constants
+
+(index 1)
+(index 2)
+(index 3)
+(index 4)
+(index 5)
+
+(highestIndex 5)
+
+(<= (lessThan ?x ?y)
+    (succ ?x ?y))
+(<= (lessThan ?x ?z)
+    (succ ?y ?z)
+    (lessThan ?x ?y))
+(<= (lte ?x ?y)
+    (lessThan ?x ?y))
+(<= (lte ?x ?x)
+    (index ?x))
+
+; Note: Due to the definitions of curRow and rowGroupCount, the successor function
+; must go from 0 to N+1, where N is the board size.
+(succ 0 1)
+(succ 1 2)
+(succ 2 3)
+(succ 3 4)
+(succ 4 5)
+(succ 5 6) ; The rowGroupCount definition requires this to be here

@@ -1,0 +1,6 @@
+{
+  "gameName": "Chess (200-turn limit)",
+
+  "rulesheet": "chess_200.kif",
+  "stylesheet": "chess_200.xsl"
+}

@@ -1,0 +1,424 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;                                                ;;;;;;;;;;;;;;;;;
+;;;;             Battlebrushes                      ;;;;;;;;;;;;;;;;;
+;;;;                                                ;;;;;;;;;;;;;;;;;
+;;;;    by Tim Federholzner and Peter Kissmann 2011 ;;;;;;;;;;;;;;;;;
+;;;;                                                ;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; Some adjustments by Alex Landau
+
+;;; four players move around on an 8x8 board and paint the cells in
+;;; their color
+
+;;; every brush has a unique color
+(role blue)
+(role red)
+(role green)
+(role yellow)
+
+;;; each player starts in one corner
+(startingcell 2 2)
+(startingcell 2 7)
+(startingcell 7 2)
+(startingcell 7 7)
+
+;;; every other cell is not painted
+(<= (init (cell ?x ?y b))
+    (coordinate ?x)
+    (coordinate ?y)
+    (not (startingcell ?x ?y)))
+
+;;; the startingcells are already painted
+(init (cell 2 2 blue))
+(init (cell 2 7 red))
+(init (cell 7 2 green))
+(init (cell 7 7 yellow))
+
+;;; fluent which saves the position of the players
+(init (at bluebrush 2 2))
+(init (at redbrush 2 7))
+(init (at greenbrush 7 2))
+(init (at yellowbrush 7 7))
+(brush blue bluebrush)
+(brush red redbrush)
+(brush green greenbrush)
+(brush yellow yellowbrush)
+
+;;; fluent which tells the color of every cell
+(<= (next (cell ?x ?y ?c))
+    (nextcellcolor ?x ?y ?c))
+
+;;; a cells remains in its color, if no player moves to it
+(<= (nextcellcolor ?x ?y ?s)
+    (true (cell ?x ?y ?s))
+    (not (does blue (goto ?x ?y)))
+    (not (does red (goto ?x ?y)))
+    (not (does green (goto ?x ?y)))
+    (not (does yellow (goto ?x ?y))))
+
+;;; a cell remains in its color, if more than one player tries to move to it
+(<= (nextcellcolor ?x ?y ?s)
+    (true (cell ?x ?y ?s))
+    (role ?r)
+    (does ?r (goto ?x ?y))
+    (role ?r2)
+    (distinct ?r ?r2)
+    (does ?r2 (goto ?x ?y)))
+
+;;; a cell is painted if exactly one player moves to it
+(<= (nextcellcolor ?x ?y blue)
+    (does blue (goto ?x ?y))
+    (not (does red (goto ?x ?y)))
+    (not (does green (goto ?x ?y)))
+    (not (does yellow (goto ?x ?y))))
+(<= (nextcellcolor ?x ?y red)
+    (does red (goto ?x ?y))
+    (not (does blue (goto ?x ?y)))
+    (not (does green (goto ?x ?y)))
+    (not (does yellow (goto ?x ?y))))
+(<= (nextcellcolor ?x ?y green)
+    (does green (goto ?x ?y))
+    (not (does blue (goto ?x ?y)))
+    (not (does red (goto ?x ?y)))
+    (not (does yellow (goto ?x ?y))))
+(<= (nextcellcolor ?x ?y yellow)
+    (does yellow (goto ?x ?y))
+    (not (does blue (goto ?x ?y)))
+    (not (does red (goto ?x ?y)))
+    (not (does green (goto ?x ?y))))
+
+;;; a player may move to adjacent cells if they are not occupied
+(<= (legal ?r (goto ?x ?y))
+    (role ?r)
+    (not (true (dizzy ?r 1)))
+    (not (true (dizzy ?r 0)))
+    (true (cell ?x ?y ?s))
+    (not (occupied ?x ?y))
+    (brush ?r ?b)
+    (true (at ?b ?i ?j))
+    (adjacent ?x ?y ?i ?j))
+
+;;; a cell is occupied, if a player is there
+(<= (occupied ?x ?y)
+    (true (at ?b ?x ?y)))
+
+;;; if two or more players collided, they feel dizzy for two steps
+(<= (legal ?r feeldizzy)
+    (true (dizzy ?r ?n)))
+
+;;; if all cells around a player are occupied, that player cannot move
+(<= (legal ?r feeldizzy)
+    (brush ?r ?b)
+    (true (at ?b ?x ?y))
+    (not (hasAdjacentEmptyCell ?x ?y)))
+
+(<= (hasAdjacentEmptyCell ?x ?y)
+    (adjacent ?x ?y ?x2 ?y2)
+    (not (occupied ?x2 ?y2)))
+
+(<= (adjacent ?x ?y ?x ?j)
+    (coordinate ?x)
+    (nextIndex ?y ?j))
+(<= (adjacent ?x ?y ?x ?j)
+    (coordinate ?x)
+    (nextIndex ?j ?y))
+(<= (adjacent ?x ?y ?i ?y)
+    (coordinate ?y)
+    (nextIndex ?x ?i))
+(<= (adjacent ?x ?y ?i ?y)
+    (coordinate ?y)
+    (nextIndex ?i ?x))
+
+;;; a player reaches a cell, if it is the only one to move there
+(<= (next (at bluebrush ?x ?y))
+    (does blue (goto ?x ?y))
+    (not (does red (goto ?x ?y)))
+    (not (does green (goto ?x ?y)))
+    (not (does yellow (goto ?x ?y))))
+(<= (next (at redbrush ?x ?y))
+    (does red (goto ?x ?y))
+    (not (does blue (goto ?x ?y)))
+    (not (does green (goto ?x ?y)))
+    (not (does yellow (goto ?x ?y))))
+(<= (next (at greenbrush ?x ?y))
+    (does green (goto ?x ?y))
+    (not (does blue (goto ?x ?y)))
+    (not (does red (goto ?x ?y)))
+    (not (does yellow (goto ?x ?y))))
+(<= (next (at yellowbrush ?x ?y))
+    (does yellow (goto ?x ?y))
+    (not (does blue (goto ?x ?y)))
+    (not (does red (goto ?x ?y)))
+    (not (does green (goto ?x ?y))))
+
+;;; a player stays at its position, if it collided with another player
+(<= (next (at ?b ?x ?y))
+    (role ?r)
+    (brush ?r ?b)
+    (true (at ?b ?x ?y))
+    (willfeeldizzy ?r))
+(<= (next (at ?b ?x ?y))
+    (role ?r)
+    (brush ?r ?b)
+    (true (at ?b ?x ?y))
+    (does ?r feeldizzy))
+
+;;; a counter for dizzy players, which decreases to zero
+(<= (next (dizzy ?r 1))
+    (willfeeldizzy ?r))
+(<= (next (dizzy ?r 0))
+    (true (dizzy ?r 1)))
+
+;;; a player will feel dizzy, if it collides with another one
+(<= (willfeeldizzy ?r)
+    (role ?r)
+    (does ?r (goto ?i ?j))
+    (role ?r2)
+    (distinct ?r ?r2)
+    (does ?r2 (goto ?i ?j)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; neighbor relation of cell coordinates
+(nextIndex 1 2)
+(nextIndex 2 3)
+(nextIndex 3 4)
+(nextIndex 4 5)
+(nextIndex 5 6)
+(nextIndex 6 7)
+(nextIndex 7 8)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; supportive predicate which holds three players in any order
+(<= (threeDistinctRoles ?r1 ?r2 ?r3)
+    (role ?r1)
+    (role ?r2)
+    (role ?r3)
+    (distinct ?r1 ?r2)
+    (distinct ?r1 ?r3)
+    (distinct ?r2 ?r3))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; the step counter is also used for counting the points of the players
+(succ -1 0)
+(succ 0 1)
+
+;;; recursive greater-than relation
+(<= (moreThan ?n ?n2)
+    (succ ?n2 ?n))
+(<= (moreThan ?n ?n2)
+    (succ ?t ?n)
+    (moreThan ?t ?n2))
+(succ 1 2)
+(succ 2 3)
+(succ 3 4)
+(succ 4 5)
+(succ 5 6)
+(succ 6 7)
+(succ 7 8)
+(succ 8 9)
+(succ 9 10)
+(succ 10 11)
+(succ 11 12)
+(succ 12 13)
+(succ 13 14)
+(succ 14 15)
+(succ 15 16)
+(succ 16 17)
+(succ 17 18)
+(succ 18 19)
+(succ 19 20)
+
+;;; in the step just before the terminal state the points for each player are calculated
+(<= (points blue ?p)
+    (calculatePoints blue ?p 1 1))
+(<= (points red ?p)
+    (calculatePoints red ?p 1 1))
+(<= (points green ?p)
+    (calculatePoints green ?p 1 1))
+(<= (points yellow ?p)
+    (calculatePoints yellow ?p 1 1))
+
+;;; the points are counted recursively from the upper left edge
+;;; if a cell has the color of the player, the counter is increased
+(<= (calculatePoints ?r ?pp1 ?x ?y)
+    (true (cell ?x ?y ?r))
+    (nextIndex ?y ?y2)
+    (calculatePoints ?r ?p ?x ?y2)
+    (succ ?p ?pp1))
+(<= (calculatePoints ?r ?pp1 ?x 8)
+    (true (cell ?x 8 ?r))
+    (nextIndex ?x ?x2)
+    (calculatePoints ?r ?p ?x2 1)
+    (succ ?p ?pp1))
+(<= (calculatePoints ?r ?p ?x ?y)
+    (coordinate ?x)
+    (coordinate ?y)
+    (role ?r)
+    (not (true (cell ?x ?y ?r)))
+    (nextIndex ?y ?y2)
+    (calculatePoints ?r ?p ?x ?y2))
+(<= (calculatePoints ?r ?p ?x 8)
+    (coordinate ?x)
+    (role ?r)
+    (not (true (cell ?x 8 ?r)))
+    (nextIndex ?x ?x2)
+    (calculatePoints ?r ?p ?x2 1))
+;;; the calculation ends in the (8,8)-cell
+(<= (calculatePoints ?r 1 8 8)
+    (true (cell 8 8 ?r)))
+(<= (calculatePoints ?r 0 8 8)
+    (role ?r)
+    (not (true (cell 8 8 ?r))))
+
+;;; step counter fluents
+(init (step 1))
+(<= (next (step ?n2))
+    (true (step ?n))
+    (succ ?n ?n2))
+
+;;; in every case the game ends in step 20
+(<= terminal
+    (true (step 20)))
+(coordinate 1)
+(coordinate 2)
+(coordinate 3)
+(coordinate 4)
+(coordinate 5)
+(coordinate 6)
+(coordinate 7)
+(coordinate 8)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (sameScore ?r1 ?r2)
+    (points ?r1 ?n)
+    (points ?r2 ?n)
+    (distinct ?r1 ?r2))
+(<= (higherScore ?r1 ?r2)
+    (points ?r1 ?n1)
+    (points ?r2 ?n2)
+    (moreThan ?n1 ?n2))
+
+;;; if one player has more points than every other player, it gains 100
+(<= (goal ?r 100)
+    (true (step 20))
+    (higherScore ?r ?r2)
+    (higherScore ?r ?r3)
+    (higherScore ?r ?r4)
+    (threeDistinctRoles ?r2 ?r3 ?r4))
+
+;;; if one player has more points than two players, but another player has more points, it gains 50
+(<= (goal ?r 50)
+    (true (step 20))
+    (higherScore ?r2 ?r)
+    (higherScore ?r ?r3)
+    (higherScore ?r ?r4)
+    (distinct ?r3 ?r4))
+
+;;; if one player has more points than another player, but two have more, it gains 25
+(<= (goal ?r 25)
+    (true (step 20))
+    (higherScore ?r2 ?r)
+    (higherScore ?r3 ?r)
+    (distinct ?r2 ?r3)
+    (higherScore ?r ?r4))
+
+;;; the player with the lowest point counter gains 0
+(<= (goal ?r 0)
+    (true (step 20))
+    (higherScore ?r2 ?r)
+    (higherScore ?r3 ?r)
+    (higherScore ?r4 ?r)
+    (threeDistinctRoles ?r2 ?r3 ?r4))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; two players have the same number of points but have more than the other two players,
+;;; both get 75
+(<= (goal ?r 75)
+    (true (step 20))
+    (sameScore ?r ?r2)
+    (higherScore ?r ?r3)
+    (higherScore ?r ?r4)
+    (distinct ?r3 ?r4))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; if three players share the top score, they get 66
+(<= (goal ?r 66)
+    (true (step 20))
+    (sameScore ?r ?r2)
+    (sameScore ?r ?r3)
+    (distinct ?r2 ?r3)
+    (higherScore ?r ?r4))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; if all players have equal points, they get 50
+(<= (goal ?r 50)
+    (true (step 20))
+    (sameScore ?r ?r2)
+    (sameScore ?r ?r3)
+    (sameScore ?r ?r4)
+    (threeDistinctRoles ?r2 ?r3 ?r4))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; two second rated players with equal points get 33
+(<= (goal ?r 33)
+    (true (step 20))
+    (sameScore ?r ?r2)
+    (higherScore ?r3 ?r)
+    (higherScore ?r ?r4))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; if three players share the second place, they get 25
+(<= (goal ?r 25)
+    (true (step 20))
+    (sameScore ?r ?r2)
+    (sameScore ?r ?r3)
+    (distinct ?r2 ?r3)
+    (higherScore ?r4 ?r))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; if two players share the last place, they get 12 points
+(<= (goal ?r 12)
+    (true (step 20))
+    (sameScore ?r ?r2)
+    (higherScore ?r3 ?r)
+    (higherScore ?r4 ?r)
+    (distinct ?r3 ?r4))
+;;;;;;;;;;;;;;;;;
+
+;;; Before the end of the game, all players have 0 points
+(<= (goal ?r 0)
+    (role ?r)
+    (not (true (step 20))))
+
+;;; Bases and inputs
+
+(<= (base (cell ?x ?y b))
+    (coordinate ?x)
+    (coordinate ?y)
+    (not (startingcell ?x ?y)))
+(<= (base (cell ?x ?y ?color))
+    (coordinate ?x)
+    (coordinate ?y)
+    (role ?color))
+(<= (base (at ?brush ?x ?y))
+    (brush ?role ?brush)
+    (coordinate ?x)
+    (coordinate ?y))
+(<= (base (dizzy ?r 1))
+    (role ?r))
+(<= (base (dizzy ?r 0))
+    (role ?r))
+(<= (base (step ?n2))
+    (succ ?n ?n2))
+
+(<= (input ?r (goto ?x ?y))
+    (role ?r)
+    (coordinate ?x)
+    (coordinate ?y))
+(<= (input ?r feeldizzy)
+    (role ?r))

@@ -1,0 +1,7 @@
+{
+  "gameName": "Reversi Suicide",
+  "rulesheet": "reversiSuicide.kif",
+  "stylesheet": "reversiSuicide.xsl",
+  "description": "reversiSuicide.txt",
+  "user_interface": "reversiSuicide.js"
+}
