@@ -1,0 +1,6 @@
+{
+  "gameName": "Solitaire Chinese Checkers",
+
+  "rulesheet": "solitaireChineseCheckers.kif",
+  "stylesheet": "chineseCheckers.xsl"
+}

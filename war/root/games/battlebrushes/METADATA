@@ -1,0 +1,6 @@
+{
+  "gameName": "Battlebrushes",
+  
+  "rulesheet": "battlebrushes.kif",  
+  "stylesheet": "battlebrushes.xsl"
+}

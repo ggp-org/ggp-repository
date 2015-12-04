@@ -1,0 +1,198 @@
+; Shmup
+; Game and GDL by Alex Landau
+;
+; The players are on a 8x8 toroidal grid.
+; Players alternate between moving in any of 8 directions and
+; firing a bullet in any direction. Bullets keep moving until
+; they hit someone.
+;
+; Players move and fire on the same turns, so the game is
+; completely symmetrical.
+;
+; If players would move to be adjacent to each other, instead
+; they remain still. This prevents the draw-inducing scenario
+; of two adjacent players shooting each other.
+
+(role light)
+(role dark)
+
+(init (ship light 3 3))
+(init (ship dark 6 6))
+
+(init (turn fire))
+
+(<= (legal ?player (fire ?dir))
+	(role ?player)
+	(true (turn fire))
+	(dir ?dir))
+(<= (legal ?player noop)
+	(role ?player)
+	(true (turn move)))
+; Players can move in any direction unless they would pass through
+; a bullet heading in the opposite direction to get there.
+(<= (legal ?player (move ?dir))
+	(role ?player)
+    (true (turn move))
+	(dir ?dir)
+	(true (ship ?player ?x ?y))
+	(dirX ?dir ?x ?x2)
+    (dirY ?dir ?y ?y2)
+	(oppDir ?dir ?oppDir)
+	(not (true (bullet ?x2 ?y2 ?oppDir))))
+	
+(dir N) (northward N)
+(dir NE) (northward NE) (eastward NE)
+(dir E) (eastward E)
+(dir SE) (eastward SE) (southward SE)
+(dir S) (southward S)
+(dir SW) (southward SW) (westward SW)
+(dir W) (westward W)
+(dir NW) (westward NW) (northward NW)
+
+(oppDir N S)
+(oppDir NE SW)
+(oppDir E W)
+(oppDir SE NW)
+(oppDir S N)
+(oppDir SW NE)
+(oppDir W E)
+(oppDir NW SE)
+
+(<= (next (ship ?player ?x ?y))
+	(true (ship ?player ?x ?y))
+	(or adjacentDestinations
+        (does ?player (fire ?dir))
+		(does ?player noop)))
+(<= (next (ship ?player ?x2 ?y2))
+	(true (ship ?player ?x1 ?y1))
+	(does ?player (move ?dir))
+    (not adjacentDestinations)
+	(dirX ?dir ?x1 ?x2)
+	(dirY ?dir ?y1 ?y2))
+(<= (next (bullet ?x2 ?y2 ?dir))
+	(does ?player (fire ?dir))
+	(true (ship ?player ?x1 ?y1))
+	(dirX ?dir ?x1 ?x2)
+	(dirY ?dir ?y1 ?y2))
+(<= (next (bullet ?x2 ?y2 ?dir))
+	(true (bullet ?x1 ?y1 ?dir))
+	(dirX ?dir ?x1 ?x2)
+	(dirY ?dir ?y1 ?y2))
+
+(<= adjacentDestinations
+    (moveDestination light ?x1 ?y1)
+    (moveDestination dark ?x2 ?y2)
+    (sameOrAdjacent ?x1 ?x2)
+    (sameOrAdjacent ?y1 ?y2))
+(<= (moveDestination ?player ?x2 ?y2)
+    (does ?player (move ?dir))
+    (true (ship ?player ?x1 ?y1))
+    (dirX ?dir ?x1 ?x2)
+    (dirY ?dir ?y1 ?y2))
+
+(<= (next (turn move))
+    (true (turn fire)))
+(<= (next (turn fire))
+    (true (turn move)))
+
+(<= (dirX ?dir ?x1 ?x2)
+	(nextTo ?x1 ?x2)
+	(eastward ?dir))
+(<= (dirX ?dir ?x1 ?x2)
+	(nextTo ?x2 ?x1)
+	(westward ?dir))
+(<= (dirX N ?x ?x)
+	(index ?x))
+(<= (dirX S ?x ?x)
+	(index ?x))
+(<= (dirY ?dir ?y1 ?y2)
+	(nextTo ?y1 ?y2) ; Upper left/northwest is origin
+	(southward ?dir))
+(<= (dirY ?dir ?y1 ?y2)
+	(nextTo ?y2 ?y1)
+	(northward ?dir))
+(<= (dirY W ?x ?x)
+	(index ?x))
+(<= (dirY E ?x ?x)
+	(index ?x))
+
+(<= (destroyed ?player)
+	(true (ship ?player ?x ?y))
+	(true (bullet ?x ?y ?dir)))
+(<= (destroyed ?player)
+	(true (ship ?player ?x ?y))
+	(true (ship ?opp ?x ?y))
+	(distinct ?player ?opp))
+
+(<= terminal
+	(destroyed ?player))
+	
+(<= (goal light 100)
+	(destroyed dark)
+	(not (destroyed light)))
+(<= (goal light 50)
+	(destroyed dark)
+	(destroyed light))
+(<= (goal light 50)
+	(not (destroyed dark))
+	(not (destroyed light)))
+(<= (goal light 0)
+	(destroyed light)
+	(not (destroyed dark)))
+(<= (goal dark 100)
+	(destroyed light)
+	(not (destroyed dark)))
+(<= (goal dark 50)
+	(destroyed dark)
+	(destroyed light))
+(<= (goal dark 50)
+	(not (destroyed dark))
+	(not (destroyed light)))
+(<= (goal dark 0)
+	(destroyed dark)
+	(not (destroyed light)))
+	
+(index 1)
+(index 2)
+(index 3)
+(index 4)
+(index 5)
+(index 6)
+(index 7)
+(index 8)
+
+(nextTo 1 2)
+(nextTo 2 3)
+(nextTo 3 4)
+(nextTo 4 5)
+(nextTo 5 6)
+(nextTo 6 7)
+(nextTo 7 8)
+(nextTo 8 1) ; toroidal board
+
+(<= (sameOrAdjacent ?x ?x)
+    (index ?x))
+(<= (sameOrAdjacent ?x ?y)
+    (nextTo ?x ?y))
+(<= (sameOrAdjacent ?x ?y)
+    (nextTo ?y ?x))
+
+(<= (base (ship ?player ?x ?y))
+    (role ?player)
+    (index ?x)
+    (index ?y))
+(base (turn fire))
+(base (turn move))
+(<= (base (bullet ?x ?y ?dir))
+    (index ?x)
+    (index ?y)
+    (dir ?dir))
+    
+(<= (input ?player (fire ?dir))
+    (role ?player)
+    (dir ?dir))
+(<= (input ?player noop)
+    (role ?player))
+(<= (input ?player (move ?dir))
+    (role ?player)
+    (dir ?dir))

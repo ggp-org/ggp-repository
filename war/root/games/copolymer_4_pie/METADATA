@@ -1,0 +1,6 @@
+{
+  "gameName": "Copolymer (4-length hexagon) w/pie rule",
+
+  "rulesheet": "copolymer_4_pie.kif",
+  "stylesheet": "copolymer_4_pie.xsl"
+}

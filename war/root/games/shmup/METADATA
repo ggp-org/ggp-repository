@@ -1,0 +1,6 @@
+{
+  "gameName": "Shmup",
+
+  "rulesheet": "shmup.kif",
+  "stylesheet": "shmup.xsl"
+}

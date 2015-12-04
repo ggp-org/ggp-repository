@@ -1,0 +1,6 @@
+{
+  "gameName": "Rubik's Cube",
+
+  "rulesheet": "rubiksCube.kif",
+  "stylesheet": "rubiksCube.xsl"
+}

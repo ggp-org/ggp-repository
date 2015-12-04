@@ -1,0 +1,181 @@
+; Copolymer
+; Game design by Mark Steere, 1006.
+; http://www.marksteeregames.com/
+; Mark Steere retains all of the rights to his games, including copyrights and trademarks.
+; 
+; GDL by Alex Landau
+;
+
+; Warning on the cell representation: The rows are represented using "x" below
+; even though it's the vertical axis. It made sense in my head.
+
+(role red)
+(role blue)
+
+; Bases and inputs
+
+(base (control red))
+(base (control blue))
+(<= (base (cell ?x ?n ?color))
+    (validCell ?x ?n)
+    (role ?color))
+
+(<= (input ?player noop)
+    (role ?player))
+(<= (input ?player (move ?x ?n))
+    (validCell ?x ?n)
+    (role ?player))
+
+(<= (base (pieceCount ?role ?n))
+    (role ?role)
+    (lte ?n 19))
+
+; Initial state
+
+(init (control red))
+(init (pieceCount red 0))
+(init (pieceCount blue 0))
+
+; Legal moves
+
+(<= (legal ?player noop)
+    (role ?player)
+    (not (true (control ?player))))
+
+(<= (legal ?player (move ?x ?n))
+    (true (control ?player))
+    (empty ?x ?n))
+
+; State dynamics
+
+(<= (next (cell ?x ?n ?color))
+    (true (cell ?x ?n ?color)))
+(<= (next (cell ?x ?n ?color))
+    (does ?color (move ?x ?n)))
+
+(<= (adjacentOpposingPiece ?x2 ?n2)
+    (does ?color (move ?x ?n))
+    (opponent ?color ?opp)
+    (connected ?x ?n ?x2 ?n2)
+    (true (cell ?x2 ?n2 ?opp)))
+
+(<= twoAdjacentOpposingPieces
+    (adjacentOpposingPiece ?x1 ?n1)
+    (adjacentOpposingPiece ?x2 ?n2)
+    (or (distinct ?x1 ?x2)
+        (distinct ?n1 ?n2)))
+
+(<= (next (control ?player))
+    (true (control ?player))
+    twoAdjacentOpposingPieces)
+(<= (next (control ?opponent))
+    (true (control ?player))
+    (not twoAdjacentOpposingPieces)
+    (opponent ?player ?opponent))
+
+(<= (next (pieceCount ?player ?n))
+    (true (pieceCount ?player ?n))
+    (not (true (control ?player))))
+(<= (next (pieceCount ?player ?np1))
+    (true (pieceCount ?player ?n))
+    (true (control ?player))
+    (succ ?n ?np1))
+
+; Terminality and goals
+
+(<= terminal
+    (won ?role))
+
+(<= (goal ?player 100)
+    (won ?player))
+(<= (goal ?player 0)
+    (role ?player)
+    (not (won ?player)))
+
+(<= (won ?player)
+    (true (pieceCount ?player 19)))
+
+; Useful values
+
+(<= (empty ?x ?n)
+    (validCell ?x ?n)
+    (not (true (cell ?x ?n red)))
+    (not (true (cell ?x ?n blue))))
+
+(<= (validCell ?x ?n)
+    (length ?x ?len)
+    (lte 1 ?n)
+    (lte ?n ?len))
+
+(opponent red blue)
+(opponent blue red)
+
+(length 1 4)
+(length 2 5)
+(length 3 6)
+(length 4 7)
+(length 5 6)
+(length 6 5)
+(length 7 4)
+
+; total number of spaces: 9 + 9 + 12 + 7 = 37
+; Total to win: (36/2 = 18) + 1 = 19
+
+(<= (connected ?x ?n1 ?x ?n2)
+    (diff1 ?n1 ?n2)
+    (validCell ?x ?n1)
+    (validCell ?x ?n2))
+(<= (connected ?x1 ?n ?x2 ?n)
+    (diff1 ?x1 ?x2)
+    (validCell ?x1 ?n)
+    (validCell ?x2 ?n))
+(<= (connected ?x1 ?n1 ?x2 ?n2)
+    (diff1 ?x1 ?x2)
+    (greaterLength ?x2 ?x1)
+    (succ ?n1 ?n2))
+(<= (connected ?x1 ?n1 ?x2 ?n2)
+    (diff1 ?x1 ?x2)
+    (greaterLength ?x1 ?x2)
+    (succ ?n2 ?n1))
+
+(<= (greaterLength ?x2 ?x1)
+    (length ?x1 ?l1)
+    (length ?x2 ?l2)
+    (lt ?l1 ?l2))
+
+(<= (diff1 ?m ?n)
+    (succ ?m ?n))
+(<= (diff1 ?n ?m)
+    (succ ?m ?n))
+
+(<= (lt ?x ?y)
+    (succ ?x ?y))
+(<= (lt ?x ?z)
+    (succ ?y ?z)
+    (lt ?x ?y))
+
+(<= (lte ?m ?m)
+    (succ ?m ?n))
+(<= (lte ?x ?y)
+    (lt ?x ?y))
+
+(succ 0 1)
+(succ 1 2)
+(succ 2 3)
+(succ 3 4)
+(succ 4 5)
+(succ 5 6)
+(succ 6 7)
+(succ 7 8)
+(succ 8 9)
+(succ 9 10)
+(succ 10 11)
+(succ 11 12)
+(succ 12 13)
+(succ 13 14)
+(succ 14 15)
+(succ 15 16)
+(succ 16 17)
+(succ 17 18)
+(succ 18 19)
+(succ 19 20)
