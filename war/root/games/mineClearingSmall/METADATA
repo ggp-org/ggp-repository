@@ -1,0 +1,7 @@
+{
+  "gameName"    : "Mine Clearing (Small)",
+  "rulesheet"   : "mineclearing.kif",
+  "stylesheet"  : "mineclearing.xsl",
+  "description" : "mineclearing.txt",
+  "curator"     : "spd"
+}

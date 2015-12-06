@@ -1,0 +1,7 @@
+{
+  "gameName"    : "31 Queens Puzzle - Legal Guided",
+  "rulesheet"   : "queens.kif",
+  "stylesheet"  : "queens.xsl",
+  "description" : "queens.txt",
+  "curator"     : "arr"
+}

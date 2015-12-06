@@ -1,0 +1,232 @@
+; Copolymer
+; Game design by Mark Steere, 1006.
+; http://www.marksteeregames.com/
+; Mark Steere retains all of the rights to his games, including copyrights and trademarks.
+; 
+; GDL by Alex Landau
+;
+
+; This adds the "pie rule" to reduce any bias in the game: After the first move,
+; the second player may choose to switch roles.
+
+; Warning on the cell representation: The "rows" are represented using "x" below
+; even though it's the vertical axis. It made sense in my head.
+
+(role player1)
+(role player2)
+
+; Bases and inputs
+
+(base (control red))
+(base (control blue))
+(base isFirstTurn)
+(base isPieTurn)
+(<= (base (isColor ?role ?color))
+    (role ?role)
+    (color ?color))
+
+(<= (base (cell ?x ?n ?color))
+    (validCell ?x ?n)
+    (color ?color))
+
+(<= (input ?player noop)
+    (role ?player))
+(<= (input ?player (move ?x ?n))
+    (validCell ?x ?n)
+    (role ?player))
+(input player2 swap)
+(input player2 doNotSwap)
+
+(<= (base (pieceCount ?color ?n))
+    (color ?color)
+    (lte ?n 19))
+
+; Initial state
+
+(init (control red))
+(init isFirstTurn)
+
+(init (isColor player1 red))
+(init (isColor player2 blue))
+
+(init (pieceCount red 0))
+(init (pieceCount blue 0))
+
+; Legal moves
+
+(<= (legal ?player noop)
+    (role ?player)
+    (true (isColor ?player ?color))
+    (not (true (control ?color))))
+
+(<= (legal ?player (move ?x ?n))
+    (true (isColor ?player ?color))
+    (true (control ?color))
+    (not (true isPieTurn))
+    (empty ?x ?n))
+
+(<= (legal player2 swap)
+    (true isPieTurn))
+(<= (legal player2 doNotSwap)
+    (true isPieTurn))
+
+; State dynamics
+
+(<= (next isPieTurn)
+    (true isFirstTurn))
+
+(<= (next (isColor ?role ?color))
+    (not (true isPieTurn))
+    (true (isColor ?role ?color)))
+(<= (next (isColor ?role ?color))
+    (does player2 swap)
+    (true (isColor ?role ?oppColor))
+    (opponent ?oppColor ?color))
+(<= (next (isColor ?role ?color))
+    (does player2 doNotSwap)
+    (true (isColor ?role ?color)))
+
+(<= (next (cell ?x ?n ?color))
+    (true (cell ?x ?n ?color)))
+(<= (next (cell ?x ?n ?color))
+    (does ?role (move ?x ?n))
+    (true (isColor ?role ?color)))
+
+(<= (adjacentOpposingPiece ?x2 ?n2)
+    (does ?role (move ?x ?n))
+    (true (isColor ?role ?color))
+    (opponent ?color ?opp)
+    (connected ?x ?n ?x2 ?n2)
+    (true (cell ?x2 ?n2 ?opp)))
+
+(<= twoAdjacentOpposingPieces
+    (adjacentOpposingPiece ?x1 ?n1)
+    (adjacentOpposingPiece ?x2 ?n2)
+    (or (distinct ?x1 ?x2)
+        (distinct ?n1 ?n2)))
+
+(<= (next (control ?player))
+    (not (true isPieTurn))
+    (true (control ?player))
+    twoAdjacentOpposingPieces)
+(<= (next (control ?opponent))
+    (not (true isPieTurn))
+    (true (control ?player))
+    (not twoAdjacentOpposingPieces)
+    (opponent ?player ?opponent))
+(<= (next (control blue))
+    (true isPieTurn))
+
+(<= (next (pieceCount ?color ?n))
+    (true (pieceCount ?color ?n))
+    (not (piecePlayed ?color)))
+(<= (next (pieceCount ?color ?np1))
+    (true (pieceCount ?color ?n))
+    (piecePlayed ?color)
+    (succ ?n ?np1))
+(<= (piecePlayed ?color)
+    (does ?player (move ?x ?n))
+    (true (isColor ?player ?color)))
+
+; Terminality and goals
+
+(<= terminal
+    (won ?player))
+
+(<= (goal ?player 100)
+    (won ?player))
+(<= (goal ?player 0)
+    (role ?player)
+    (not (won ?player)))
+
+; Total number of spaces: 37
+; Total to win: (36/2 = 18) + 1 = 19
+
+(<= (won ?player)
+    (true (isColor ?player ?color))
+    (true (pieceCount ?color 19)))
+
+; Useful values
+
+(<= (empty ?x ?n)
+    (validCell ?x ?n)
+    (not (true (cell ?x ?n red)))
+    (not (true (cell ?x ?n blue))))
+
+(<= (validCell ?x ?n)
+    (length ?x ?len)
+    (lte 1 ?n)
+    (lte ?n ?len))
+
+(color red)
+(color blue)
+
+(opponent red blue)
+(opponent blue red)
+
+(length 1 4)
+(length 2 5)
+(length 3 6)
+(length 4 7)
+(length 5 6)
+(length 6 5)
+(length 7 4)
+
+(<= (connected ?x ?n1 ?x ?n2)
+    (diff1 ?n1 ?n2)
+    (validCell ?x ?n1)
+    (validCell ?x ?n2))
+(<= (connected ?x1 ?n ?x2 ?n)
+    (diff1 ?x1 ?x2)
+    (validCell ?x1 ?n)
+    (validCell ?x2 ?n))
+(<= (connected ?x1 ?n1 ?x2 ?n2)
+    (diff1 ?x1 ?x2)
+    (greaterLength ?x2 ?x1)
+    (succ ?n1 ?n2))
+(<= (connected ?x1 ?n1 ?x2 ?n2)
+    (diff1 ?x1 ?x2)
+    (greaterLength ?x1 ?x2)
+    (succ ?n2 ?n1))
+
+(<= (greaterLength ?x2 ?x1)
+    (length ?x1 ?l1)
+    (length ?x2 ?l2)
+    (lt ?l1 ?l2))
+
+(<= (diff1 ?m ?n)
+    (succ ?m ?n))
+(<= (diff1 ?n ?m)
+    (succ ?m ?n))
+
+(<= (lt ?x ?y)
+    (succ ?x ?y))
+(<= (lt ?x ?z)
+    (succ ?y ?z)
+    (lt ?x ?y))
+
+(<= (lte ?m ?m)
+    (succ ?m ?n))
+(<= (lte ?x ?y)
+    (lt ?x ?y))
+
+(succ 0 1)
+(succ 1 2)
+(succ 2 3)
+(succ 3 4)
+(succ 4 5)
+(succ 5 6)
+(succ 6 7)
+(succ 7 8)
+(succ 8 9)
+(succ 9 10)
+(succ 10 11)
+(succ 11 12)
+(succ 12 13)
+(succ 13 14)
+(succ 14 15)
+(succ 15 16)
+(succ 16 17)
+(succ 17 18)
+(succ 18 19)
+(succ 19 20)

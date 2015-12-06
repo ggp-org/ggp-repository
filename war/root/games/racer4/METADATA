@@ -1,3 +1,5 @@
 {
-  "rulesheet": "racer4.kif"
+  "gameName": "Racer (4 players)",
+  "rulesheet": "racer4.kif",
+  "stylesheet": "racer4.xsl"
 }

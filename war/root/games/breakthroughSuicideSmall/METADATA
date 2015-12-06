@@ -1,0 +1,7 @@
+{
+  "gameName": "Breakthrough Suicide (Small)",
+  
+  "user_interface": "breakthroughSuicideSmall.js",
+  "rulesheet": "breakthroughSuicideSmall.kif",  
+  "stylesheet": "breakthroughSuicideSmall.xsl"
+}

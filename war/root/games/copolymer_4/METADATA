@@ -1,0 +1,6 @@
+{
+  "gameName": "Copolymer (4-length hexagon)",
+
+  "rulesheet": "copolymer_4.kif",
+  "stylesheet": "copolymer_4.xsl"
+}
