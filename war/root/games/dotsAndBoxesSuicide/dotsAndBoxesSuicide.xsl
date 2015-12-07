@@ -13,20 +13,20 @@
         background-color: #000000;
       }
       td.hline {
-        width:  <xsl:value-of select="$width * 0.14"/>px;
+        width:  <xsl:value-of select="$width * 0.176"/>px;
         height: <xsl:value-of select="$height * 0.02"/>px;
         border: none;
         background-color: #CCCCCC;
       }
       td.vline {
         width:  <xsl:value-of select="$width * 0.02"/>px;
-        height: <xsl:value-of select="$height * 0.14"/>px;
+        height: <xsl:value-of select="$height * 0.176"/>px;
         border: none;
         background-color: #CCCCCC;
       }
       td.box {
-        width:  <xsl:value-of select="$width * 0.14"/>px;
-        height: <xsl:value-of select="$height * 0.14"/>px;
+        width:  <xsl:value-of select="$width * 0.176"/>px;
+        height: <xsl:value-of select="$height * 0.176"/>px;
         border: none;
         background-color: #CCCCCC;
       }
@@ -35,7 +35,7 @@
         border-collapse: collapse;
       }
       div.dot {
-        font-size: <xsl:value-of select="$height * 0.6 * 0.14"/>px;
+        font-size: <xsl:value-of select="$height * 0.6 * 0.176"/>px;
         text-align: center;
         align: center;
         font-weight: bold;
@@ -44,8 +44,8 @@
     
     <!-- Draw Board -->
     <xsl:call-template name="board">
-      <xsl:with-param name="cols" select="7"/>
-      <xsl:with-param name="rows" select="7"/>
+      <xsl:with-param name="cols" select="6"/>
+      <xsl:with-param name="rows" select="6"/>
     </xsl:call-template>		    
   </div>  
 </xsl:template>
@@ -56,7 +56,7 @@
 
   <td class="dot" />
 
-  <xsl:if test="7 > $col">
+  <xsl:if test="6 > $col">
   <td class="hline">
   <xsl:attribute name="id">
     <xsl:value-of select="'cell_'"/>
@@ -92,7 +92,7 @@
   </xsl:if>
   
   </td>
-  <xsl:if test="$col &lt; 7">
+  <xsl:if test="$col &lt; 6">
   <td class="box">
   <xsl:attribute name="id">
     <xsl:value-of select="'cell_'"/>
@@ -164,7 +164,7 @@
   </xsl:call-template>
   </tr>
 
-  <xsl:if test="$row &lt; 7">
+  <xsl:if test="$row &lt; 6">
   <tr>
   <xsl:call-template name="board_row_lower">
     <xsl:with-param name="cols" select="$cols"/>
