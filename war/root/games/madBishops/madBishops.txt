@@ -1,0 +1,17 @@
+Mad Bishops is a "game of annihilation" designed by Mark Steere in 2010.
+
+It is played on a 10x10 board that begins with 25 bishops of each color.
+The goal of the game is to capture all of the opponent's bishops. Bishops
+generally move like chess bishops, but with some restrictions on which
+moves can be chosen in a given turn.
+
+Each turn, the active player must make one of the two following types of
+moves:
+1. Use a bishop to capture an opponent's bishop.
+2. Use a bishop that does not have an available capture to move to a
+space where it threatens an opposing bishop.
+
+A player wins when all of the opponent's pieces have been captured.
+
+http://www.marksteeregames.com/
+Mark Steere retains all of the rights to his games, including copyrights and trademarks.
