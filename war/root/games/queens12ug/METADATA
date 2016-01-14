@@ -1,0 +1,7 @@
+{
+  "gameName"    : "12 Queens Puzzle - Unguided",
+  "rulesheet"   : "queens.kif",
+  "stylesheet"  : "queens.xsl",
+  "description" : "queens.txt",
+  "curator"     : "arr"
+}
