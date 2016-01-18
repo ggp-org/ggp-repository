@@ -403,28 +403,35 @@
 
 (<= (goal red 100)
     (goal_snake red 100)
-    terminal_snake)
+    terminal_snake
+    (not terminal_assem))
 (<= (goal red 50)
     (goal_snake red 50)
-    terminal_snake)
+    terminal_snake
+    (not terminal_assem))
 (<= (goal red 0)
     (goal_snake red 0)
-    terminal_snake)
+    terminal_snake
+    (not terminal_assem))
 (<= (goal blue 100)
     (goal_snake blue 100)
-    terminal_snake)
+    terminal_snake
+    (not terminal_assem))
 (<= (goal blue 50)
     (goal_snake blue 50)
-    terminal_snake)
+    terminal_snake
+    (not terminal_assem))
 (<= (goal blue 0)
     (goal_snake blue 0)
-    terminal_snake)
+    terminal_snake
+    (not terminal_assem))
 (<= (goal red ?s)
     (goal_assem red ?s)
     terminal_assem)
 (<= (goal blue ?s)
     (goal_assem blue ?s)
     terminal_assem)
+
 
 (<= terminal
     terminal_snake)
