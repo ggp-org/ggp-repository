@@ -1,0 +1,237 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Queens Puzzle.
+;;;
+;;; Place queens on the board such that none are attacking each other.  On an
+;;; NxN board, it's possible to place N queens (except for 2x2 and 3x3).
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(role robot)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Base propositions.
+;
+; - Each cell has a queen or is blank.
+; - The player can be placing the nth queen.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (base (cell ?row ?col ?type))
+    (number ?row)
+    (number ?col)
+    (type ?type))
+
+(<= (base (placing ?n))
+    (number ?n))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Inputs.
+;
+; - Each turn consists of placing a queen.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (input robot (place ?row ?col))
+    (number ?row)
+    (number ?col))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Initial state.
+;
+; - All cells are blank.
+; - The player is placing the first queen.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (init (cell ?row ?col blank))
+    (number ?row)
+    (number ?col))
+
+(init (placing 1))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Legal moves.
+;
+; A queen can be placed on any blank cell.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (legal robot (place ?row ?col))
+    (true (cell ?row ?col blank)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Next state calculations.
+;
+; - Cells that are played gain a queen.
+; - All other cells retain their existing state.
+; - The queen being placed moves on.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (next (cell ?row ?col queen))
+    (does robot (place ?row ?col)))
+
+(<= (next (cell ?row ?col ?type))
+    (true (cell ?row ?col ?type))
+    (not (does robot (place ?row ?col))))
+
+(<= (next (placing ?n2))
+    (true (placing ?n1))
+    (succ ?n1 ?n2))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Terminality.
+;
+; The game is over when the player no longer has any queens left to place.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= terminal
+    (not still_placing))
+
+(<= still_placing
+    (true (placing ?n)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Goal.
+;
+; - Score 0 if any queen is attacked.
+; - Otherwise score 100.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (goal robot 0)
+    (true (cell ?row ?col queen))
+    (attacked ?row ?col))
+
+(<= (goal robot 100)
+    (not (goal robot 0)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; General functions.
+;
+; - Maths.
+; - Piece types.
+; - Whether a cell is being attacked by a queen.
+;   - True if there's a queen in the same row.
+;   - True if there's a queen in the same column.
+;   - True if there's a queen in the same NE diagonal (row + col = CONST).
+;   - True if there's a queen in the same NW diagonal (row - col = CONST)
+;     => CONST + col = row (but note than CONST might need to be negative).
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (number ?n)
+    (succ ?n ?m))
+
+(<= (number ?m)
+    (succ ?n ?m))
+
+(<= (ext_succ ?n1 ?n2)
+    (succ ?n1 ?n2))
+
+(<= (ext_number ?n)
+    (ext_succ ?n ?m))
+
+(<= (ext_number ?m)
+    (ext_succ ?n ?m))
+
+(<= (plus ?n 0 ?n)
+    (ext_number ?n))
+
+(<= (plus ?x ?y ?z)
+    (ext_succ ?y2 ?y)
+    (ext_succ ?x ?x2)
+    (plus ?x2 ?y2 ?z))
+
+(type queen)
+(type blank)
+
+(<= (attacked ?row ?col)
+    (true (cell ?row ?col2 queen))
+    (number ?col)
+    (distinct ?col ?col2))
+
+(<= (attacked ?row ?col)
+    (true (cell ?row2 ?col queen))
+    (number ?row)
+    (distinct ?row ?row2))
+
+(<= (attacked ?row ?col)
+    (true (cell ?row2 ?col2 queen))
+    (plus ?row ?col ?c)
+    (plus ?row2 ?col2 ?c)
+    (distinct ?row ?row2))
+
+(<= (attacked ?row ?col)
+    (true (cell ?row2 ?col2 queen))
+    (plus ?c ?col ?row)
+    (plus ?c ?col2 ?row2)
+    (distinct ?row ?row2))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Data specific to this instance of the problem.
+;
+; - The successor relation (of the correct size for the puzzle in question).
+; - The extended successor relation (up to twice the board size and down to
+;   negative board size).
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(succ 1   2)
+(succ 2   3)
+(succ 3   4)
+(succ 4   5)
+(succ 5   6)
+(succ 6   7)
+(succ 7   8)
+(succ 8   9)
+(succ 9  10)
+(succ 10 11)
+(succ 11 12)
+(succ 12 13)
+(succ 13 14)
+(succ 14 15)
+(succ 15 16)
+
+(ext_succ m16 m15)
+(ext_succ m15 m14)
+(ext_succ m14 m13)
+(ext_succ m13 m12)
+(ext_succ m12 m11)
+(ext_succ m11 m10)
+(ext_succ m10 m9)
+(ext_succ m9  m8)
+(ext_succ m8  m7)
+(ext_succ m7  m6)
+(ext_succ m6  m5)
+(ext_succ m5  m4)
+(ext_succ m4  m3)
+(ext_succ m3  m2)
+(ext_succ m2  m1)
+(ext_succ m1   0)
+(ext_succ  0   1)
+(ext_succ  1   2)
+(ext_succ  2   3)
+(ext_succ  3   4)
+(ext_succ  4   5)
+(ext_succ  5   6)
+(ext_succ  6   7)
+(ext_succ  7   8)
+(ext_succ  8   9)
+(ext_succ  9  10)
+(ext_succ 10  11)
+(ext_succ 11  12)
+(ext_succ 12  13)
+(ext_succ 13  14)
+(ext_succ 14  15)
+(ext_succ 15  16)
+(ext_succ 16  17)
+(ext_succ 17  18)
+(ext_succ 18  19)
+(ext_succ 19  20)
+(ext_succ 20  21)
+(ext_succ 21  22)
+(ext_succ 22  23)
+(ext_succ 23  24)
+(ext_succ 24  25)
+(ext_succ 25  26)
+(ext_succ 26  27)
+(ext_succ 27  28)
+(ext_succ 28  29)
+(ext_succ 29  30)
+(ext_succ 30  31)
+(ext_succ 31  32)
+
