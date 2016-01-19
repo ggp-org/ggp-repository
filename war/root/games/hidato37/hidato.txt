@@ -1,0 +1,1 @@
+Place numbers to create a contiguous trail from 1 to the maximum.

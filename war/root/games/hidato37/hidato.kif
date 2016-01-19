@@ -1,0 +1,407 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Hidato.
+;;;
+;;; Place numbers to create a contiguous trail from 1 to the maximum.
+;;;
+;;;       --  --  --  --                            35  34  33  32
+;;;
+;;;     --  --  10  31  30                        36  09  10  31  30
+;;;
+;;;   37  --  --  12  --  --                    37  08  11  12  13  29
+;;;
+;;; --  --  17  --  15  --  --     ----->     06  07  17  16  15  14  28
+;;;
+;;;   --  --  --  --  --  --                    05  18  19  20  26  27
+;;;
+;;;     --  02  --  --  --                        04  02  21  23  25
+;;;
+;;;       --  01  22  24                            03  01  22  24
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(role robot)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Base propositions.
+;
+; - Each cell has a number or "blank".
+; - The player can have chosen to quit.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (base (cell ?c ?n))
+    (coord  ?c)
+    (number ?n))
+
+(<= (base (cell ?c blank))
+    (coord  ?c))
+
+(base finished)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Inputs.
+;
+; - Each turn consists of placing a number in a cell.
+; - The player can choose to quit.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (input robot (place ?c ?n))
+    (coord ?c)
+    (number ?n))
+
+(input robot quit)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Initial state.
+;
+; - Some cells are filled, the rest are blank.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(init (cell a1 blank))
+(init (cell a2 37))
+(init (cell a3 blank))
+(init (cell a4 blank))
+(init (cell b1 blank))
+(init (cell b2 blank))
+(init (cell b3 blank))
+(init (cell b4 blank))
+(init (cell b5 blank))
+(init (cell c1 blank))
+(init (cell c2 blank))
+(init (cell c3 17))
+(init (cell c4 blank))
+(init (cell c5 10))
+(init (cell c6 blank))
+(init (cell d1 blank))
+(init (cell d2  2))
+(init (cell d3 blank))
+(init (cell d4 blank))
+(init (cell d5 12))
+(init (cell d6 31))
+(init (cell d7 blank))
+(init (cell e2  1))
+(init (cell e3 blank))
+(init (cell e4 blank))
+(init (cell e5 15))
+(init (cell e6 blank))
+(init (cell e7 30))
+(init (cell f3 22))
+(init (cell f4 blank))
+(init (cell f5 blank))
+(init (cell f6 blank))
+(init (cell f7 blank))
+(init (cell g4 24))
+(init (cell g5 blank))
+(init (cell g6 blank))
+(init (cell g7 blank))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Legal moves.
+;
+; A number n can be placed in cell c iff...
+;
+; - c is blank.
+; - n is not already present.
+; - n-1 is either not present or is adjacent to c.
+; - n+1 is either not present or is adjacent to c.
+;
+; The player can always quit (which will become the only legal move at some
+; point following a mistake).
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (legal robot (place ?c ?n1))
+    (true (cell ?c blank))
+    (unused ?n1)
+    (succ ?n0 ?n1)
+    (succ ?n1 ?n2)
+    (absent_or_adjacent ?n0 ?c)
+    (absent_or_adjacent ?n2 ?c))
+
+(<= (unused ?n)
+    (number ?n)
+    (not (used ?n)))
+
+(<= (used ?n)
+    (true (cell ?c ?n)))
+
+(<= (absent_or_adjacent ?n ?c)
+    (coord ?c)
+    (unused ?n))
+
+(<= (absent_or_adjacent ?n ?c1)
+    (true (cell ?c2 ?n))
+    (adjacent ?c1 ?c2))
+
+(legal robot quit)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Next state calculations.
+;
+; - Cells with numbers retain their numbers.
+; - Blank cells remain blank unless played on.
+; - Cells that are played on gain the number placed.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (next (cell ?c ?n))
+    (true (cell ?c ?n))
+    (number ?n))
+
+(<= (next (cell ?c1 blank))
+    (true (cell ?c1 blank))
+    (does robot (place ?c2 ?n))
+    (distinct ?c1 ?c2))
+
+(<= (next (cell ?c blank))
+    (true (cell ?c blank))
+    (does robot quit))
+
+(<= (next (cell ?c ?n))
+    (does robot (place ?c ?n)))
+
+(<= (next finished)
+    (does robot quit))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Terminality.
+;
+; The game is over when there are no blank cells remaining or when the player
+; quits.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= terminal
+    filled)
+
+(<= filled
+    (not anyblank))
+
+(<= anyblank
+    (true (cell ?c blank)))
+
+(<= terminal
+    (true finished))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Goal.
+;
+; - If there are any blank cells, the player scores 0.
+; - Otherwise score 100.  (The other requirements are always met because of the
+;   legals.)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (goal robot 0)
+    (true (cell ?c blank)))
+
+(<= (goal robot 100)
+    (not (goal robot 0)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; General functions.
+;
+; - Numbers appear on the either side of the successor relation.
+; - Adjacency is symmetric.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(<= (number ?n)
+    (succ ?n ?m))
+
+(<= (number ?m)
+    (succ ?n ?m))
+
+(<= (adjacent ?c1 ?c2)
+    (adj ?c1 ?c2))
+
+(<= (adjacent ?c1 ?c2)
+    (adj ?c2 ?c1))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Data specific to this instance of the problem.
+;
+; - The coordinate system.
+;
+;
+;          a4  b5  c6  d7
+;
+;        a3  b4  c5  d6  e7
+;
+;      a2  b3  c4  d5  e6  f7
+;
+;    a1  b2  c3  d4  e5  f6  g7
+;
+;      b1  c2  d3  e4  f5  g6
+;
+;        c1  d2  e3  f4  g5
+;
+;          d1  e2  f3  g4
+;
+;
+; - The adjacency information.
+; - The successor relations.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(coord  a1)
+(coord  a2)
+(coord  a3)
+(coord  a4)
+(coord  b1)
+(coord  b2)
+(coord  b3)
+(coord  b4)
+(coord  b5)
+(coord  c1)
+(coord  c2)
+(coord  c3)
+(coord  c4)
+(coord  c5)
+(coord  c6)
+(coord  d1)
+(coord  d2)
+(coord  d3)
+(coord  d4)
+(coord  d5)
+(coord  d6)
+(coord  d7)
+(coord  e2)
+(coord  e3)
+(coord  e4)
+(coord  e5)
+(coord  e6)
+(coord  e7)
+(coord  f3)
+(coord  f4)
+(coord  f5)
+(coord  f6)
+(coord  f7)
+(coord  g4)
+(coord  g5)
+(coord  g6)
+(coord  g7)
+
+(adj a1 a2)
+(adj a2 a3)
+(adj a3 a4)
+(adj b1 b2)
+(adj b2 b3)
+(adj b3 b4)
+(adj b4 b5)
+(adj c1 c2)
+(adj c2 c3)
+(adj c3 c4)
+(adj c4 c5)
+(adj c5 c6)
+(adj d1 d2)
+(adj d2 d3)
+(adj d3 d4)
+(adj d4 d5)
+(adj d5 d6)
+(adj d6 d7)
+(adj e2 e3)
+(adj e3 e4)
+(adj e4 e5)
+(adj e5 e6)
+(adj e6 e7)
+(adj f3 f4)
+(adj f4 f5)
+(adj f5 f6)
+(adj f6 f7)
+(adj g4 g5)
+(adj g5 g6)
+(adj g6 g7)
+
+(adj a1 b1)
+(adj b1 c1)
+(adj c1 d1)
+(adj a2 b2)
+(adj b2 c2)
+(adj c2 d2)
+(adj d2 e2)
+(adj a3 b3)
+(adj b3 c3)
+(adj c3 d3)
+(adj d3 e3)
+(adj e3 f3)
+(adj a4 b4)
+(adj b4 c4)
+(adj c4 d4)
+(adj d4 e4)
+(adj e4 f4)
+(adj f4 g4)
+(adj b5 c5)
+(adj c5 d5)
+(adj d5 e5)
+(adj e5 f5)
+(adj f5 g5)
+(adj c6 d6)
+(adj d6 e6)
+(adj e6 f6)
+(adj f6 g6)
+(adj d7 e7)
+(adj e7 f7)
+(adj f7 g7)
+
+(adj a4 b5)
+(adj b5 c6)
+(adj c6 d7)
+(adj a3 b4)
+(adj b4 c5)
+(adj c5 d6)
+(adj d6 e7)
+(adj a2 b3)
+(adj b3 c4)
+(adj c4 d5)
+(adj d5 e6)
+(adj e6 f7)
+(adj a1 b2)
+(adj b2 c3)
+(adj c3 d4)
+(adj d4 e5)
+(adj e5 f6)
+(adj f6 g7)
+(adj b1 c2)
+(adj c2 d3)
+(adj d3 e4)
+(adj e4 f5)
+(adj f5 g6)
+(adj c1 d2)
+(adj d2 e3)
+(adj e3 f4)
+(adj f4 g5)
+(adj d1 e2)
+(adj e2 f3)
+(adj f3 g4)
+
+(succ  1  2)
+(succ  2  3)
+(succ  3  4)
+(succ  4  5)
+(succ  5  6)
+(succ  6  7)
+(succ  7  8)
+(succ  8  9)
+(succ  9 10)
+(succ 10 11)
+(succ 11 12)
+(succ 12 13)
+(succ 13 14)
+(succ 14 15)
+(succ 15 16)
+(succ 16 17)
+(succ 17 18)
+(succ 18 19)
+(succ 19 20)
+(succ 20 21)
+(succ 21 22)
+(succ 22 23)
+(succ 23 24)
+(succ 24 25)
+(succ 25 26)
+(succ 26 27)
+(succ 27 28)
+(succ 28 29)
+(succ 29 30)
+(succ 30 31)
+(succ 31 32)
+(succ 32 33)
+(succ 33 34)
+(succ 34 35)
+(succ 35 36)
+(succ 36 37)
+
