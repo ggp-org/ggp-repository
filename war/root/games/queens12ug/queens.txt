@@ -1,0 +1,4 @@
+The classic queens puzzles.  Place queens on the board so that none of them are attacking each other.  On an NxN board, it's possible to place N queens (except for 2x2 and 3x3).
+
+This is the unguided formulation of the puzzle.  If queens are placed illegally, the player scores 0 at the end.
+

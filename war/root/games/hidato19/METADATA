@@ -1,0 +1,7 @@
+{
+  "gameName"    : "Hidato (19 hexes)",
+  "rulesheet"   : "hidato.kif",
+  "description" : "hidato.txt",
+  "stylesheet"  : "hidato.xsl",
+  "curator"     : "arr"
+}
