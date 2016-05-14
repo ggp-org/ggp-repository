@@ -212,7 +212,7 @@
       <div class="       hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="       hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="       hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
-      <div class="{$c71} hex     "><div class="left"></div><div class="middle"><p>7 4</p></div><div class="right"></div></div>
+      <div class="{$c71} hex     "><div class="left"></div><div class="middle"><p>7 1</p></div><div class="right"></div></div>
       <div class="       hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="       hex     "><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
       <div class="       hex even"><div class="left"></div><div class="middle"><p>  </p></div><div class="right"></div></div>
