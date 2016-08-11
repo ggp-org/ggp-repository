@@ -1,0 +1,7 @@
+{
+  "gameName": "Mad Bishops",
+
+  "description": "madBishops.txt",
+  "rulesheet": "madBishops.kif",
+  "stylesheet": "madBishops.xsl"
+}

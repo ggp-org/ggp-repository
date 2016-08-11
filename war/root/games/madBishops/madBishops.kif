@@ -1,0 +1,183 @@
+; Mad Bishops
+; Game design by Mark Steere, 2010.
+; http://www.marksteeregames.com/
+; Mark Steere retains all of the rights to his games, including copyrights and trademarks.
+; 
+; GDL by Alex Landau
+;
+
+(role white)
+(role black)
+
+; Initial state
+
+(initFile white a)
+(initFile black b)
+(initFile white c)
+(initFile black d)
+(initFile white e)
+(initFile black f)
+(initFile white g)
+(initFile black h)
+(initFile white i)
+(initFile black j)
+
+(initRank white 1)
+(initRank black 2)
+(initRank white 3)
+(initRank black 4)
+(initRank white 5)
+(initRank black 6)
+(initRank white 7)
+(initRank black 8)
+(initRank white 9)
+(initRank black 10)
+
+(<= (init (cell ?x ?y ?color))
+    (initFile ?color ?x)
+    (initRank ?color ?y))
+
+(init (control white))
+
+; Legal moves
+
+(<= (threatensEmptySpace ?color ?x1 ?y1 ?x2 ?y2 ?dir)
+    (true (cell ?x1 ?y1 ?color))
+    (nextCellInDir ?x1 ?y1 ?x2 ?y2 ?dir)
+    (not (occupied ?x2 ?y2)))
+(<= (threatensEmptySpace ?color ?x1 ?y1 ?x3 ?y3 ?dir)
+    (threatensEmptySpace ?color ?x1 ?y1 ?x2 ?y2 ?dir)
+    (nextCellInDir ?x2 ?y2 ?x3 ?y3 ?dir)
+    (not (occupied ?x3 ?y3)))
+
+(<= (occupied ?x ?y)
+    (true (cell ?x ?y ?color)))
+
+(<= (threatensOpposingPiece ?color ?x1 ?y1 ?x2 ?y2 ?dir)
+    (true (cell ?x1 ?y1 ?color))
+    (nextCellInDir ?x1 ?y1 ?x2 ?y2 ?dir)
+    (opponent ?color ?opp)
+    (true (cell ?x2 ?y2 ?opp)))
+(<= (threatensOpposingPiece ?color ?x1 ?y1 ?x3 ?y3 ?dir)
+    (threatensEmptySpace ?color ?x1 ?y1 ?x2 ?y2 ?dir)
+    (nextCellInDir ?x2 ?y2 ?x3 ?y3 ?dir)
+    (opponent ?color ?opp)
+    (true (cell ?x3 ?y3 ?opp)))
+
+(<= (threatensAnyOpposingPiece ?x1 ?y1)
+    (threatensOpposingPiece ?color ?x1 ?y1 ?x2 ?y2 ?dir))
+
+; Capture
+(<= (legal ?player (move ?x1 ?y1 ?x2 ?y2))
+    (true (control ?player))
+    (threatensOpposingPiece ?player ?x1 ?y1 ?x2 ?y2 ?dir))
+; Threaten
+(<= (legal ?player (move ?x1 ?y1 ?x2 ?y2))
+    (true (control ?player))
+    (true (cell ?x1 ?y1 ?player))
+    (not (threatensAnyOpposingPiece ?x1 ?y1))
+    ; Find some space threatened by the opponent to move to
+    (threatensEmptySpace ?player ?x1 ?y1 ?x2 ?y2 ?dir)
+    (opponent ?player ?opp)
+    (isEmptySpaceThreatenedByPlayer ?opp ?x2 ?y2))
+
+(<= (legal ?player noop)
+    (role ?player)
+    (not (true (control ?player))))
+
+(<= (isEmptySpaceThreatenedByPlayer ?player ?x2 ?y2)
+    (threatensEmptySpace ?player ?x1 ?y1 ?x2 ?y2 ?dir))
+
+; Turn dynamics
+
+(<= (next (control black))
+    (true (control white)))
+(<= (next (control white))
+    (true (control black)))
+
+(<= (affected ?x1 ?y1)
+    (does ?player (move ?x1 ?y1 ?x2 ?y2)))
+(<= (affected ?x2 ?y2)
+    (does ?player (move ?x1 ?y1 ?x2 ?y2)))
+
+(<= (next (cell ?x ?y ?color))
+    (true (cell ?x ?y ?color))
+    (not (affected ?x ?y)))
+(<= (next (cell ?x2 ?y2 ?color))
+    (does ?color (move ?x1 ?y1 ?x2 ?y2)))
+
+; Terminality and goals
+
+(<= (anyPiecesOfColor ?color)
+    (true (cell ?x ?y ?color)))
+
+(<= terminal
+    (role ?color)
+    (not (anyPiecesOfColor ?color)))
+
+(<= (goal ?color 100)
+    (anyPiecesOfColor ?color))
+(<= (goal ?color 0)
+    (role ?color)
+    (not (anyPiecesOfColor ?color)))
+
+; Utility constants
+
+(opponent white black)
+(opponent black white)
+
+(<= (nextCellInDir ?x1 ?y1 ?x2 ?y2 ne)
+    (nextFile ?x1 ?x2)
+    (nextRank ?y1 ?y2))
+(<= (nextCellInDir ?x1 ?y1 ?x2 ?y2 se)
+    (nextFile ?x2 ?x1)
+    (nextRank ?y1 ?y2))
+(<= (nextCellInDir ?x1 ?y1 ?x2 ?y2 sw)
+    (nextFile ?x2 ?x1)
+    (nextRank ?y2 ?y1))
+(<= (nextCellInDir ?x1 ?y1 ?x2 ?y2 nw)
+    (nextFile ?x1 ?x2)
+    (nextRank ?y2 ?y1))
+
+(nextFile a b)
+(nextFile b c)
+(nextFile c d)
+(nextFile d e)
+(nextFile e f)
+(nextFile f g)
+(nextFile g h)
+(nextFile h i)
+(nextFile i j)
+(nextRank 1 2)
+(nextRank 2 3)
+(nextRank 3 4)
+(nextRank 4 5)
+(nextRank 5 6)
+(nextRank 6 7)
+(nextRank 7 8)
+(nextRank 8 9)
+(nextRank 9 10)
+
+; Bases and inputs
+
+(<= (legalCell ?x ?y)
+    (initFile ?color ?x)
+    (initRank ?color ?y))
+(<= (base (cell ?x ?y ?color))
+    (legalCell ?x ?y)
+    (role ?color))
+(base (control white))
+(base (control black))
+
+(<= (input ?player noop)
+    (role ?player))
+(<= (input ?player (move ?x1 ?y1 ?x2 ?y2))
+    (role ?player)
+    (validDiagonal ?x1 ?y1 ?x2 ?y2 ?dir))
+
+(<= (validDiagonal ?x1 ?y1 ?x2 ?y2 ?dir)
+    (legalCell ?x1 ?y1)
+    (nextCellInDir ?x1 ?y1 ?x2 ?y2 ?dir))
+(<= (validDiagonal ?x1 ?y1 ?x3 ?y3 ?dir)
+    (validDiagonal ?x1 ?y1 ?x2 ?y2 ?dir)
+    (nextCellInDir ?x2 ?y2 ?x3 ?y3 ?dir))
