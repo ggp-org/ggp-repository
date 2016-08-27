@@ -1,0 +1,7 @@
+{
+  "gameName": "Connect Four 7x7 (Suicide)",
+  
+  "user_interface": "connectFourSuicide_7x7.js",
+  "rulesheet": "connectFourSuicide_7x7.kif",  
+  "stylesheet": "connectFourSuicide_7x7.xsl"
+}
