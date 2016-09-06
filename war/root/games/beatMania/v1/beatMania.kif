@@ -1,0 +1,180 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Beat Mania
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; ROLE Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(role random)
+(role player)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; INIT Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(init (blocksDropped 0))
+(init (blocksCaught  0))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; LEGAL Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (legal random (place 1))
+    (not (true (blocksDropped 30))))
+(<= (legal random (place 2))
+    (not (true (blocksDropped 30))))
+(<= (legal random (place 3))
+    (not (true (blocksDropped 30))))
+(<= (legal random noop)
+    (true (blocksDropped 30)))
+
+(legal player (play 1))
+(legal player (play 2))
+(legal player (play 3))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; NEXT Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (next (block 1 30))
+    (does random (place 1)))
+(<= (next (block 2 30))
+    (does random (place 2)))
+(<= (next (block 3 30))
+    (does random (place 3)))
+    
+(<= (next (blocksDropped ?nplusplus))
+    blockDropped
+    (true (blocksDropped ?n))
+    (plusplus ?n ?nplusplus))
+(<= (next (blocksDropped ?n))
+    (true (blocksDropped ?n))
+    (not blockDropped))
+    
+(<= (next (blocksCaught ?nplusplus))    
+	blockCaught
+    (true (blocksCaught ?n))
+    (plusplus ?n ?nplusplus))
+(<= (next (blocksCaught ?n))
+    (true (blocksCaught ?n))
+    (not blockCaught))
+    
+(<= (next (block ?x ?yminusminus))
+    (true (block ?x ?y))
+    (minusminus ?y ?yminusminus))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; TERMINAL Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= terminal
+    (true (blocksDropped 30))
+    (not (true (block 1 1)))
+    (not (true (block 2 1)))
+    (not (true (block 3 1))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; GOAL Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(goal random 100)
+(<= (goal player ?goal)
+    (true (blocksCaught ?n))
+    (scoreMap ?n ?goal))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; View Definitions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= blockDropped
+    (does random (place 1)))
+(<= blockDropped
+    (does random (place 2)))
+(<= blockDropped
+    (does random (place 3)))
+    
+(<= blockCaught
+    (does player (play 1))
+    (true (block 1 1)))
+(<= blockCaught
+    (does player (play 2))
+    (true (block 2 1)))
+(<= blockCaught
+    (does player (play 3))
+    (true (block 3 1)))
+    
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Static Relations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(plusplus  0  1) (plusplus  1  2) (plusplus  2  3) (plusplus  3  4) (plusplus  4  5) (plusplus  5  6) (plusplus  6  7) (plusplus  7  8) (plusplus  8  9) (plusplus  9 10)
+(plusplus 10 11) (plusplus 11 12) (plusplus 12 13) (plusplus 13 14) (plusplus 14 15) (plusplus 15 16) (plusplus 16 17) (plusplus 17 18) (plusplus 18 19) (plusplus 19 20)
+(plusplus 20 21) (plusplus 21 22) (plusplus 22 23) (plusplus 23 24) (plusplus 24 25) (plusplus 25 26) (plusplus 26 27) (plusplus 27 28) (plusplus 28 29) (plusplus 29 30)
+
+(minusminus 30 29) (minusminus 29 28) (minusminus 28 27) (minusminus 27 26) (minusminus 26 25) (minusminus 25 24) (minusminus 24 23) (minusminus 23 22) (minusminus 22 21) (minusminus 21 20)
+(minusminus 20 19) (minusminus 19 18) (minusminus 18 17) (minusminus 17 16) (minusminus 16 15) (minusminus 15 14) (minusminus 14 13) (minusminus 13 12) (minusminus 12 11) (minusminus 11 10)
+(minusminus 10  9) (minusminus  9  8) (minusminus  8  7) (minusminus  7  6) (minusminus  6  5) (minusminus  5  4) (minusminus  4  3) (minusminus  3  2) (minusminus  2  1)
+
+(scoreMap  0   0)
+(scoreMap  1   3)
+(scoreMap  2   6)
+(scoreMap  3   9)
+(scoreMap  4  12)
+(scoreMap  5  15)
+(scoreMap  6  18)
+(scoreMap  7  21)
+(scoreMap  8  24)
+(scoreMap  9  27)
+(scoreMap 10  30)
+(scoreMap 11  33)
+(scoreMap 12  36)
+(scoreMap 13  39)
+(scoreMap 14  42)
+(scoreMap 15  45)
+(scoreMap 16  48)
+(scoreMap 17  51)
+(scoreMap 18  54)
+(scoreMap 19  57)
+(scoreMap 20  60)
+(scoreMap 21  63)
+(scoreMap 22  66)
+(scoreMap 23  69)
+(scoreMap 24  72)
+(scoreMap 25  75)
+(scoreMap 26  80)
+(scoreMap 27  85)
+(scoreMap 28  90)
+(scoreMap 29  95)
+(scoreMap 30 100)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Bases and Inputs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(x 1)
+(x 2)
+(x 3)
+
+; Contains 1 to 30
+(<= (y ?n)
+    (plusplus ?m ?n))
+
+(<= (base (block ?x ?y))
+    (x ?x)
+    (y ?y))
+
+(base (blocksDropped 0))
+(<= (base (blocksDropped ?n))
+    (y ?n))
+(base (blocksCaught 0))
+(<= (base (blocksCaught ?n))
+    (y ?n))
+
+(<= (input random (place ?x))
+    (x ?x))
+(input random noop)
+(<= (input player (play ?x))
+    (x ?x))
