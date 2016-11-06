@@ -3,6 +3,7 @@
 	<xsl:param name="height" select="400"/>
 	<xsl:template name="main" match="/state">
 
+    <div>
 	<style type="text/css" media="all">
 
 		div.upsticker
@@ -426,7 +427,7 @@
 	<div class="upsticker" id="yy"/>
 	<div class="upsticker" id="yyb"/>
 	</div>
-
+    </div>
 </xsl:template>
 
 <xsl:template name="cornercolor">
