@@ -35,7 +35,7 @@
   <xsl:param name="row" select="1"/>
   <xsl:param name="col" select="1"/> 
   
-  <xsl:param name="col_char" select="translate(translate(translate(translate(translate(translate(translate(translate(translate(replace($col,'10','j'),1,'a'),2,'b'),3,'c'),4,'d'),5,'e'),6,'f'),7,'g'),8,'h'),9,'i')"/>
+  <xsl:param name="col_char" select="if ($col = '10') then 'j' else translate(translate(translate(translate(translate(translate(translate(translate(translate($col,1,'a'),2,'b'),3,'c'),4,'d'),5,'e'),6,'f'),7,'g'),8,'h'),9,'i')"/>
 
   <td class="cell">
   <xsl:attribute name="id">
