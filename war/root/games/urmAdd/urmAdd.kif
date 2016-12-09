@@ -1,0 +1,279 @@
+; A puzzle with a universal register machine
+; Code the machine to add two numbers
+; by Alex Landau, 6/20/11
+
+(role coder)
+(role debugger)
+
+(goal debugger 100)
+
+; Define here the number of lines given to the coder
+; (should be less than the maximum value given in succ)
+(maxLines 10)
+; Define here the number of registers allowed for use
+(maxRegisters 5)
+; Define here how long it should be allowed to run
+(numSteps 50)
+; Define here legal inputs...
+(legalInput 1)
+(legalInput 2)
+(legalInput 3)
+(legalInput 4)
+(legalInput 5)
+(legalInput 6)
+; Define here (with a rule) the correct value
+(<= (correctValue ?sum)
+	(true (chosenInput1 ?n1))
+	(true (chosenInput2 ?n2))
+	(sum ?n1 ?n2 ?sum))
+
+; Those definitions, plus these, define the allowable lines/registers
+(lineNumber 1)
+(registerNumber 1)
+(<= (lineNumber ?np1)
+	(succ ?n ?np1)
+	(not (maxLines ?n))
+	(lineNumber ?n))
+(<= (registerNumber ?np1)
+	(succ ?n ?np1)
+	(not (maxRegisters ?n))
+	(registerNumber ?n))
+
+(init (lineToAdd 1))
+(<= (init (rv ?reg 0))
+	(registerNumber ?reg))
+
+
+(<= (legal coder done)
+	coding)
+(<= (legal coder (write ?instruction))
+	(validInstruction ?instruction)
+	coding) 
+
+(<= (legal coder noop)
+	(not coding))
+	
+(<= coding
+	(true (lineToAdd ?n)))
+(<= running
+	(true (step ?n)))
+	
+(<= (next readyForInput)
+	(does coder done))
+(<= (next readyForInput)
+    (true (lineToAdd 10)))
+	
+(<= (legal debugger noop)
+	(not (true readyForInput)))
+; Tester picks their input...
+(<= (legal debugger (test ?n1 ?n2))
+	(legalInput ?n1)
+	(legalInput ?n2)
+	(true readyForInput))
+; Which gets inputted and recorded
+(<= (toReplace 1 ?n1)
+	(does debugger (test ?n1 ?n2)))
+(<= (toReplace 2 ?n2)
+	(does debugger (test ?n1 ?n2)))
+(<= (next (chosenInput1 ?n1))
+	(does debugger (test ?n1 ?n2)))
+(<= (next (chosenInput2 ?n2))
+	(does debugger (test ?n1 ?n2)))
+(<= (next (chosenInput1 ?n))
+	(true (chosenInput1 ?n)))
+(<= (next (chosenInput2 ?n))
+	(true (chosenInput2 ?n)))
+; And the computer starts
+(<= (next (step 1))
+	(does debugger (test ?n1 ?n2)))
+(<= (next (pc 1))
+	(does debugger (test ?n1 ?n2)))
+
+; If the coder writes a line, prepare to write the next line,
+; unless we've reached the last possible line
+(<= (next (lineToAdd ?np1))
+	(not (does coder done))
+	(true (lineToAdd ?n))
+	(not (maxLines ?n))
+	(succ ?n ?np1))
+	
+; Define the valid instructions:
+(<= (validInstruction (zero ?reg))
+	(registerNumber ?reg))
+(<= (validInstruction (incr ?reg))
+	(registerNumber ?reg))
+(<= (validInstruction (move ?r1 ?r2))
+	(registerNumber ?r1)
+	(registerNumber ?r2))
+; Branch on equal
+(<= (validInstruction (beq ?r1 ?r2 ?line))
+	(registerNumber ?r1)
+	(registerNumber ?r2)
+	(lineNumber ?line)) 
+
+(<= (next (line ?lineNum ?instruction))
+	(does coder (write ?instruction))
+	(true (lineToAdd ?lineNum)))
+(<= (next (line ?lineNum ?instruction))
+	(true (line ?lineNum ?instruction)))
+
+; Now we're ready to define what happens after the tester sets
+; the input values... ('running' is true)
+(<= (next (step ?np1))
+	(true (step ?n))
+	(succ ?n ?np1))
+(<= (curInstruction ?instruction)
+	(true (pc ?n))
+	(true (line ?n ?instruction)))
+(<= (toReplace ?reg 0)
+	(curInstruction (zero ?reg)))
+(<= (toReplace ?reg ?np1)
+	(curInstruction (incr ?reg))
+	(true (rv ?reg ?n))
+	(succ ?n ?np1))
+(<= (toReplace ?r2 ?n1)
+	(curInstruction (move ?r1 ?r2))
+	(true (rv ?r1 ?n1)))
+
+(<= branching
+	(curInstruction (beq ?r1 ?r2 ?line)))
+(<= (next (pc ?np1))
+	(true (pc ?n))
+	(succ ?n ?np1)
+	(not branching))
+(<= (next (pc ?np1))
+	(true (pc ?n))
+	(succ ?n ?np1)
+	(curInstruction (beq ?r1 ?r2 ?line))
+	(true (rv ?r1 ?n1))
+	(true (rv ?r2 ?n2))
+	(distinct ?n1 ?n2))
+(<= (next (pc ?line))
+	(curInstruction (beq ?r1 ?r2 ?line))
+	(true (rv ?r1 ?n))
+	(true (rv ?r2 ?n)))
+
+(<= (next (rv ?reg ?n))
+	(toReplace ?reg ?n))
+(<= (replaced ?reg)
+	(toReplace ?reg ?n))
+(<= (next (rv ?reg ?n))
+	(true (rv ?reg ?n))
+	(not (replaced ?reg)))
+
+;Terminal when at the last step or an empty line of code
+(<= (hasCode ?lineNum)
+	(true (line ?lineNum ?instruction)))
+(<= ranToEnd
+	running
+	(true (pc ?n))
+	(not (hasCode ?n)))
+(<= terminal
+	ranToEnd)
+(<= terminal
+	(true (step ?n))
+	(numSteps ?n))
+
+;Goal=100 iff we reached the end of the code and the value
+;in register 1 is correct
+(<= correct
+	ranToEnd
+	(correctValue ?n)
+	(true (rv 1 ?n)))
+(<= (goal coder 100)
+	correct)
+(<= (goal coder 0)
+	(not correct))
+	
+; Arithmetic
+(sum 0 0 0)
+(<= (sum 0 ?n ?n)
+	(succ ?m ?n))
+(<= (sum ?mp1 ?n ?sp1)
+	(succ ?m ?mp1)
+	(succ ?s ?sp1)
+	(sum ?m ?n ?s))
+(succ 0 1)
+(succ 1 2)
+(succ 2 3)
+(succ 3 4)
+(succ 4 5)
+(succ 5 6)
+(succ 6 7)
+(succ 7 8)
+(succ 8 9)
+(succ 9 10)
+(succ 10 11)
+(succ 11 12)
+(succ 12 13)
+(succ 13 14)
+(succ 14 15)
+(succ 15 16)
+(succ 16 17)
+(succ 17 18)
+(succ 18 19)
+(succ 19 20)
+(succ 20 21)
+(succ 21 22)
+(succ 22 23)
+(succ 23 24)
+(succ 24 25)
+(succ 25 26)
+(succ 26 27)
+(succ 27 28)
+(succ 28 29)
+(succ 29 30)
+(succ 30 31)
+(succ 31 32)
+(succ 32 33)
+(succ 33 34)
+(succ 34 35)
+(succ 35 36)
+(succ 36 37)
+(succ 37 38)
+(succ 38 39)
+(succ 39 40)
+(succ 40 41)
+(succ 41 42)
+(succ 42 43)
+(succ 43 44)
+(succ 44 45)
+(succ 45 46)
+(succ 46 47)
+(succ 47 48)
+(succ 48 49)
+(succ 49 50)
+(succ 50 51)
+
+; Bases and inputs
+(<= (base (lineToAdd ?n))
+	(lineNumber ?n))
+(<= (base (rv ?reg ?n))
+	(registerNumber ?reg)
+	(succ ?n ?np1))
+(base readyForInput)
+(<= (base (chosenInput1 ?n))
+	(legalInput ?n))
+(<= (base (chosenInput2 ?n))
+	(legalInput ?n))
+(<= (base (step ?n))
+	(succ ?m ?n))
+(<= (base (pc ?n))
+	(lineNumber ?n))
+(<= (base (pc ?mp1))
+	(maxLines ?m)
+	(succ ?m ?mp1))
+(<= (base (line ?lineNum ?instruction))
+	(lineNumber ?lineNum)
+	(validInstruction ?instruction))
+
+(input coder done)
+(<= (input coder (write ?instruction))
+	(validInstruction ?instruction)) 
+(input coder noop)
+(input debugger noop)
+; Tester picks their input...
+(<= (input debugger (test ?n1 ?n2))
+	(legalInput ?n1)
+	(legalInput ?n2))
+	

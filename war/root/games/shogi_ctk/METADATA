@@ -1,0 +1,6 @@
+{
+  "gameName": "Shogi (Capture the King)",
+
+  "rulesheet": "shogi_ctk.kif",
+  "stylesheet": "shogi_ctk.xsl"
+}
