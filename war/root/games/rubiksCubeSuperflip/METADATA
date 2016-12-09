@@ -1,0 +1,6 @@
+{
+  "gameName": "Rubik's Cube (Superflip)",
+
+  "rulesheet": "rubiksCubeSuperflip.kif",
+  "stylesheet": "rubiksCubeSuperflip.xsl"
+}

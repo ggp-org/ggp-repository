@@ -1,0 +1,6 @@
+{
+  "gameName": "Lines of Action",
+
+  "rulesheet": "linesOfAction.kif",
+  "stylesheet": "linesOfAction.xsl"
+}

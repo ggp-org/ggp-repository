@@ -1,0 +1,6 @@
+{
+  "gameName": "Gomoku (Swap2 15x15)",
+
+  "rulesheet": "gomoku_swap2_15x15.kif",
+  "stylesheet": "gomoku_swap2_15x15.xsl"
+}

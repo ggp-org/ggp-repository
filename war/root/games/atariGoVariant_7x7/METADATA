@@ -1,0 +1,6 @@
+{
+  "gameName": "Atari Go (variant, 7x7)",
+
+  "rulesheet": "atariGoVariant_7x7.kif",
+  "stylesheet": "atariGoVariant_7x7.xsl"
+}

@@ -1,0 +1,148 @@
+; Atari Go
+;
+; GDL by Alex Landau
+;
+; This is a Go variant in which the first player to make a capture
+; wins the game.
+;
+; In this version, the active player is not allowed to pass.
+
+(role black)
+(role white)
+
+(init (control black))
+
+; Legal moves
+(<= (legal ?role noop)
+    (role ?role)
+    (not (true (control ?role))))
+
+(<= (legal ?role (play ?x ?y))
+    (true (control ?role))
+    (empty ?x ?y))
+
+(<= (empty ?x ?y)
+    (index ?x)
+    (index ?y)
+    (not (occupied ?x ?y)))
+(<= (occupied ?x ?y)
+    (true (cell ?x ?y ?color)))
+
+(<= (next (cell ?x ?y ?color))
+    (true (cell ?x ?y ?color)))
+(<= (next (cell ?x ?y ?role))
+    (does ?role (play ?x ?y)))
+
+(<= (next (control white))
+    (true (control black)))
+(<= (next (control black))
+    (true (control white)))
+
+; Win if you make a move that results in the opponent being surrounded
+; when it's their turn to move.
+; Alternatively, lose if you make a move that results in your own piece
+; being surrounded without capturing an opponent's piece. 
+(<= (winner ?role)
+    (opponent ?role ?opponent)
+    (hasPieceWithoutLiberties ?opponent)
+    (not (hasPieceWithoutLiberties ?role)))
+(<= (winner ?role)
+    (opponent ?role ?opponent)
+    (hasPieceWithoutLiberties ?opponent)
+    (true (control ?opponent)))
+
+(<= terminal
+    (hasPieceWithoutLiberties ?anyPlayer))
+
+(<= (goal ?role 100)
+    (winner ?role))
+(<= (goal ?role 0)
+    (winner ?opponent)
+    (opponent ?role ?opponent))
+(<= (goal ?role 50)
+    (role ?role)
+    (not (winner white))
+    (not (winner black)))
+
+(<= (hasPieceWithoutLiberties ?role)
+    (true (cell ?x ?y ?role))
+    (true (group ?x ?y ?xg ?yg))
+    (not (groupHasLiberty ?xg ?yg)))
+
+; The stone ends up in a new group of its own label
+(<= (next (group ?x ?y ?x ?y))
+    (does ?role (play ?x ?y)))
+
+; The groups of any adjacent stones of this color should switch to the new group
+(<= (switchToGroup ?xg1 ?yg1 ?xg2 ?yg2)
+    (does ?role (play ?xg2 ?yg2))
+    (adjacent ?xg2 ?yg2 ?x2 ?y2)
+    (true (cell ?x2 ?y2 ?role))
+    (true (group ?x2 ?y2 ?xg1 ?yg1)))
+
+; Rule for maintaining groups
+(<= (affectedGroup ?xg ?yg)
+    (switchToGroup ?xg ?yg ?xg2 ?yg2))
+(<= (next (group ?x ?y ?xg ?yg))
+    (true (group ?x ?y ?xg ?yg))
+    (not (affectedGroup ?xg ?yg)))
+(<= (next (group ?x ?y ?xg2 ?yg2))
+    (true (group ?x ?y ?xg1 ?yg1))
+    (switchToGroup ?xg1 ?yg1 ?xg2 ?yg2))
+
+; Calculate liberties based on groups
+(<= (groupHasLiberty ?xg ?yg)
+    (true (group ?x ?y ?xg ?yg))
+    (adjacent ?x ?y ?x2 ?y2)
+    (empty ?x2 ?y2))
+
+(<= (adjacent ?x ?y1 ?x ?y2)
+    (index ?x)
+    (nextIndex ?y1 ?y2))
+(<= (adjacent ?x ?y2 ?x ?y1)
+    (index ?x)
+    (nextIndex ?y1 ?y2))
+(<= (adjacent ?x1 ?y ?x2 ?y)
+    (index ?y)
+    (nextIndex ?x1 ?x2))
+(<= (adjacent ?x2 ?y ?x1 ?y)
+    (index ?y)
+    (nextIndex ?x1 ?x2))
+
+
+(opponent white black)
+(opponent black white)
+
+(index 1)
+(index 2)
+(index 3)
+(index 4)
+(index 5)
+(index 6)
+(index 7)
+
+(nextIndex 1 2)
+(nextIndex 2 3)
+(nextIndex 3 4)
+(nextIndex 4 5)
+(nextIndex 5 6)
+(nextIndex 6 7)
+
+(<= (base (cell ?x ?y ?color))
+    (index ?x)
+    (index ?y)
+    (role ?color))
+(<= (base (control ?role))
+    (role ?role))
+(<= (base (group ?x ?y ?xg ?yg))
+    (index ?x)
+    (index ?y)
+    (index ?xg)
+    (index ?yg))
+
+(<= (input ?role noop)
+    (role ?role))
+(<= (input ?role (play ?x ?y))
+    (role ?role)
+    (index ?x)
+    (index ?y))

@@ -1,0 +1,462 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Zombie attack with one player
+;;;
+;;; By SteadyEddie.
+;;; Minor tweaks by Alex Landau.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Roles
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(role hero)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Base & Input
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (base (cell ?x ?y zombie ?zombienumber)) (index ?x) (index ?y) (zombieindex ?zombienumber))
+(<= (base (cell ?x ?y hero 1)) (index ?x) (index ?y))
+
+(<= (base (bodycount ?n))
+    (bodycountsucc ?n ?np1))
+(base (step 1))
+(<= (base (step ?np1))
+    (movesucc ?n ?np1))
+(<= (base (circcount ?n))
+    (nextcirccount ?n ?np1))
+
+(base shoot)
+(base move)
+
+(<= (input hero (move ?x ?y)) (index ?x) (index ?y))
+(<= (input hero (shoot ?x ?y)) (index ?x) (index ?y))
+
+(input hero movenoop)
+(input hero shootnoop)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Initial State
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(init (cell 1 3 zombie 1))
+(init (cell 9 7 zombie 2))
+(init (cell 7 1 zombie 3))
+(init (cell 3 9 zombie 4))
+(init (cell 1 1 zombie 5))
+(init (cell 9 9 zombie 6))
+
+(init (cell 5 5 hero 1))
+
+(init (step 1))
+(init (bodycount 0))
+(init (circcount 1))
+
+(init move)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dynamic Components
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Cell
+
+(<= (next (cell ?x ?y hero 1))
+    (does hero (move ?x ?y)))
+
+(<= (next (cell ?x ?y hero 1))
+    (true (cell ?x ?y hero 1))
+    (or (does hero movenoop)
+        (does hero shootnoop)
+        (does hero (shoot ?m ?n))))
+  
+(<= (next (cell ?x ?y zombie ?z))
+    (true (cell ?x ?y zombie ?z))
+    (or (does hero (move ?m ?n))
+        (does hero movenoop)))
+
+(<= (next (cell ?x ?y zombie ?z))
+    (true (cell ?m ?n zombie ?z))
+    (or (not (does hero (shoot ?m ?n)))
+        (lowerzombieincell ?m ?n ?z))
+    (true (cell ?j ?k hero 1))
+    (towardshero ?m ?x ?j)
+    (towardshero ?n ?y ?k)
+    (true shoot))
+
+(<= (next (cell ?x ?y zombie ?z))
+    (newpiece ?circcount ?x ?y)
+    (nextzombie ?z)
+    (true (circcount ?circcount))
+    (true shoot))   
+
+(<= (next (step ?np1))
+    (true (step ?n))
+    (movesucc ?n ?np1))
+
+(<= (next (bodycount ?n))
+    (true (bodycount ?n))
+    (or (does hero (move ?x ?y))
+        (does hero movenoop)
+        (does hero shootnoop)))
+    
+(<= (next (bodycount ?np1))
+    (true (bodycount ?n))
+    (bodycountsucc ?n ?np1)
+    (true (cell ?x ?y zombie ?z))
+    (does hero (shoot ?x ?y))
+    (not (lowerzombieincell ?x ?y ?z)))
+ 
+(<= (next move) (true shoot))
+(<= (next shoot) (true move))
+
+(<= (next (circcount ?np1))
+    (nextcirccount ?n ?np1)
+    (true (circcount ?n)))
+
+(<= allZombiesKilled
+    (true (bodycount 20)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= (legal hero (move ?x ?y))
+    (true (cell ?x ?y hero 1))
+    (true move))
+
+(<= (legal hero (move ?x ?y))
+    (true (cell ?n ?y hero 1))
+    (succ ?n ?x)
+    (true move))
+
+(<= (legal hero (move ?x ?y))
+    (true (cell ?n ?y hero 1))
+    (succ ?x ?n)
+    (true move))
+
+(<= (legal hero (move ?x ?y))
+    (true (cell ?x ?n hero 1))
+    (succ ?y ?n)
+    (true move))
+
+(<= (legal hero (move ?x ?y))
+    (true (cell ?x ?n hero 1))
+    (succ ?n ?y)
+    (true move))
+
+(<= (legal hero (shoot ?x1 ?y1))
+    (true (cell ?x2 ?y2 hero 1))
+    (true (cell ?x1 ?y1 zombie ?z))
+    (dir ?dir)
+    (openBetween ?x1 ?y1 ?x2 ?y2 ?dir)
+    (true shoot))
+        
+(<= (legal hero movenoop)
+    (true move))
+
+(<= (legal hero shootnoop)
+    (true shoot))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= brainslost 
+    (true (cell ?x ?y zombie ?z))
+    (true (cell ?x ?y hero 1))
+    (index ?x)
+    (index ?y))
+
+(<= (lowerzombieincell ?m ?n ?z)
+    (true (cell ?m ?n zombie ?zother))
+    (distinct ?z ?zother)
+    (ltzombie ?zother ?z))
+
+(<= (openBetween ?x1 ?y1 ?x2 ?y2 ?dir)
+    (oneInDir ?x1 ?y1 ?x2 ?y2 ?dir))
+(<= (openBetween ?x1 ?y1 ?x3 ?y3 ?dir)
+    (oneInDir ?x1 ?y1 ?x2 ?y2 ?dir)
+    ;(not (true (cell ?x1 ?y1 zombie)))
+    (openBetween ?x2 ?y2 ?x3 ?y3 ?dir))
+
+(<= (oneInDir ?x ?y1 ?x ?y2 n)
+    (file ?x)
+    (nextRank ?y1 ?y2))
+(<= (oneInDir ?x1 ?y1 ?x2 ?y2 ne)
+    (nextFile ?x1 ?x2)
+    (nextRank ?y1 ?y2))
+(<= (oneInDir ?x1 ?y ?x2 ?y e)
+    (nextFile ?x1 ?x2)
+    (rank ?y))
+(<= (oneInDir ?x1 ?y2 ?x2 ?y1 se)
+    (nextFile ?x1 ?x2)
+    (nextRank ?y1 ?y2))
+(<= (oneInDir ?x ?y2 ?x ?y1 s)
+    (file ?x)
+    (nextRank ?y1 ?y2))
+(<= (oneInDir ?x2 ?y2 ?x1 ?y1 sw)
+    (nextFile ?x1 ?x2)
+    (nextRank ?y1 ?y2))
+(<= (oneInDir ?x2 ?y ?x1 ?y w)
+    (nextFile ?x1 ?x2)
+    (rank ?y))
+(<= (oneInDir ?x2 ?y1 ?x1 ?y2 nw)
+    (nextFile ?x1 ?x2)
+    (nextRank ?y1 ?y2))
+
+; Old zombie, new zombie, hero
+(<= (towardshero ?x ?y ?z)
+    (ltbyone ?x ?y)
+    (ltsucc ?y ?z))
+
+(<= (towardshero ?x ?y ?z)
+    (ltsucc ?z ?y)
+    (ltbyone ?y ?x))
+
+(<= (towardshero ?x ?y ?y)
+    (ltbyone ?x ?y))
+
+(<= (towardshero ?x ?y ?y)
+    (ltbyone ?y ?x))
+
+(<= (towardshero ?y ?y ?y)
+    (index ?y))
+
+(<= (ltsucc ?a ?b)
+    (succ ?a ?b))
+(<= (ltsucc ?a ?c)
+    (succ ?a ?b)
+    (ltsucc ?b ?c))
+(<= (ltbyone ?a ?b)
+    (succ ?a ?b))
+
+(<= (ltzombie ?a ?b)
+    (zombieindexsucc ?a ?b))
+(<= (ltzombie ?a ?c)
+    (zombieindexsucc ?a ?b)
+    (ltzombie ?b ?c))
+
+(<= (nextzombie ?z)
+    (zombieindex ?z)
+    (not (zombieinuse ?z))
+    (not (lowerzombiefree ?z)))
+
+(<= (zombieinuse ?z)
+    (true (cell ?m ?n zombie ?z)))
+
+(<= (lowerzombiefree ?z)
+    (not (zombieinuse ?otherz))
+    (distinct ?z ?otherz)
+    (ltzombie ?otherz ?z))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<= terminal
+    allZombiesKilled)
+
+(<= terminal
+    brainslost)
+
+(<= terminal
+    (true (step 50)))
+
+
+(<= (goal hero 100)
+    allZombiesKilled
+    (not brainslost))
+
+(<= (goal hero 0)
+    brainslost)
+
+(<= (goal hero 50)
+    (not allZombiesKilled)
+    (not brainslost))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(nextcirccount 1 2)
+(nextcirccount 2 3)
+(nextcirccount 3 4)
+(nextcirccount 4 5)
+(nextcirccount 5 6)
+(nextcirccount 6 7)
+(nextcirccount 7 8)
+(nextcirccount 8 9)
+(nextcirccount 9 1)
+
+(newpiece 1 1 1)
+(newpiece 2 7 1)
+(newpiece 3 9 7)
+(newpiece 4 6 9)
+(newpiece 5 1 6)
+(newpiece 6 4 1)
+(newpiece 7 9 3)
+(newpiece 8 2 9)
+(newpiece 9 1 3)
+   
+(succ 1 2)
+(succ 2 3)
+(succ 3 4)
+(succ 4 5)
+(succ 5 6)
+(succ 6 7)
+(succ 7 8)
+(succ 8 9)
+
+(bodycountsucc 0 1)
+(bodycountsucc 1 2)
+(bodycountsucc 2 3)
+(bodycountsucc 3 4)
+(bodycountsucc 4 5)
+(bodycountsucc 5 6)
+(bodycountsucc 6 7)
+(bodycountsucc 7 8)
+(bodycountsucc 8 9)
+(bodycountsucc 9 10)
+(bodycountsucc 10 11)
+(bodycountsucc 11 12)
+(bodycountsucc 12 13)
+(bodycountsucc 13 14)
+(bodycountsucc 14 15)
+(bodycountsucc 15 16)
+(bodycountsucc 16 17)
+(bodycountsucc 17 18)
+(bodycountsucc 18 19)
+(bodycountsucc 19 20)
+(bodycountsucc 20 21)
+(bodycountsucc 21 22)
+(bodycountsucc 22 23)
+(bodycountsucc 23 24)
+(bodycountsucc 24 25)
+(bodycountsucc 25 26)
+(bodycountsucc 26 27)
+(bodycountsucc 27 28)
+(bodycountsucc 28 29)
+(bodycountsucc 29 30)
+
+(dir n)
+(dir s)
+(dir e)
+(dir w)
+(dir nw)
+(dir ne)
+(dir se)
+(dir sw)
+
+(file 1)
+(file 2)
+(file 3)
+(file 4)
+(file 5)
+(file 6)
+(file 7)
+(file 8)
+(file 9)
+
+(nextFile 1 2)
+(nextFile 2 3)
+(nextFile 3 4)
+(nextFile 4 5)
+(nextFile 5 6)
+(nextFile 6 7)
+(nextFile 7 8)
+(nextFile 8 9)
+
+(rank 1)
+(rank 2)
+(rank 3)
+(rank 4)
+(rank 5)
+(rank 6)
+(rank 7)
+(rank 8)
+(rank 9)
+
+(nextRank 1 2)
+(nextRank 2 3)
+(nextRank 3 4)
+(nextRank 4 5)
+(nextRank 5 6)
+(nextRank 6 7)
+(nextRank 7 8)
+(nextRank 8 9)
+
+(index 1) 
+(index 2) 
+(index 3) 
+(index 4)
+(index 5)
+(index 6)
+(index 7)
+(index 8)
+(index 9)
+
+(zombieindex 1)
+(zombieindex 2)
+(zombieindex 3)
+(zombieindex 4)
+(zombieindex 5)
+(zombieindex 6)
+(zombieindex 7)
+(zombieindex 8)
+(zombieindex 9)
+(zombieindex 10)
+
+(zombieindexsucc 1 2)
+(zombieindexsucc 2 3)
+(zombieindexsucc 3 4)
+(zombieindexsucc 4 5)
+(zombieindexsucc 5 6)
+(zombieindexsucc 6 7)
+(zombieindexsucc 7 8)
+(zombieindexsucc 8 9)
+(zombieindexsucc 9 10)
+(zombieindexsucc 10 11)
+
+(movesucc 0 1)
+(movesucc 1 2)
+(movesucc 2 3)
+(movesucc 3 4)
+(movesucc 4 5)
+(movesucc 5 6)
+(movesucc 6 7)
+(movesucc 7 8)
+(movesucc 8 9)
+(movesucc 9 10)
+(movesucc 10 11)
+(movesucc 11 12)
+(movesucc 12 13)
+(movesucc 13 14)
+(movesucc 14 15)
+(movesucc 15 16)
+(movesucc 16 17)
+(movesucc 17 18)
+(movesucc 18 19)
+(movesucc 19 20)
+(movesucc 20 21)
+(movesucc 21 22)
+(movesucc 22 23)
+(movesucc 23 24)
+(movesucc 24 25)
+(movesucc 25 26)
+(movesucc 26 27)
+(movesucc 27 28)
+(movesucc 28 29)
+(movesucc 29 30)
+(movesucc 30 31)
+(movesucc 31 32)
+(movesucc 32 33)
+(movesucc 33 34)
+(movesucc 34 35)
+(movesucc 35 36)
+(movesucc 36 37)
+(movesucc 37 38)
+(movesucc 38 39)
+(movesucc 39 40)
+(movesucc 40 41)
+(movesucc 41 42)
+(movesucc 42 43)
+(movesucc 43 44)
+(movesucc 44 45)
+(movesucc 45 46)
+(movesucc 46 47)
+(movesucc 47 48)
+(movesucc 48 49)
+(movesucc 49 50)
+(movesucc 50 51)

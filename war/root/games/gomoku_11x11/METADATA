@@ -1,0 +1,6 @@
+{
+  "gameName": "Gomoku (11x11)",
+
+  "rulesheet": "gomoku_11x11.kif",
+  "stylesheet": "gomoku_11x11.xsl"
+}

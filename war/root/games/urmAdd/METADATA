@@ -1,0 +1,5 @@
+{
+  "gameName": "URM Adding Program",
+  "rulesheet": "urmAdd.kif",
+  "stylesheet": "urmAdd.xsl"
+}
