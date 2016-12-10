@@ -100,7 +100,9 @@ public class GGP_RepositoryServlet extends CachedStaticServlet {
     	} else if (theURL.equals("/dresden")) {
     		return "text/html";
     	} else if (theURL.equals("/stanford")) {
-    		return "text/html";    		
+    		return "text/html";
+        } else if (theURL.endsWith(".svg")) {
+            return "image/svg+xml";
     	} else if (theURL.endsWith("/")) {
     		return "text/javascript";
     	}
