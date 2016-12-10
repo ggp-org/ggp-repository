@@ -28,25 +28,31 @@
     <td style="min-width: 20em">
       <xsl:for-each select="//fact[relation='line' and argument[1]=$row]">
         <xsl:variable name="line" select="argument[2]"/>
-        <xsl:if test="$line[relation='beq']">
-          jump-if-equal
-          <xsl:value-of select="$line/argument[1]"/><xsl:value-of select="' '"/> 
-          <xsl:value-of select="$line/argument[2]"/><xsl:value-of select="' '"/>
-          <xsl:value-of select="$line/argument[3]"/>
-        </xsl:if>
-        <xsl:if test="$line[relation='zero']">
-          zero
-          <xsl:value-of select="$line/argument[1]"/>
-        </xsl:if>
-        <xsl:if test="$line[relation='incr']">
-          increment
-          <xsl:value-of select="$line/argument[1]"/>
-        </xsl:if>
-        <xsl:if test="$line[relation='move']">
-          move
-          <xsl:value-of select="$line/argument[1]"/><xsl:value-of select="' '"/>
-          <xsl:value-of select="$line/argument[2]"/>
-        </xsl:if>
+        <xsl:choose>
+        <!-- The first four should work in the case of GGP-Base, the last in the case of Tiltyard JS -->
+          <xsl:when test="$line[relation='beq']">
+            jump-if-equal
+            <xsl:value-of select="$line/argument[1]"/><xsl:value-of select="' '"/> 
+            <xsl:value-of select="$line/argument[2]"/><xsl:value-of select="' '"/>
+            <xsl:value-of select="$line/argument[3]"/>
+          </xsl:when>
+          <xsl:when test="$line[relation='zero']">
+            zero
+            <xsl:value-of select="$line/argument[1]"/>
+          </xsl:when>
+          <xsl:when test="$line[relation='incr']">
+            increment
+            <xsl:value-of select="$line/argument[1]"/>
+          </xsl:when>
+          <xsl:when test="$line[relation='move']">
+            move
+            <xsl:value-of select="$line/argument[1]"/><xsl:value-of select="' '"/>
+            <xsl:value-of select="$line/argument[2]"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$line"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>
     </td>
     <td style="padding-right: 10px">
